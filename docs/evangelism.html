@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vision 2026: Evangelism | SDA Cross River Conference</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* --- GLOBAL STYLES --- */
+        :root {
+            --primary: #003087;
+            --primary-dark: #002266;
+            --secondary: #F9A01B;
+            --accent: #D32F2F; /* Red for Urgency/Evangelism */
+            --text-dark: #1a1a1a;
+            --text-gray: #555555;
+            --bg-light: #f4f6f8;
+            --white: #ffffff;
+            --radius: 12px;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; color: var(--text-dark); background-color: var(--bg-light); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        /* Header styles moved to styles.css */
+
+        /* --- HERO SECTION --- */
+        .mission-hero {
+            position: relative;
+            padding: 120px 5%;
+            background: linear-gradient(rgba(0, 15, 40, 0.85), rgba(0, 48, 135, 0.8)), url('https://images.unsplash.com/photo-1544427920-24e832256625?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+        }
+        
+        .hero-badge {
+            background: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+
+        .mission-hero h1 { font-size: 4rem; margin-bottom: 15px; font-weight: 900; line-height: 1.1; }
+        .mission-hero p { font-size: 1.4rem; max-width: 800px; margin: 0 auto 40px; opacity: 0.9; font-weight: 300; }
+        
+        .stat-row {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 40px;
+        }
+        .stat-item h3 { font-size: 2.5rem; font-weight: 800; color: var(--secondary); margin-bottom: 5px; }
+        .stat-item span { text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; opacity: 0.8; }
+
+        /* --- STRATEGY GRID --- */
+        .strategy-section { padding: 80px 5%; max-width: 1300px; margin: 0 auto; }
+        .section-header { text-align: center; margin-bottom: 60px; }
+        .section-header h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
+        .section-header p { font-size: 1.1rem; color: var(--text-gray); }
+
+        .phase-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .phase-card {
+            background: white;
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            border-top: 4px solid var(--primary);
+            transition: 0.3s;
+        }
+        .phase-card:hover { transform: translateY(-5px); }
+
+        .phase-number {
+            position: absolute;
+            top: -10px; right: -10px;
+            font-size: 4rem;
+            font-weight: 900;
+            color: rgba(0,0,0,0.03);
+            z-index: 0;
+        }
+
+        .phase-icon {
+            width: 60px; height: 60px;
+            background: #eef2ff;
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            position: relative; z-index: 1;
+        }
+
+        .phase-title { font-size: 1.25rem; font-weight: 700; margin-bottom: 5px; color: var(--text-dark); position: relative; z-index: 1; }
+        .phase-date { font-size: 0.85rem; color: var(--accent); font-weight: 700; text-transform: uppercase; margin-bottom: 15px; display: block; position: relative; z-index: 1; }
+        .phase-desc { font-size: 0.95rem; color: var(--text-gray); line-height: 1.5; position: relative; z-index: 1; }
+
+        /* Specific Phase Colors */
+        .phase-1 { border-top-color: #4CAF50; } /* Prep */
+        .phase-1 .phase-icon { color: #4CAF50; background: #e8f5e9; }
+        
+        .phase-2 { border-top-color: #FF9800; } /* Sowing */
+        .phase-2 .phase-icon { color: #FF9800; background: #fff3e0; }
+        
+        .phase-3 { border-top-color: #D32F2F; } /* Reaping */
+        .phase-3 .phase-icon { color: #D32F2F; background: #ffebee; }
+        
+        .phase-4 { border-top-color: #2196F3; } /* Harvest */
+        .phase-4 .phase-icon { color: #2196F3; background: #e3f2fd; }
+
+        /* --- METHODS SECTION --- */
+        .methods-section { background: #1a1a1a; color: white; padding: 80px 5%; }
+        .methods-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .method-card { display: flex; gap: 20px; align-items: flex-start; }
+        .method-icon { 
+            font-size: 2.5rem; 
+            color: var(--secondary); 
+            background: rgba(255,255,255,0.1); 
+            padding: 15px; 
+            border-radius: 12px;
+        }
+        .method-content h3 { font-size: 1.4rem; margin-bottom: 10px; }
+        .method-content p { color: #aaa; font-size: 1rem; }
+
+        /* --- PLEDGE / CTA --- */
+        .pledge-section {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            padding: 80px 5%;
+            text-align: center;
+            color: white;
+        }
+        
+        .pledge-card {
+            background: white;
+            color: var(--text-dark);
+            max-width: 600px;
+            margin: 40px auto 0;
+            padding: 40px;
+            border-radius: var(--radius);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        }
+
+        .pledge-input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .pledge-input:focus { border-color: var(--primary); outline: none; }
+        
+        .pledge-btn {
+            background: var(--accent);
+            color: white;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+        }
+        .pledge-btn:hover { background: #b71c1c; transform: translateY(-2px); }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .phase-grid { grid-template-columns: 1fr 1fr; }
+        }
+        
+        @media (max-width: 768px) {
+            .mission-hero h1 { font-size: 2.5rem; }
+            .stat-row { flex-direction: column; gap: 20px; }
+            .phase-grid, .methods-grid { grid-template-columns: 1fr; }
+            .nav-links, .nav-action { display: none; }
+            .menu-toggle { display: block; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="./logo.png" alt="Seventh Day Adventist Church CRC logo" class="site-logo">
+            <div class="site-title">
+                <span class="church-name">Seventh Day Adventist Church</span>
+                <span class="church-sub">CRC</span>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="small-groups.html">Small Groups</a></li>
+            <li><a href="evangelism.html" class="active">Evangelism</a></li>
+            <li><a href="join.html">Join</a></li>
+            <li><a href="sermons.html">Sermons</a></li>
+            <li><a href="departments.html">Departments</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="nav-action">
+            <a href="join.html" class="btn-primary">
+                Join Us
+            </a>
+        </div>
+        <div class="menu-toggle"><i class="ph ph-list"></i></div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="mission-hero">
+        <div class="hero-badge">Strategic Vision 2026</div>
+        <h1>Impact 2026: <br>The Final Harvest</h1>
+        <p>An aggressive, coordinated evangelistic offensive to penetrate every city, village, and home in the Cross River territory with the Three Angels' Messages.</p>
+        
+        <div class="stat-row">
+            <div class="stat-item">
+                <h3>5,000</h3>
+                <span>Souls Target</span>
+            </div>
+            <div class="stat-item">
+                <h3>100</h3>
+                <span>New Sites</span>
+            </div>
+            <div class="stat-item">
+                <h3>50,000</h3>
+                <span>Tracts</span>
+            </div>
+            <div class="stat-item">
+                <h3>1</h3>
+                <span>Mission</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Strategic Timeline -->
+    <section class="strategy-section">
+        <div class="section-header">
+            <h2>The Battle Plan</h2>
+            <p>Our operational timeline for Total Member Involvement (TMI).</p>
+        </div>
+
+        <div class="phase-grid">
+            
+            <!-- Phase 1 -->
+            <div class="phase-card phase-1">
+                <span class="phase-number">01</span>
+                <div class="phase-icon"><i class="ph-fill ph-plant"></i></div>
+                <h3 class="phase-title">Preparation</h3>
+                <span class="phase-date">Jan - Mar 2026</span>
+                <p class="phase-desc">Spiritual revival in all churches. Training of laity. Identification of Bible study interests. 40 Days of Prayer and Fasting.</p>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="phase-card phase-2">
+                <span class="phase-number">02</span>
+                <div class="phase-icon"><i class="ph-fill ph-hand-heart"></i></div>
+                <h3 class="phase-title">Sowing</h3>
+                <span class="phase-date">Apr - Jun 2026</span>
+                <p class="phase-desc">Friendship evangelism. Medical missionary health expos. Distribution of GLOW tracts. Small group community service projects.</p>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="phase-card phase-3">
+                <span class="phase-number">03</span>
+                <div class="phase-icon"><i class="ph-fill ph-microphone-stage"></i></div>
+                <h3 class="phase-title">Reaping</h3>
+                <span class="phase-date">Jul - Sep 2026</span>
+                <p class="phase-desc">The "Loud Cry" campaigns. Simultaneous city-wide public evangelism. WAD Impact events. Baptismal harvesting.</p>
+            </div>
+
+            <!-- Phase 4 -->
+            <div class="phase-card phase-4">
+                <span class="phase-number">04</span>
+                <div class="phase-icon"><i class="ph-fill ph-users-three"></i></div>
+                <h3 class="phase-title">Retention</h3>
+                <span class="phase-date">Oct - Dec 2026</span>
+                <p class="phase-desc">Discipleship masterclasses. Integration of new members into Small Care Groups. Nurturing and grounding in the faith.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Methods of Warfare -->
+    <section class="methods-section">
+        <div class="section-header" style="color: white;">
+            <h2 style="color: white;">Methods of Engagement</h2>
+            <p style="color: #aaa;">How we will reach the unreached.</p>
+        </div>
+
+        <div class="methods-grid">
+            <div class="method-card">
+                <div class="method-icon"><i class="ph-fill ph-globe"></i></div>
+                <div class="method-content">
+                    <h3>Digital Army</h3>
+                    <p>Turning every member's phone into a pulpit. Utilizing WhatsApp status evangelism, Facebook live streams, and digital Bible studies to reach the youth.</p>
+                </div>
+            </div>
+
+            <div class="method-card">
+                <div class="method-icon"><i class="ph-fill ph-book-open"></i></div>
+                <div class="method-content">
+                    <h3>Literature Evangelism</h3>
+                    <p>Scattering the truth like leaves of autumn. Massive distribution of "The Great Controversy" and health literature in marketplaces and schools.</p>
+                </div>
+            </div>
+
+            <div class="method-card">
+                <div class="method-icon"><i class="ph-fill ph-first-aid-kit"></i></div>
+                <div class="method-content">
+                    <h3>Medical Missionary</h3>
+                    <p>The right arm of the gospel. Free medical checkups, eye screenings, and health lectures to break down prejudice and open hearts.</p>
+                </div>
+            </div>
+
+            <div class="method-card">
+                <div class="method-icon"><i class="ph-fill ph-house-line"></i></div>
+                <div class="method-content">
+                    <h3>Small Group Evangelism</h3>
+                    <p>Turning homes into centers of light. Neighbors inviting neighbors for Bible study and fellowship in a non-threatening environment.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pledge Section -->
+    <section class="pledge-section">
+        <i class="ph-fill ph-paper-plane-tilt" style="font-size: 4rem; color: var(--secondary); margin-bottom: 20px;"></i>
+        <h2>The "I Will Go" Pledge</h2>
+        <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto; opacity: 0.9;">I commit to God and the Cross River Conference that I will labor for the salvation of at least ONE soul in 2026.</p>
+
+        <div class="pledge-card">
+            <form>
+                <div style="text-align: left; margin-bottom: 20px; font-weight: 700; color: var(--primary);">My Commitment:</div>
+                <input type="text" class="pledge-input" placeholder="Your Full Name">
+                <input type="tel" class="pledge-input" placeholder="Your Phone Number">
+                <select class="pledge-input">
+                    <option>Select your Local Church...</option>
+                    <option>Calabar Central</option>
+                    <option>Marian District</option>
+                    <option>Other</option>
+                </select>
+                <button type="button" class="pledge-btn" onclick="alert('Thank you for your commitment! A coordinator will contact you.')">Sign the Pledge</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer style="background: #111; color: #aaa; padding: 60px 5% 20px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; max-width: 1200px; margin: 0 auto 40px;">
+            <div>
+                <h4 style="color: white; margin-bottom: 20px;">CRC</h4>
+                <p>Preparing a people for the soon coming of our Lord Jesus Christ.</p>
+            </div>
+            <div>
+                <h4 style="color: white; margin-bottom: 20px;">Quick Links</h4>
+                <ul>
+                    <li style="margin-bottom: 10px;"><a href="index.html">Home</a></li>
+                    <li style="margin-bottom: 10px;"><a href="sermons.html">Sermons</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: white; margin-bottom: 20px;">Contact</h4>
+                <ul>
+                    <li>101 Goldie/Marian Road, Calabar</li>
+                    <li>secsec2013@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+        <div style="border-top: 1px solid #333; padding-top: 20px; text-align: center; font-size: 0.9rem;">
+            &copy; 2025 Seventh-Day Adventist Church Cross River Conference.
+        </div>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+        document.addEventListener('click', function(event) {
+            const nav = document.querySelector('.navbar');
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            if (!nav.contains(event.target) && !menuToggle.contains(event.target)) {
+                navLinks.classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>

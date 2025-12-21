@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Calendar | SDA Cross River Conference</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* --- GLOBAL STYLES --- */
+        :root {
+            --primary: #003087;
+            --primary-dark: #002266;
+            --secondary: #F9A01B;
+            --accent: #009A44;
+            --text-dark: #1a1a1a;
+            --text-gray: #666666;
+            --bg-light: #f8f9fa;
+            --white: #ffffff;
+            --radius: 12px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; color: var(--text-dark); background-color: var(--bg-light); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        /* Header styles moved to styles.css */
+
+        .nav-links.active {
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            top: 80px;
+            left: 0;
+            width: 100%;
+            background: var(--white);
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- HERO SECTION --- */
+        .events-hero {
+            background: linear-gradient(rgba(0, 48, 135, 0.9), rgba(0, 48, 135, 0.8)), url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 80px 5%;
+            text-align: center;
+        }
+        .events-hero h1 { font-size: 3rem; margin-bottom: 10px; font-weight: 800; }
+        .events-hero p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto; }
+
+        /* --- FILTER BAR --- */
+        .filter-bar {
+            background: white;
+            padding: 20px 5%;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 80px;
+            z-index: 900;
+        }
+        .filter-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .filter-select {
+            padding: 10px 20px;
+            border: 1px solid #ddd;
+            border-radius: 50px;
+            background: white;
+            color: var(--text-dark);
+            font-size: 0.95rem;
+            cursor: pointer;
+            outline: none;
+        }
+        .filter-select:focus { border-color: var(--primary); }
+        .view-options { margin-left: auto; display: flex; gap: 10px; }
+        .view-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--text-gray); }
+        .view-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+        /* --- EVENTS GRID --- */
+        .events-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 5%;
+        }
+
+        .events-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columns on desktop */
+            gap: 30px;
+        }
+
+        /* --- EVENT CARD --- */
+        .event-card {
+            background: white;
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid #eee;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .event-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            border-color: var(--primary);
+        }
+
+        .card-image {
+            height: 180px;
+            position: relative;
+            background-color: #ddd;
+        }
+        .card-image img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .category-tag {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Category Colors */
+        .tag-general { background: var(--primary); }
+        .tag-youth { background: #F9A01B; color: var(--text-dark); }
+        .tag-women { background: #E91E63; }
+        .tag-men { background: #1565C0; }
+        .tag-children { background: #00BCD4; color: var(--text-dark); }
+        .tag-evangelism { background: var(--accent); }
+
+        .card-body {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .date-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .date-box {
+            background: #f0f7ff;
+            color: var(--primary);
+            padding: 8px 12px;
+            border-radius: 8px;
+            text-align: center;
+            min-width: 60px;
+            line-height: 1.1;
+        }
+        .date-day { font-size: 1.4rem; font-weight: 800; display: block; }
+        .date-month { font-size: 0.75rem; text-transform: uppercase; font-weight: 700; }
+        .date-range { color: var(--text-gray); font-size: 0.9rem; }
+
+        .event-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: var(--text-dark);
+            line-height: 1.3;
+        }
+
+        .event-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 20px;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+        .meta-item { display: flex; align-items: center; gap: 8px; }
+
+        .card-footer {
+            margin-top: auto;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-cal {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+            color: var(--text-dark);
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            transition: 0.2s;
+        }
+        .btn-cal:hover { border-color: var(--primary); color: var(--primary); background: #f0f7ff; }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1200px) {
+            .events-hero h1 { font-size: 2.5rem; }
+            .events-hero p { font-size: 1.1rem; }
+            .events-grid { gap: 25px; }
+        }
+
+        @media (max-width: 1024px) {
+            .events-grid {
+                grid-template-columns: repeat(2, 1fr); /* 2 columns on tablets */
+            }
+        }
+
+        @media (max-width: 900px) {
+            .nav-links, .nav-action { display: none; }
+            .menu-toggle { display: block; }
+            .site-logo { height: 36px; }
+            .filter-bar { top: 70px; }
+            .filter-container { flex-direction: column; align-items: stretch; }
+            .view-options { display: none; }
+            .events-hero { padding: 60px 5%; }
+        }
+
+        /* Mobile Optimization: 2 Cards Per Row */
+        @media (max-width: 768px) {
+            .events-container { padding: 40px 15px; }
+            
+            .events-grid {
+                grid-template-columns: repeat(2, 1fr); /* Force 2 columns */
+                gap: 12px;
+            }
+
+            .card-image { height: 130px; }
+            .category-tag { font-size: 0.6rem; padding: 4px 8px; top: 8px; right: 8px; }
+
+            .card-body { padding: 15px; }
+            
+            .date-row { gap: 8px; margin-bottom: 10px; }
+            .date-box { min-width: 45px; padding: 5px 8px; border-radius: 6px; }
+            .date-day { font-size: 1.1rem; }
+            .date-month { font-size: 0.65rem; }
+            .date-range { font-size: 0.75rem; line-height: 1.2; }
+
+            .event-title { font-size: 0.95rem; line-height: 1.25; margin-bottom: 8px; }
+            
+            .event-meta { font-size: 0.75rem; gap: 4px; margin-bottom: 12px; }
+            .meta-item i { font-size: 0.85rem; }
+            
+            .card-footer { padding-top: 12px; }
+            .btn-cal { font-size: 0.8rem; padding: 8px; }
+            .btn-cal i { font-size: 0.9rem; }
+        }
+
+        @media (max-width: 480px) {
+            .events-hero h1 { font-size: 2rem; }
+            .events-hero p { font-size: 1rem; }
+            .events-container { padding: 30px 10px; }
+            .events-grid { gap: 10px; }
+            .card-body { padding: 12px; }
+            .event-title { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">
+            <img src="./logo.png" alt="Seventh Day Adventist Church CRC logo" class="site-logo">
+            <div class="site-title">
+                <span class="church-name">Seventh Day Adventist Church</span>
+                <span class="church-sub">CRC</span>
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="small-groups.html">Small Groups</a></li>
+            <li><a href="evangelism.html">Evangelism</a></li>
+            <li><a href="join.html">Join</a></li>
+            <li><a href="sermons.html">Sermons</a></li>
+            <li><a href="departments.html">Departments</a></li>
+            <li><a href="events.html" class="active">Events</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="nav-action">
+            <a href="live.html" class="btn-primary">
+                <i class="ph ph-video-camera"></i> Watch Live
+            </a>
+        </div>
+        <div class="menu-toggle" onclick="toggleMenu()"><i class="ph ph-list"></i></div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="events-hero">
+        <h1>Upcoming Events</h1>
+        <p>Stay connected with what is happening around the conference. Mark your calendars and join us.</p>
+    </header>
+
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="filter-container">
+            <select class="filter-select">
+                <option>All Months</option>
+                <option>January 2025</option>
+                <option>February 2025</option>
+                <option>March 2025</option>
+            </select>
+            <select class="filter-select">
+                <option>All Departments</option>
+                <option>General</option>
+                <option>Youth (AYO)</option>
+                <option>Women (AWM)</option>
+                <option>Men (AMO)</option>
+                <option>Children</option>
+            </select>
+            <select class="filter-select">
+                <option>All Locations</option>
+                <option>Conference HQ</option>
+                <option>Camp Grounds</option>
+                <option>Local Churches</option>
+            </select>
+            
+            <div class="view-options">
+                <div class="view-btn active"><i class="ph-fill ph-squares-four"></i></div>
+                <div class="view-btn"><i class="ph-fill ph-list"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Events Grid -->
+    <div class="events-container">
+        <div class="events-grid">
+            
+            <!-- Event 1: Camp Meeting -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://plus.unsplash.com/premium_photo-1679483321550-5d6a2c2620f4?q=80&w=600&auto=format&fit=crop" alt="Camp Meeting">
+                    <div class="category-tag tag-general">Conference Wide</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">15</span>
+                            <span class="date-month">Aug</span>
+                        </div>
+                        <span class="date-range">to Aug 22, 2025</span>
+                    </div>
+                    <h3 class="event-title">Annual Camp Meeting 2025</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> All Day Event</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> Camp Grounds</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('Camp Meeting')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 2: Youth Rally -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1529070538774-1843cb3265df?auto=format&fit=crop&q=80" alt="Youth Rally">
+                    <div class="category-tag tag-youth">Youth (AYO)</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">15</span>
+                            <span class="date-month">Mar</span>
+                        </div>
+                    </div>
+                    <h3 class="event-title">Global Youth Day</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> 8AM - 4PM</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> Calabar Municipal</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('Global Youth Day')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 3: AMO Prayer Breakfast -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1507537362848-9c7e70b746c6?auto=format&fit=crop&q=80" alt="Men Praying">
+                    <div class="category-tag tag-men">AMO</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">02</span>
+                            <span class="date-month">Feb</span>
+                        </div>
+                    </div>
+                    <h3 class="event-title">Men's Prayer Breakfast</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> 7AM - 9AM</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> HQ Conference Room</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('AMO Breakfast')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 4: Women's Convention -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?auto=format&fit=crop&q=80" alt="Women Convention">
+                    <div class="category-tag tag-women">AWM</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">10</span>
+                            <span class="date-month">Jun</span>
+                        </div>
+                    </div>
+                    <h3 class="event-title">Women's Ministries Convention</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> 9AM Start</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> Calabar Central</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('AWM Convention')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 5: Health Expo -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80" alt="Health">
+                    <div class="category-tag tag-general">Health</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">25</span>
+                            <span class="date-month">May</span>
+                        </div>
+                    </div>
+                    <h3 class="event-title">Community Health Expo</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> 10AM - 3PM</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> Watt Market Square</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('Health Expo')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 6: Music Festival -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80" alt="Music">
+                    <div class="category-tag tag-youth">Music</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">12</span>
+                            <span class="date-month">Dec</span>
+                        </div>
+                    </div>
+                    <h3 class="event-title">End of Year Music Festival</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> 5PM - 9PM</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> Cultural Center</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('Music Fest')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 7: VBS (Children) -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1606092195730-5d7b9af1ef4d?auto=format&fit=crop&q=80" alt="Children">
+                    <div class="category-tag tag-children">Children</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">01</span>
+                            <span class="date-month">Aug</span>
+                        </div>
+                        <span class="date-range">to Aug 07, 2025</span>
+                    </div>
+                    <h3 class="event-title">Vacation Bible School</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> Daily 9AM</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> All Districts</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('VBS 2025')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 8: Elders Retreat -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80" alt="Meeting">
+                    <div class="category-tag tag-general">Leadership</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">19</span>
+                            <span class="date-month">Jan</span>
+                        </div>
+                    </div>
+                    <h3 class="event-title">Elders & Deacons Retreat</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> 9AM - 2PM</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> Conference HQ</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('Elders Retreat')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 9: Literature Evangelism -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1457369804613-52c61a468e7d?auto=format&fit=crop&q=80" alt="Books">
+                    <div class="category-tag tag-evangelism">Evangelism</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">05</span>
+                            <span class="date-month">Apr</span>
+                        </div>
+                    </div>
+                    <h3 class="event-title">Literature Evangelism Training</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> 8AM Start</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> Marian Church</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('LE Training')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 11: Sabbath School Convention -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&q=80" alt="Sabbath School">
+                    <div class="category-tag tag-general">Sabbath School</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">14</span>
+                            <span class="date-month">Jul</span>
+                        </div>
+                    </div>
+                    <h3 class="event-title">Sabbath School Convention</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> 8AM - 5PM</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> Conference HQ</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('SS Convention')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 12: Pathfinders Camporee -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&q=80" alt="Pathfinders">
+                    <div class="category-tag tag-children">Pathfinders</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">20</span>
+                            <span class="date-month">Oct</span>
+                        </div>
+                        <span class="date-range">to Oct 22, 2025</span>
+                    </div>
+                    <h3 class="event-title">Pathfinders Camporee</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> Weekend Event</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> Camp Grounds</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('Pathfinders Camporee')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 13: Marriage Enrichment Seminar -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80" alt="Marriage">
+                    <div class="category-tag tag-general">Family</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">18</span>
+                            <span class="date-month">Nov</span>
+                        </div>
+                    </div>
+                    <h3 class="event-title">Marriage Enrichment Seminar</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> 9AM - 4PM</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> Calabar Central</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('Marriage Seminar')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 14: Stewardship Rally -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80" alt="Stewardship">
+                    <div class="category-tag tag-general">Stewardship</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">03</span>
+                            <span class="date-month">Mar</span>
+                        </div>
+                    </div>
+                    <h3 class="event-title">Annual Stewardship Rally</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> 10AM - 2PM</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> All Churches</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('Stewardship Rally')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 15: Prayer and Fasting Day -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1544197150-b99a580bb7a8?auto=format&fit=crop&q=80" alt="Prayer">
+                    <div class="category-tag tag-general">Prayer</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">07</span>
+                            <span class="date-month">May</span>
+                        </div>
+                    </div>
+                    <h3 class="event-title">Conference Prayer & Fasting Day</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> All Day</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> All Locations</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('Prayer Day')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 16: Education Summit -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&q=80" alt="Education">
+                    <div class="category-tag tag-general">Education</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">22</span>
+                            <span class="date-month">Sep</span>
+                        </div>
+                    </div>
+                    <h3 class="event-title">Adventist Education Summit</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> 9AM - 3PM</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> Conference HQ</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('Education Summit')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 17: Community Outreach -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?auto=format&fit=crop&q=80" alt="Outreach">
+                    <div class="category-tag tag-evangelism">Evangelism</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">11</span>
+                            <span class="date-month">Jan</span>
+                        </div>
+                    </div>
+                    <h3 class="event-title">Community Health Outreach</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> 8AM - 12PM</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> Public Square</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('Health Outreach')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Event 18: Youth Leadership Conference -->
+            <article class="event-card">
+                <div class="card-image">
+                    <img src="https://images.unsplash.com/photo-1515187029135-18ee286d815b?auto=format&fit=crop&q=80" alt="Youth Leadership">
+                    <div class="category-tag tag-youth">Youth (AYO)</div>
+                </div>
+                <div class="card-body">
+                    <div class="date-row">
+                        <div class="date-box">
+                            <span class="date-day">30</span>
+                            <span class="date-month">Apr</span>
+                        </div>
+                    </div>
+                    <h3 class="event-title">Youth Leadership Conference</h3>
+                    <div class="event-meta">
+                        <div class="meta-item"><i class="ph-fill ph-clock"></i> 9AM - 5PM</div>
+                        <div class="meta-item"><i class="ph-fill ph-map-pin"></i> Uyo Central</div>
+                    </div>
+                    <div class="card-footer">
+                        <button class="btn-cal" onclick="addToCalendar('Youth Leadership')"><i class="ph-bold ph-plus"></i> Add to Calendar</button>
+                    </div>
+                </div>
+            </article>
+    </div>
+
+    <!-- Footer -->
+    <footer style="background: #111; color: #aaa; padding: 60px 5% 20px; margin-top: auto;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; max-width: 1200px; margin: 0 auto 40px;">
+            <div>
+                <h4 style="color: white; margin-bottom: 20px;">CRC</h4>
+                <p>Preparing a people for the soon coming of our Lord Jesus Christ.</p>
+            </div>
+            <div>
+                <h4 style="color: white; margin-bottom: 20px;">Quick Links</h4>
+                <ul>
+                    <li style="margin-bottom: 10px;"><a href="#">About Us</a></li>
+                    <li style="margin-bottom: 10px;"><a href="#">Beliefs</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 style="color: white; margin-bottom: 20px;">Contact</h4>
+                <ul>
+                    <li>101 Goldie/Marian Road, Calabar</li>
+                    <li>secsec2013@gmail.com</li>
+                </ul>
+            </div>
+        </div>
+        <div style="border-top: 1px solid #333; padding-top: 20px; text-align: center; font-size: 0.9rem;">
+            &copy; 2025 Seventh-Day Adventist Church Cross River Conference.
+        </div>
+    </footer>
+
+    <script>
+        // Mobile Menu Toggle Logic
+        function toggleMenu() {
+            const navLinks = document.querySelector('.nav-links');
+            navLinks.classList.toggle('active');
+        }
+
+        // Mock Function for Add to Calendar
+        function addToCalendar(eventName) {
+            // In a real app, this would generate an .ics file or link to Google Calendar
+            alert(`"${eventName}" has been added to your device calendar.`);
+        }
+    </script>
+
+</body>
+</html>
