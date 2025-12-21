@@ -1,4 +1,4 @@
-/* Copied styles from ASSETS/PROTOTYPE/styles.css - used by hosted site in docs/ */
+/* Shared header / navigation styles for all pages */
 :root {
     --primary: #003087;
     --primary-dark: #002266;
@@ -28,10 +28,6 @@
 .nav-links { display: flex; gap: 30px; }
 .nav-links a { font-weight: 600; color: var(--text-gray); font-size: 0.95rem; }
 .nav-links a:hover, .nav-links a.active { color: var(--primary); }
-
-/* Admin link - visible for prototype access */
-.nav-links a.admin-link { font-weight: 700; color: var(--primary); }
-.nav-links a.admin-link:hover { color: var(--primary-dark); text-decoration: underline; }
 
 .nav-action { display: flex; align-items:center; gap: 12px; }
 
