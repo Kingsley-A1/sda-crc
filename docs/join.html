@@ -1,375 +1,561 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Join the Family | SDA Cross River Conference</title>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <style>
-        /* --- GLOBAL STYLES --- */
-        :root {
-            --primary: #003087;
-            --primary-dark: #002266;
-            --secondary: #F9A01B;
-            --accent: #009A44;
-            --text-dark: #1a1a1a;
-            --text-gray: #666666;
-            --bg-light: #f8f9fa;
-            --white: #ffffff;
-            --radius: 12px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      /* --- GLOBAL STYLES --- */
+      :root {
+        --primary: #003087;
+        --primary-dark: #002266;
+        --secondary: #f9a01b;
+        --accent: #009a44;
+        --text-dark: #1a1a1a;
+        --text-gray: #666666;
+        --bg-light: #f8f9fa;
+        --white: #ffffff;
+        --radius: 12px;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        color: var(--text-dark);
+        background-color: var(--bg-light);
+        line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+        transition: 0.3s;
+      }
+      ul {
+        list-style: none;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      /* Header styles moved to styles.css */
+
+      /* --- HERO SECTION --- */
+      .join-hero {
+        position: relative;
+        padding: 100px 5%;
+        background: linear-gradient(
+            rgba(0, 48, 135, 0.85),
+            rgba(0, 48, 135, 0.7)
+          ),
+          url("https://images.unsplash.com/photo-1544427920-24e832256625?auto=format&fit=crop&q=80");
+        background-size: cover;
+        background-position: center;
+        color: white;
+        text-align: center;
+      }
+      .join-hero h1 {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        font-weight: 800;
+      }
+      .join-hero p {
+        font-size: 1.25rem;
+        max-width: 700px;
+        margin: 0 auto;
+        opacity: 0.95;
+      }
+
+      /* --- FORM CONTAINER --- */
+      .form-container {
+        max-width: 900px;
+        margin: -60px auto 80px;
+        background: white;
+        border-radius: var(--radius);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        padding: 50px;
+        position: relative;
+        z-index: 2;
+      }
+
+      .form-header {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+      .form-header h2 {
+        color: var(--primary);
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+      .form-header p {
+        color: var(--text-gray);
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+      }
+      .full-width {
+        grid-column: span 2;
+      }
+
+      .form-group {
+        margin-bottom: 5px;
+      }
+      .form-label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: var(--text-dark);
+      }
+      .form-input,
+      .form-select,
+      .form-textarea {
+        width: 100%;
+        padding: 12px 15px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        font-family: inherit;
+        outline: none;
+        transition: 0.3s;
+        font-size: 1rem;
+        background: #fdfdfd;
+      }
+      .form-input:focus,
+      .form-select:focus,
+      .form-textarea:focus {
+        border-color: var(--primary);
+        background: white;
+        box-shadow: 0 0 0 4px rgba(0, 48, 135, 0.1);
+      }
+
+      /* Section Dividers */
+      .form-section-title {
+        grid-column: span 2;
+        margin-top: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f0f0;
+        color: var(--primary);
+        font-size: 1.2rem;
+        font-weight: 700;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      /* Checkbox & Radio Styles */
+      .radio-group {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+      }
+      .radio-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: #f8f9fa;
+        padding: 10px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+        border: 1px solid transparent;
+        transition: 0.2s;
+      }
+      .radio-option:hover {
+        background: #eef2f6;
+      }
+      .radio-option input:checked + span {
+        color: var(--primary);
+        font-weight: 700;
+      }
+
+      .helper-text {
+        font-size: 0.8rem;
+        color: #888;
+        margin-top: 5px;
+      }
+
+      /* Submit Button */
+      .submit-btn {
+        width: 100%;
+        padding: 16px;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 50px;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-top: 20px;
+      }
+      .submit-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .form-grid {
+          grid-template-columns: 1fr;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; color: var(--text-dark); background-color: var(--bg-light); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
-        ul { list-style: none; }
-        img { max-width: 100%; display: block; }
-
-        /* Header styles moved to styles.css */
-
-        /* --- HERO SECTION --- */
-        .join-hero {
-            position: relative;
-            padding: 100px 5%;
-            background: linear-gradient(rgba(0, 48, 135, 0.85), rgba(0, 48, 135, 0.7)), url('https://images.unsplash.com/photo-1544427920-24e832256625?auto=format&fit=crop&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            text-align: center;
+        .full-width {
+          grid-column: span 1;
         }
-        .join-hero h1 { font-size: 3rem; margin-bottom: 20px; font-weight: 800; }
-        .join-hero p { font-size: 1.25rem; max-width: 700px; margin: 0 auto; opacity: 0.95; }
-
-        /* --- FORM CONTAINER --- */
         .form-container {
-            max-width: 900px;
-            margin: -60px auto 80px;
-            background: white;
-            border-radius: var(--radius);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            padding: 50px;
-            position: relative;
-            z-index: 2;
+          padding: 30px 20px;
+          margin-top: -40px;
         }
-
-        .form-header { text-align: center; margin-bottom: 40px; }
-        .form-header h2 { color: var(--primary); font-size: 2rem; margin-bottom: 10px; }
-        .form-header p { color: var(--text-gray); }
-
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
-        .full-width { grid-column: span 2; }
-
-        .form-group { margin-bottom: 5px; }
-        .form-label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem; color: var(--text-dark); }
-        .form-input, .form-select, .form-textarea {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-family: inherit;
-            outline: none;
-            transition: 0.3s;
-            font-size: 1rem;
-            background: #fdfdfd;
+        .nav-links,
+        .nav-action {
+          display: none;
         }
-        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(0, 48, 135, 0.1); }
-        
-        /* Section Dividers */
-        .form-section-title {
-            grid-column: span 2;
-            margin-top: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #f0f0f0;
-            color: var(--primary);
-            font-size: 1.2rem;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .menu-toggle {
+          display: block;
         }
-
-        /* Checkbox & Radio Styles */
-        .radio-group { display: flex; gap: 20px; flex-wrap: wrap; }
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: #f8f9fa;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            border: 1px solid transparent;
-            transition: 0.2s;
+        .site-logo {
+          height: 36px;
         }
-        .radio-option:hover { background: #eef2f6; }
-        .radio-option input:checked + span { color: var(--primary); font-weight: 700; }
-        
-        .helper-text { font-size: 0.8rem; color: #888; margin-top: 5px; }
-
-        /* Submit Button */
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            margin-top: 20px;
-        }
-        .submit-btn:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(0,0,0,0.15); }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .full-width { grid-column: span 1; }
-            .form-container { padding: 30px 20px; margin-top: -40px; }
-            .nav-links, .nav-action { display: none; }
-            .menu-toggle { display: block; }
-            .site-logo { height: 36px; }
-        }
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <!-- Navigation -->
     <nav class="navbar">
-        <div class="logo">
-            <img src="./logo.png" alt="Seventh Day Adventist Church CRC logo" class="site-logo">
-            <div class="site-title">
-                <span class="church-name">Seventh Day Adventist Church</span>
-                <span class="church-sub">CRC</span>
-            </div>
+      <div class="logo">
+        <img
+          src="./logo.png"
+          alt="Seventh Day Adventist Church CRC logo"
+          class="site-logo"
+        />
+        <div class="site-title">
+          <span class="church-name">Seventh Day Adventist Church</span>
+          <span class="church-sub">CRC</span>
         </div>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="small-groups.html">Small Groups</a></li>
-            <li><a href="evangelism.html">Evangelism</a></li>
-            <li><a href="join.html" class="active">Join</a></li>
-            <li><a href="sermons.html">Sermons</a></li>
-            <li><a href="departments.html">Departments</a></li>
-            <li><a href="events.html">Events</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="admin/admin-dashboard.html" class="admin-link" aria-label="Admin area (prototype)">Admin</a></li>
-        </ul>
-        <div class="nav-action">
-            <a href="join.html" class="btn-primary">
-                Join Us
-            </a>
-        </div>
-        <div class="menu-toggle" onclick="toggleMenu()"><i class="ph ph-list"></i></div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="small-groups.html">Small Groups</a></li>
+        <li><a href="evangelism.html">Evangelism</a></li>
+        <li><a href="join.html" class="active">Join</a></li>
+        <li><a href="sermons.html">Sermons</a></li>
+        <li><a href="departments.html">Departments</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li>
+          <a
+            href="admin/admin-dashboard.html"
+            class="admin-link"
+            aria-label="Admin area (prototype)"
+            >Admin</a
+          >
+        </li>
+      </ul>
+      <div class="nav-action">
+        <a href="join.html" class="btn-primary"> Join Us </a>
+      </div>
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <i class="ph ph-list"></i>
+      </div>
     </nav>
 
     <!-- Hero -->
     <header class="join-hero">
-        <h1>Welcome Home</h1>
-        <p>"And let them make me a sanctuary; that I may dwell among them."<br>— Exodus 25:8</p>
+      <h1>Welcome Home</h1>
+      <p>
+        "And let them make me a sanctuary; that I may dwell among them."<br />—
+        Exodus 25:8
+      </p>
     </header>
 
     <!-- Registration Form -->
     <div class="form-container">
-        <div class="form-header">
-            <h2>Membership Registration</h2>
-            <p>We are delighted that you have chosen to unite with God's remnant church. Please fill out the form below to begin your journey.</p>
-        </div>
+      <div class="form-header">
+        <h2>Membership Registration</h2>
+        <p>
+          We are delighted that you have chosen to unite with God's remnant
+          church. Please fill out the form below to begin your journey.
+        </p>
+      </div>
 
-        <form>
-            <div class="form-grid">
-                
-                <!-- Personal Details -->
-                <div class="form-section-title">
-                    <i class="ph-fill ph-user-circle"></i> Personal Information
-                </div>
+      <form>
+        <div class="form-grid">
+          <!-- Personal Details -->
+          <div class="form-section-title">
+            <i class="ph-fill ph-user-circle"></i> Personal Information
+          </div>
 
-                <div class="form-group">
-                    <label class="form-label">First Name</label>
-                    <input type="text" class="form-input" required placeholder="Brother/Sister First Name">
-                </div>
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input
+              type="text"
+              class="form-input"
+              required
+              placeholder="Brother/Sister First Name"
+            />
+          </div>
 
-                <div class="form-group">
-                    <label class="form-label">Last Name</label>
-                    <input type="text" class="form-input" required placeholder="Family Name">
-                </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input
+              type="text"
+              class="form-input"
+              required
+              placeholder="Family Name"
+            />
+          </div>
 
-                <div class="form-group">
-                    <label class="form-label">Phone Number</label>
-                    <input type="tel" class="form-input" required placeholder="+234...">
-                </div>
+          <div class="form-group">
+            <label class="form-label">Phone Number</label>
+            <input
+              type="tel"
+              class="form-input"
+              required
+              placeholder="+234..."
+            />
+          </div>
 
-                <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" class="form-input" placeholder="email@example.com">
-                </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input
+              type="email"
+              class="form-input"
+              placeholder="email@example.com"
+            />
+          </div>
 
-                <div class="form-group full-width">
-                    <label class="form-label">Residential Address</label>
-                    <input type="text" class="form-input" required placeholder="Street Address, Area/District">
-                </div>
+          <div class="form-group full-width">
+            <label class="form-label">Residential Address</label>
+            <input
+              type="text"
+              class="form-input"
+              required
+              placeholder="Street Address, Area/District"
+            />
+          </div>
 
-                <!-- Spiritual Interest & Status -->
-                <div class="form-section-title">
-                    <i class="ph-fill ph-hands-praying"></i> Membership Pathway
-                </div>
+          <!-- Spiritual Interest & Status -->
+          <div class="form-section-title">
+            <i class="ph-fill ph-hands-praying"></i> Membership Pathway
+          </div>
 
-                <div class="form-group full-width">
-                    <label class="form-label">I am joining through:</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="radio" name="join_type" value="baptism"> 
-                            <span>Baptism (New Believer)</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="join_type" value="profession"> 
-                            <span>Profession of Faith</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="radio" name="join_type" value="transfer"> 
-                            <span>Letter of Transfer</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="form-group full-width">
-                    <label class="form-label">Current Spiritual Status</label>
-                    <select class="form-select">
-                        <option value="">Select an option...</option>
-                        <option>I have never been baptized.</option>
-                        <option>I was baptized by immersion previously.</option>
-                        <option>I was baptized as an infant.</option>
-                        <option>I am an ordained Elder/Deacon in another conference.</option>
-                    </select>
-                </div>
-
-                <div class="form-group full-width" id="transfer-details">
-                    <label class="form-label">If Transferring: Previous Church/Conference</label>
-                    <input type="text" class="form-input" placeholder="e.g., Abuja Central Church, North Central Conference">
-                    <div class="helper-text">Leave blank if not applicable.</div>
-                </div>
-
-                <!-- Bible Study Interests -->
-                <div class="form-section-title">
-                    <i class="ph-fill ph-book-open-text"></i> Bible Study Interests
-                </div>
-
-                <div class="form-group full-width">
-                    <label class="form-label">I would like to study:</label>
-                    <div class="radio-group">
-                        <label class="radio-option">
-                            <input type="checkbox" name="study" value="doctrines"> 
-                            <span>Fundamental Beliefs</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="checkbox" name="study" value="prophecy"> 
-                            <span>Daniel & Revelation</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="checkbox" name="study" value="health"> 
-                            <span>Health & Lifestyle</span>
-                        </label>
-                        <label class="radio-option">
-                            <input type="checkbox" name="study" value="home"> 
-                            <span>Christian Home</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- Ministry & Small Group -->
-                <div class="form-section-title">
-                    <i class="ph-fill ph-users-three"></i> Community Integration
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Preferred Small Care Group</label>
-                    <select class="form-select">
-                        <option value="">Assign me to the nearest one</option>
-                        <option>Marian Area</option>
-                        <option>Calabar South Area</option>
-                        <option>8 Miles Area</option>
-                        <option>Housing Estate Area</option>
-                        <option>University Campus (SDAF)</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Ministry Interest</label>
-                    <select class="form-select">
-                        <option value="">I want to discover my talent</option>
-                        <option>Choir / Music</option>
-                        <option>Ushers / Protocol</option>
-                        <option>Media / Technical</option>
-                        <option>Dorcas / Community Service</option>
-                        <option>Children's Teacher</option>
-                        <option>Literature Evangelism</option>
-                    </select>
-                </div>
-
-                <div class="form-group full-width">
-                    <label class="form-label">Additional Notes or Prayer Requests</label>
-                    <textarea class="form-textarea" rows="3" placeholder="Is there anything specific you would like the Pastor to know?"></textarea>
-                </div>
-
-                <div class="form-group full-width">
-                    <button type="submit" class="submit-btn">
-                        Submit Registration <i class="ph-bold ph-arrow-right"></i>
-                    </button>
-                    <div style="text-align: center; margin-top: 15px; font-size: 0.85rem; color: #777;">
-                        By submitting this form, you agree to be contacted by the Church Clerk or Pastor regarding your membership.
-                    </div>
-                </div>
-
+          <div class="form-group full-width">
+            <label class="form-label">I am joining through:</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" name="join_type" value="baptism" />
+                <span>Baptism (New Believer)</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="join_type" value="profession" />
+                <span>Profession of Faith</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="join_type" value="transfer" />
+                <span>Letter of Transfer</span>
+              </label>
             </div>
-        </form>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">Current Spiritual Status</label>
+            <select class="form-select">
+              <option value="">Select an option...</option>
+              <option>I have never been baptized.</option>
+              <option>I was baptized by immersion previously.</option>
+              <option>I was baptized as an infant.</option>
+              <option>
+                I am an ordained Elder/Deacon in another conference.
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group full-width" id="transfer-details">
+            <label class="form-label"
+              >If Transferring: Previous Church/Conference</label
+            >
+            <input
+              type="text"
+              class="form-input"
+              placeholder="e.g., Abuja Central Church, North Central Conference"
+            />
+            <div class="helper-text">Leave blank if not applicable.</div>
+          </div>
+
+          <!-- Bible Study Interests -->
+          <div class="form-section-title">
+            <i class="ph-fill ph-book-open-text"></i> Bible Study Interests
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label">I would like to study:</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="checkbox" name="study" value="doctrines" />
+                <span>Fundamental Beliefs</span>
+              </label>
+              <label class="radio-option">
+                <input type="checkbox" name="study" value="prophecy" />
+                <span>Daniel & Revelation</span>
+              </label>
+              <label class="radio-option">
+                <input type="checkbox" name="study" value="health" />
+                <span>Health & Lifestyle</span>
+              </label>
+              <label class="radio-option">
+                <input type="checkbox" name="study" value="home" />
+                <span>Christian Home</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Ministry & Small Group -->
+          <div class="form-section-title">
+            <i class="ph-fill ph-users-three"></i> Community Integration
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Preferred Small Care Group</label>
+            <select class="form-select">
+              <option value="">Assign me to the nearest one</option>
+              <option>Marian Area</option>
+              <option>Calabar South Area</option>
+              <option>8 Miles Area</option>
+              <option>Housing Estate Area</option>
+              <option>University Campus (SDAF)</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Ministry Interest</label>
+            <select class="form-select">
+              <option value="">I want to discover my talent</option>
+              <option>Choir / Music</option>
+              <option>Ushers / Protocol</option>
+              <option>Media / Technical</option>
+              <option>Dorcas / Community Service</option>
+              <option>Children's Teacher</option>
+              <option>Literature Evangelism</option>
+            </select>
+          </div>
+
+          <div class="form-group full-width">
+            <label class="form-label"
+              >Additional Notes or Prayer Requests</label
+            >
+            <textarea
+              class="form-textarea"
+              rows="3"
+              placeholder="Is there anything specific you would like the Pastor to know?"
+            ></textarea>
+          </div>
+
+          <div class="form-group full-width">
+            <button type="submit" class="submit-btn">
+              Submit Registration <i class="ph-bold ph-arrow-right"></i>
+            </button>
+            <div
+              style="
+                text-align: center;
+                margin-top: 15px;
+                font-size: 0.85rem;
+                color: #777;
+              "
+            >
+              By submitting this form, you agree to be contacted by the Church
+              Clerk or Pastor regarding your membership.
+            </div>
+          </div>
+        </div>
+      </form>
     </div>
 
     <!-- Footer -->
-    <footer style="background: #111; color: #aaa; padding: 60px 5% 20px; margin-top: auto;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; max-width: 1200px; margin: 0 auto 40px;">
-            <div>
-                <h4 style="color: white; margin-bottom: 20px;">CRC</h4>
-                <p>Preparing a people for the soon coming of our Lord Jesus Christ.</p>
-            </div>
-            <div>
-                <h4 style="color: white; margin-bottom: 20px;">Quick Links</h4>
-                <ul>
-                    <li style="margin-bottom: 10px;"><a href="index.html">Home</a></li>
-                    <li style="margin-bottom: 10px;"><a href="sermons.html">Sermons</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 style="color: white; margin-bottom: 20px;">Contact</h4>
-                <ul>
-                    <li>101 Goldie/Marian Road, Calabar</li>
-                    <li>secsec2013@gmail.com</li>
-                </ul>
-            </div>
+    <footer
+      style="
+        background: #111;
+        color: #aaa;
+        padding: 60px 5% 20px;
+        margin-top: auto;
+      "
+    >
+      <div
+        style="
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 40px;
+          margin-bottom: 40px;
+          max-width: 1200px;
+          margin: 0 auto 40px;
+        "
+      >
+        <div>
+          <h4 style="color: white; margin-bottom: 20px">CRC</h4>
+          <p>
+            Preparing a people for the soon coming of our Lord Jesus Christ.
+          </p>
         </div>
-        <div style="border-top: 1px solid #333; padding-top: 20px; text-align: center; font-size: 0.9rem;">
-            &copy; 2025 Seventh-Day Adventist Church Cross River Conference.
+        <div>
+          <h4 style="color: white; margin-bottom: 20px">Quick Links</h4>
+          <ul>
+            <li style="margin-bottom: 10px"><a href="index.html">Home</a></li>
+            <li style="margin-bottom: 10px">
+              <a href="sermons.html">Sermons</a>
+            </li>
+          </ul>
         </div>
+        <div>
+          <h4 style="color: white; margin-bottom: 20px">Contact</h4>
+          <ul>
+            <li>101 Goldie/Marian Road, Calabar</li>
+            <li>secsec2013@gmail.com</li>
+          </ul>
+        </div>
+      </div>
+      <div
+        style="
+          border-top: 1px solid #333;
+          padding-top: 20px;
+          text-align: center;
+          font-size: 0.9rem;
+        "
+      >
+        &copy; 2025 Seventh-Day Adventist Church Cross River Conference.
+      </div>
     </footer>
 
     <script>
-        // Mobile Menu Toggle used across pages
-        function toggleMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.toggle('active');
-        }
+      // Mobile Menu Toggle used across pages
+      function toggleMenu() {
+        const navLinks = document.querySelector(".nav-links");
+        navLinks.classList.toggle("active");
+      }
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const nav = document.querySelector('.navbar');
-            const menuToggle = document.querySelector('.menu-toggle');
-            const navLinks = document.querySelector('.nav-links');
-            if (!nav.contains(event.target) && !menuToggle.contains(event.target)) {
-                navLinks.classList.remove('active');
-            }
-        });
+      // Close mobile menu when clicking outside
+      document.addEventListener("click", function (event) {
+        const nav = document.querySelector(".navbar");
+        const menuToggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+        if (!nav.contains(event.target) && !menuToggle.contains(event.target)) {
+          navLinks.classList.remove("active");
+        }
+      });
     </script>
-</body>
+  </body>
 </html>

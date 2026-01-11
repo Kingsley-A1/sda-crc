@@ -1,0 +1,646 @@
+// =============================================================================
+// SDA Cross River Conference - Prisma Schema
+// =============================================================================
+// Database: CockroachDB Serverless
+// ORM: Prisma 5.x
+// 
+// "In the beginning was the Word, and the Word was with God, and the Word was God." — John 1:1
+// =============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "cockroachdb"
+  url      = env("DATABASE_URL")
+}
+
+// =============================================================================
+// AUTHENTICATION & USERS
+// =============================================================================
+
+model User {
+  id            String    @id @default(cuid())
+  name          String
+  email         String    @unique
+  emailVerified DateTime?
+  password      String?
+  image         String?
+  role          UserRole  @default(VIEWER)
+  isActive      Boolean   @default(true)
+  lastLoginAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts Account[]
+  sessions Session[]
+  sermons  Sermon[]  @relation("CreatedSermons")
+  events   Event[]   @relation("CreatedEvents")
+  worker   Worker?
+
+  @@index([email])
+  @@index([role])
+  @@map("users")
+}
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("sessions")
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}
+
+// =============================================================================
+// SERMONS
+// =============================================================================
+
+model Sermon {
+  id                 String       @id @default(cuid())
+  title              String
+  slug               String       @unique
+  preacher           String
+  date               DateTime
+  description        String?
+  audioUrl           String?
+  videoUrl           String?
+  thumbnailUrl       String?
+  duration           Int?         // Duration in seconds
+  scriptureReference String?
+  seriesId           String?
+  tags               String[]     @default([])
+  isPublished        Boolean      @default(false)
+  viewCount          Int          @default(0)
+  createdById        String?
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  createdBy User?         @relation("CreatedSermons", fields: [createdById], references: [id], onDelete: SetNull)
+  series    SermonSeries? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+
+  @@index([date])
+  @@index([preacher])
+  @@index([isPublished])
+  @@map("sermons")
+}
+
+model SermonSeries {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  sermons Sermon[]
+
+  @@map("sermon_series")
+}
+
+// =============================================================================
+// EVENTS
+// =============================================================================
+
+model Event {
+  id                   String        @id @default(cuid())
+  title                String
+  slug                 String        @unique
+  description          String?
+  date                 DateTime
+  endDate              DateTime?
+  location             String?
+  imageUrl             String?
+  isOnline             Boolean       @default(false)
+  onlineLink           String?
+  category             String        @default("other")
+  isFeatured           Boolean       @default(false)
+  isPublished          Boolean       @default(false)
+  requiresRegistration Boolean       @default(false)
+  maxAttendees         Int?
+  createdById          String?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  createdBy User? @relation("CreatedEvents", fields: [createdById], references: [id], onDelete: SetNull)
+
+  @@index([date])
+  @@index([category])
+  @@index([isPublished])
+  @@map("events")
+}
+
+enum EventCategory {
+  WORSHIP
+  FELLOWSHIP
+  EVANGELISM
+  TRAINING
+  YOUTH
+  CHILDREN
+  SPECIAL
+}
+
+// =============================================================================
+// DEPARTMENTS
+// =============================================================================
+
+model Department {
+  id              String   @id @default(cuid())
+  name            String
+  slug            String   @unique
+  description     String?
+  mission         String?
+  imageUrl        String?
+  iconName        String?  // Phosphor icon name
+  colorScheme     String?  // Color scheme for UI
+  leaderId        String?  @unique
+  meetingDay      String?
+  meetingTime     String?
+  meetingLocation String?
+  isActive        Boolean  @default(true)
+  order           Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  leader  Member?  @relation("DepartmentLeader", fields: [leaderId], references: [id], onDelete: SetNull)
+  members Member[] @relation("DepartmentMembers")
+
+  @@index([slug])
+  @@index([isActive])
+  @@map("departments")
+}
+
+// =============================================================================
+// SMALL GROUPS
+// =============================================================================
+
+model SmallGroup {
+  id               String   @id @default(cuid())
+  name             String
+  description      String?
+  leaderId         String?  @unique
+  latitude         Float?
+  longitude        Float?
+  address          String?
+  city             String?
+  state            String?
+  meetingDay       String
+  meetingTime      String?
+  type             String   @default("bible-study")
+  maxMembers       Int      @default(12)
+  isActive         Boolean  @default(true)
+  acceptingMembers Boolean  @default(true)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  leader  Member?  @relation("SmallGroupLeader", fields: [leaderId], references: [id], onDelete: SetNull)
+  members Member[] @relation("SmallGroupMembers")
+
+  @@index([city])
+  @@index([isActive])
+  @@map("small_groups")
+}
+
+// =============================================================================
+// MEMBERS
+// =============================================================================
+
+model Member {
+  id                    String          @id @default(cuid())
+  firstName             String
+  lastName              String
+  email                 String          @unique
+  phone                 String
+  dateOfBirth           DateTime?
+  gender                Gender?
+  address               String?
+  city                  String?
+  state                 String?
+  occupation            String?
+  baptismDate           DateTime?
+  membershipType        MembershipType  @default(FULL)
+  photoUrl              String?
+  emergencyContactName  String?
+  emergencyContactPhone String?
+  interests             String[]        @default([])
+  departmentId          String?
+  smallGroupId          String?
+  isActive              Boolean         @default(true)
+  isWorker              Boolean         @default(false)
+  workerRole            String?
+  workerOrder           Int?
+  notes                 String?
+  createdAt             DateTime        @default(now())
+  updatedAt             DateTime        @updatedAt
+
+  department          Department?      @relation("DepartmentMembers", fields: [departmentId], references: [id], onDelete: SetNull)
+  smallGroup          SmallGroup?      @relation("SmallGroupMembers", fields: [smallGroupId], references: [id], onDelete: SetNull)
+  leadingDepartment   Department?      @relation("DepartmentLeader")
+  leadingSmallGroup   SmallGroup?      @relation("SmallGroupLeader")
+  evangelismSites     EvangelismSite[] @relation("SiteCoordinator")
+  pledges             Pledge[]
+  soulPledges         SoulPledge[]     @relation("MemberSoulPledges")
+  worker              Worker?
+
+  @@index([email])
+  @@index([phone])
+  @@index([lastName])
+  @@index([isWorker])
+  @@map("members")
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum MembershipType {
+  FULL
+  TRANSFER
+  PROFESSION_OF_FAITH
+  BAPTISM
+}
+
+// =============================================================================
+// WORKERS (Church Leadership & Ministry Teams)
+// =============================================================================
+
+model Worker {
+  id           String      @id @default(cuid())
+  memberId     String?     @unique
+  userId       String?     @unique
+  firstName    String
+  lastName     String
+  email        String?
+  phone        String?
+  role         WorkerRole
+  title        String?     // Custom title override
+  department   String?     // Department name (for display)
+  bio          String?
+  photoUrl     String?
+  startDate    DateTime?
+  endDate      DateTime?
+  isActive     Boolean     @default(true)
+  displayOrder Int?        // For custom ordering within same role
+  showOnWebsite Boolean    @default(true)
+  socialLinks  Json?       // { facebook, twitter, instagram, linkedin }
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  member Member? @relation(fields: [memberId], references: [id], onDelete: SetNull)
+  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([role])
+  @@index([isActive])
+  @@map("workers")
+}
+
+enum WorkerRole {
+  // Conference Leadership
+  PRESIDENT
+  EXECUTIVE_SECRETARY
+  TREASURER
+  
+  // Pastoral Ministry
+  SENIOR_PASTOR
+  ASSOCIATE_PASTOR
+  DISTRICT_PASTOR
+  INTERN_PASTOR
+  
+  // Church Elders
+  FIRST_ELDER
+  SECOND_ELDER
+  ELDER
+  
+  // Deacons & Deaconesses
+  HEAD_DEACON
+  DEACON
+  HEAD_DEACONESS
+  DEACONESS
+  
+  // Music Ministry
+  MUSIC_DIRECTOR
+  CHOIR_LEADER
+  ORGANIST
+  CHOIR_MEMBER
+  
+  // Sabbath School
+  SS_SUPERINTENDENT
+  SS_SECRETARY
+  SS_TEACHER
+  
+  // Youth Ministry
+  AY_DIRECTOR
+  AY_ASSOCIATE
+  PATHFINDER_DIRECTOR
+  PATHFINDER_DEPUTY
+  ADVENTURER_DIRECTOR
+  MASTER_GUIDE
+  
+  // Women & Family Ministry
+  WM_LEADER
+  WM_ASSOCIATE
+  FM_LEADER
+  
+  // Children's Ministry
+  CHILDREN_DIRECTOR
+  CHILDREN_TEACHER
+  
+  // Communication & Media
+  COMMUNICATION_DIRECTOR
+  MEDIA_DIRECTOR
+  SOUND_ENGINEER
+  CAMERA_OPERATOR
+  
+  // Other Departments
+  HEALTH_DIRECTOR
+  EDUCATION_DIRECTOR
+  STEWARDSHIP_DIRECTOR
+  PERSONAL_MINISTRIES_DIRECTOR
+  PUBLISHING_DIRECTOR
+  
+  // Church Officers
+  CHURCH_CLERK
+  CHURCH_TREASURER
+  INTEREST_COORDINATOR
+  
+  // General Workers
+  USHER
+  GREETER
+  SECURITY
+  VOLUNTEER
+}
+
+// =============================================================================
+// EVANGELISM SITES
+// =============================================================================
+
+model EvangelismSite {
+  id               String            @id @default(cuid())
+  name             String
+  description      String?
+  address          String?
+  city             String?
+  state            String?
+  latitude         Float?
+  longitude        Float?
+  status           EvangelismStatus  @default(PLANNING)
+  startDate        DateTime?
+  endDate          DateTime?
+  coordinatorId    String?
+  targetAttendance Int?
+  actualAttendance Int?
+  baptisms         Int                 @default(0)
+  decisions        Int                 @default(0)
+  imageUrl         String?
+  createdAt        DateTime            @default(now())
+  updatedAt        DateTime            @updatedAt
+
+  coordinator Member? @relation("SiteCoordinator", fields: [coordinatorId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([startDate])
+  @@map("evangelism_sites")
+}
+
+enum EvangelismStatus {
+  PLANNING
+  ACTIVE
+  COMPLETED
+  PAUSED
+}
+
+// =============================================================================
+// SOUL PLEDGES (Evangelism Commitments)
+// =============================================================================
+
+model SoulPledge {
+  id           String              @id @default(cuid())
+  memberId     String?
+  campaignId   String?
+  pledgedSouls Int                 @default(1)
+  wonSouls     Int                 @default(0)
+  status       SoulPledgeStatus    @default(ACTIVE)
+  notes        String?
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+
+  member   Member?           @relation("MemberSoulPledges", fields: [memberId], references: [id], onDelete: SetNull)
+  campaign EvangelismCampaign? @relation(fields: [campaignId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@index([memberId])
+  @@map("soul_pledges")
+}
+
+enum SoulPledgeStatus {
+  ACTIVE
+  FULFILLED
+  PARTIAL
+  CANCELLED
+}
+
+model EvangelismCampaign {
+  id          String   @id @default(cuid())
+  name        String
+  theme       String?
+  startDate   DateTime
+  endDate     DateTime?
+  description String?
+  imageUrl    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  pledges SoulPledge[]
+
+  @@map("evangelism_campaigns")
+}
+
+// =============================================================================
+// PLEDGES
+// =============================================================================
+
+model Pledge {
+  id          String           @id @default(cuid())
+  memberId    String?
+  name        String
+  email       String?
+  phone       String?
+  amount      Float
+  currency    Currency         @default(NGN)
+  purpose     PledgePurpose    @default(OFFERING)
+  projectName String?
+  frequency   PledgeFrequency  @default(ONE_TIME)
+  startDate   DateTime         @default(now())
+  status      PledgeStatus     @default(PENDING)
+  notes       String?
+  anonymous   Boolean          @default(false)
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  member Member? @relation(fields: [memberId], references: [id], onDelete: SetNull)
+
+  @@index([purpose])
+  @@index([status])
+  @@map("pledges")
+}
+
+enum Currency {
+  NGN
+  USD
+}
+
+enum PledgePurpose {
+  TITHE
+  OFFERING
+  EVANGELISM
+  BUILDING
+  SPECIAL_PROJECT
+  OTHER
+}
+
+enum PledgeFrequency {
+  ONE_TIME
+  WEEKLY
+  MONTHLY
+  QUARTERLY
+  YEARLY
+}
+
+enum PledgeStatus {
+  PENDING
+  PARTIAL
+  FULFILLED
+  CANCELLED
+}
+
+// =============================================================================
+// CONTACT SUBMISSIONS
+// =============================================================================
+
+model ContactSubmission {
+  id        String               @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String
+  category  ContactCategory      @default(GENERAL)
+  status    ContactStatus        @default(NEW)
+  ipAddress String?
+  userAgent String?
+  readAt    DateTime?
+  repliedAt DateTime?
+  notes     String?
+  createdAt DateTime             @default(now())
+  updatedAt DateTime             @updatedAt
+
+  @@index([status])
+  @@index([category])
+  @@map("contact_submissions")
+}
+
+enum ContactCategory {
+  GENERAL
+  PRAYER_REQUEST
+  MEMBERSHIP
+  EVENTS
+  FEEDBACK
+  OTHER
+}
+
+enum ContactStatus {
+  NEW
+  READ
+  IN_PROGRESS
+  REPLIED
+  RESOLVED
+  ARCHIVED
+}
+
+// =============================================================================
+// SITE SETTINGS
+// =============================================================================
+
+model SiteSettings {
+  id              String   @id @default(cuid())
+  siteName        String   @default("SDA Cross River Conference")
+  siteDescription String?
+  contactEmail    String?
+  contactPhone    String?
+  address         String?
+  facebookUrl     String?
+  twitterUrl      String?
+  instagramUrl    String?
+  youtubeUrl      String?
+  liveStreamUrl   String?
+  maintenanceMode Boolean  @default(false)
+  offlineMessage  String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@map("site_settings")
+}
+
+// =============================================================================
+// RESOURCES (Documents, Downloads)
+// =============================================================================
+
+model Resource {
+  id          String       @id @default(cuid())
+  title       String
+  description String?
+  fileUrl     String
+  fileType    String
+  fileSize    Int
+  category    String?
+  published   Boolean      @default(false)
+  downloads   Int          @default(0)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+
+  @@index([category])
+  @@index([published])
+  @@map("resources")
+}

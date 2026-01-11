@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Core SDA Branding */
+  --primary-main: #009a44; /* SDA Green */
+  --primary-light: #66bb6a;
+  --primary: #003087; /* SDA Blue */
+  --primary-dark: #002266;
+  --secondary: #f9a01b; /* Gold/Yellow Accents */
+  --accent-green: #009a44; /* Growth/Youth/Health */
+  --accent-red: #d32f2f; /* Evangelism/Urgency/Danger */
+
+  /* Surface & Backgrounds */
+  --background: #f8f9fa; /* Light Gray for Public Pages */
+  --foreground: #1a1a1a; /* Deep Black/Gray Text */
+  --admin-bg: #0f172a; /* Midnight Slate for Command Center */
+  --admin-panel: #1e293b; /* Lighter Slate for Admin Cards */
+
+  /* UI Tokens */
+  --radius: 12px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -1px rgb(0 0 0 / 0.06);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* Dark Mode / Admin Specific Overrides */
+.admin-theme {
+  --background: var(--admin-bg);
+  --foreground: #f8fafc;
+  --card: var(--admin-panel);
+  --border: rgba(255, 255, 255, 0.05);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  /* Smooth Scroll for PWA feel */
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+@layer components {
+  .btn-hover-effect {
+    @apply transition-all duration-300 active:scale-95;
+  }
+
+  /* Custom glass effect for the PWA Header */
+  .glass-header {
+    @apply sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-100;
+  }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera (Clean PWA Look) */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scroll-width: none; /* Firefox */
+}

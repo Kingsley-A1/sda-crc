@@ -1,223 +1,210 @@
 Project Blueprint: SDA Cross River Conference Digital Platform
 
-Status: Draft | Stack: Next.js (App Router), PostgreSQL, Cloudflare R2 | Type: PWA
+Status: Strategic Build | Stack: Next.js 15, PostgreSQL (CockroachDB), Cloudflare R2 | Type: PWA
 
 1. Executive Summary
 
-This project aims to build a Progressive Web App (PWA) for the Seventh-Day Adventist Church Cross River Conference. The platform will serve two distinct groups:
+The SDA Cross River Conference Digital Platform is a "Digital Sanctuary" designed to proclaim the Everlasting Gospel. It serves as both a Member Hub (PWA for worship, sermons, and community) and a Mission HQ (Admin Command Center for aggressive evangelism and conference management).
 
-The Admin/Conference: Tools to manage content, events, and ministries without coding.
+Primary Goals:
 
-The Members/Public: A fast, installable app to watch sermons, stream programs, and connect with ministries (AMO, AWM, AYO).
+Engagement: Instant access to live streams and a massive sermon archive with zero-egress download costs.
 
-2. Technical Architecture
+Mission: Tracking the "Vision 2026" evangelism goals and "I Will Go" pledges.
 
-The stack is chosen for performance and cost-efficiency.
+Community: Integrating the WAD Small Care Group structure into the daily lives of members.
 
-Frontend (The "Face"): Next.js 15 (App Router).
+2. Technical Architecture & Hosting
 
-Why: Incredible speed, SEO optimized (crucial for evangelism), and PWA support (installable on phones like an app).
+We are utilizing a modern, serverless stack to ensure high performance on Nigerian mobile networks with minimal maintenance costs.
 
-Database (The "Brain"): PostgreSQL (Managed via Neon or Supabase).
+Component
 
-Why: Structured data is essential for maintaining thousands of sermon records, member directories, and event calendars.
+Service Provider
 
-Storage (The "Vault"): Cloudflare R2.
+Why?
 
-Why: Traditional cloud storage charges for "egress" (downloading files). R2 is zero-egress fee. This is critical for a church allowing unlimited sermon downloads.
+Frontend/API
 
-Live Streaming: Hybrid Approach.
+Vercel
 
-Strategy: We will not host live streams directly on R2 (it is for storage). We will embed a YouTube Live or Facebook Live player on the site for the live event, then automatically upload the recording to R2 for the permanent "Sermon Archive."
+Industry standard for Next.js; global Edge network ensures speed in Calabar/Nigeria.
 
-3. Database Schema (Simplified)
+Database
 
-We need three core tables to start.
+CockroachDB Serverless
 
-A. users (Admins & Members)
+Distributed PostgreSQL; 100% uptime and scales automatically with membership growth.
 
-Column
+Media Storage
 
-Type
+Cloudflare R2
 
-Notes
+Hosts sermons and resources with Zero Egress Fees, making unlimited downloads affordable.
 
-id
+PWA Engine
 
-UUID
+Next-PWA
 
-Primary Key
+Enables "Add to Home Screen" functionality, offline caching, and a native app feel.
 
-email
+Live Streaming
 
-String
+Hybrid Integration
 
-Unique, for login
+Low-latency YouTube/Facebook embeds for live events; auto-archiving to R2.
 
-role
+3. Database Schema (Enhanced)
 
-Enum
+Beyond standard tables, we are building for the "WAD Impact" and "Small Care" initiatives.
 
-'ADMIN', 'EDITOR', 'MEMBER'
+A. Core Administration
 
-ministry_affiliation
+users: Admins, Clerks, and Members (Roles: SUPER_ADMIN, DEPT_DIRECTOR, CLERK, MEMBER).
 
-String
+sermons: Title, Preacher, Series, R2 Video URL, R2 Audio URL, Tags.
 
-e.g., 'AMO', 'AWM'
+events: Calendar items, Location, Departmental Category, Live status.
 
-B. sermons
+B. Mission & Community (The Pulse)
 
-Column
+care_groups: Name, Location (Geo-coordinates), Leader contact, Meeting time.
 
-Type
+evangelism_sites: 2026 Strategy locations, Coordinator, Status (Preparation, Sowing, Reaping, Retention).
 
-Notes
+pledges: "I Will Go" records, Member ID, Soul target, Progress tracking.
 
-id
+resources: PDF Manuals, Sabbath School guides, and Departmental files on R2.
 
-UUID
+4. Implementation Roadmap
 
-Primary Key
+Phase 1: The Sanctuary Shell (Weeks 1-2)
 
-title
+[ ] Next.js 15 App Router initialization with Tailwind CSS.
 
-String
+[ ] PWA Manifest and Service Worker configuration.
 
-preacher
+[ ] Deployment of the Public Home and About (101 Goldie) pages.
 
-String
+Phase 2: The Word & The Archive (Weeks 3-4)
 
-video_url
+[ ] Integration of Cloudflare R2 with AWS S3 SDK.
 
-String
+[ ] Admin "War Room": Build the Sermon Upload & Management portal.
 
-Link to Cloudflare R2 file
+[ ] Public "Sermon Library": Searchable grid with audio/video toggle.
 
-audio_url
+Phase 3: Total Member Involvement (Weeks 5-6)
 
-String
+[ ] Small Care Group Finder: Map-based search for local home cells.
 
-Link to Cloudflare R2 file (for low data)
+[ ] Join Us Portal: Membership registration, Baptismal interest, and Transfer requests.
 
-date
+[ ] Departmental Hubs: AYM (Youth), AMO (Men), and AWM (Women) dynamic pages.
 
-DateTime
+Phase 4: Strategy 2026 & Live (Weeks 7-8)
 
-C. events
+[ ] Battle Map: Admin dashboard for tracking evangelism site progress.
 
-Column
+[ ] Live Sanctuary: Implementation of the Live Stream player with real-time chat.
 
-Type
+[ ] Final Polish: SEO Optimization for Calabar/Cross River searches and PWA install testing.
 
-Notes
-
-id
-
-UUID
-
-Primary Key
-
-title
-
-String
-
-department
-
-String
-
-e.g., 'Youth', 'Women'
-
-start_time
-
-DateTime
-
-is_live
-
-Boolean
-
-Toggles the "Live Now" banner
-
-4. Feature Implementation Roadmap
-
-Phase 1: The Foundation (Weeks 1-2)
-
-[ ] Setup Next.js project with Tailwind CSS.
-
-[ ] Configure next-pwa to make the site installable.
-
-[ ] Build the "App Shell" (Navbar, Sidebar, Footer).
-
-[ ] Create the Landing Page (Hero section, Featured Sermon).
-
-Phase 2: The Archive (Weeks 3-4)
-
-[ ] Set up Cloudflare R2 bucket (crc-sermons).
-
-[ ] Build the Admin Upload Form:
-
-Action: Admin selects video file -> File uploads directly to R2 -> URL saved to Postgres.
-
-[ ] Build the Public Sermon Library with search/filter by preacher.
-
-Phase 3: Ministries & Departments (Weeks 5-6)
-
-[ ] Create dynamic pages for AMO, AWM, and AYO.
-
-[ ] Each department gets a "Resources" tab (PDFs/Guides hosted on R2).
-
-[ ] Build the "Contact Us" and "Join Us" forms (connected to email alerts).
-
-Phase 4: Live & Interactive (Weeks 7-8)
-
-[ ] Integrate the Live Stream Player page.
-
-[ ] Add "Upcoming Events" calendar.
-
-[ ] Final Polish: Accessibility check, SEO tags, Performance tuning.
-
-5. Project Directory Structure (VS Code View)
-
-This is how your project files will be organized. We are using the src directory pattern for cleaner organization.
+5. Project Directory Structure
 
 crc-platform/
-├── public/ # Static assets (images, logos, favicon, manifest.json)
+├── public/                 # PWA Icons, Manifest, Static Assets
 ├── src/
-│ ├── app/ # App Router (Pages & Layouts)
-│ │ ├── (auth)/ # Route group for authentication (login/signup)
-│ │ ├── (main)/ # Route group for main site
-│ │ │ ├── page.tsx # Home Page (Landing)
-│ │ │ ├── sermons/ # /sermons route
-│ │ │ ├── events/ # /events route
-│ │ │ ├── departments/
-│ │ │ │ ├── amo/ # /departments/amo
-│ │ │ │ ├── awm/ # /departments/awm
-│ │ │ │ └── ayo/ # /departments/ayo
-│ │ │ └── about/ # /about route
-│ │ ├── admin/ # Admin Dashboard (protected routes)
-│ │ ├── api/ # API Routes (Serverless functions)
-│ │ ├── layout.tsx # Root Layout
-│ │ └── globals.css # Global Styles (Tailwind imports)
-│ ├── components/ # Reusable UI components
-│ │ ├── ui/ # Buttons, Cards, Inputs (base elements)
-│ │ ├── shared/ # Navbar, Footer, Sidebar
-│ │ └── features/ # SermonPlayer, EventCard (complex logic)
-│ ├── lib/ # Utility functions & Database config
-│ │ ├── db.ts # Postgres connection setup
-│ │ ├── r2.ts # Cloudflare R2 upload helper
-│ │ └── utils.ts # General helper functions
-│ └── types/ # TypeScript definitions (Sermon, User, Event interfaces)
-├── .env.local # Environment variables (API Keys - DO NOT COMMIT)
-├── next.config.mjs # Next.js configuration (PWA settings go here)
-├── tailwind.config.ts # Tailwind styling config
-└── package.json # Dependencies
+│   ├── app/                # Next.js App Router
+│   │   ├── (public)/       # Public Sanctuary Routes (Sermons, Events, Join)
+│   │   ├── (admin)/        # Mission HQ Routes (Dashboard, Evangelism Map)
+│   │   ├── (auth)/         # Secure Login for Conference Admins
+│   │   ├── api/            # Serverless functions (R2 Upload, DB Query)
+│   │   └── layout.tsx      # Global Root Layout
+│   ├── components/
+│   │   ├── ui/             # Core Brand Components (Buttons, Cards)
+│   │   ├── sanctuary/      # Public components (SermonPlayer, GroupFinder)
+│   │   └── command/        # Admin components (StatsGrid, BattleList)
+│   ├── lib/
+│   │   ├── cockroach.ts    # DB Connection (Prisma or Drizzle)
+│   │   ├── r2-client.ts    # Cloudflare R2 logic
+│   │   └── utils.ts        # PWA & Auth helpers
+│   └── styles/
+│       └── globals.css     # SDA Brand CSS Variables
+├── tailwind.config.ts      # Core Brand Colors & Breakpoints
+└── package.json            # Next.js 15 & S3 SDK dependencies
 
-6. Actionable Next Steps
 
-Initialize the Repo: Run npx create-next-app@latest crc-platform.
+6. Financial Plan & Cost Analysis
 
-Database: Set up a free Postgres instance on Neon.tech.
+Building and maintaining this platform requires a modest but consistent investment to ensure performance and reliability.
 
-Storage: Create a Cloudflare account and purchase R2 (starts free/cheap).
+A. Development Phase (Monthly Costs)
 
-Prototype: Use the React code provided below as your page.tsx starting point.
+Item
+
+Cost
+
+Purpose
+
+GitHub Copilot
+
+~$10/mo
+
+AI-powered development assistance to speed up building the complex Next.js logic.
+
+Domain Name
+
+~$15/yr
+
+Official .org or .org.ng web address for the Conference.
+
+B. Infrastructure & Hosting (Monthly Estimates)
+
+Service
+
+Tier
+
+Cost
+
+Notes
+
+Vercel
+
+Hobby
+
+$0
+
+Free for non-commercial projects. Pro tier ($20/mo) only needed if team grows.
+
+CockroachDB
+
+Serverless
+
+$0
+
+Free up to 10GB storage and 50M request units. High availability included.
+
+Cloudflare R2
+
+Pay-as-you-go
+
+~$0 - $10
+
+First 10GB free. $0.015/GB/mo after. **$0 Egress fees** (No cost for downloads).
+
+C. Total Estimated Initial Monthly Budget
+
+Minimum Operational Cost: ~$10.00 USD (GitHub Copilot only).
+
+Scaling Operational Cost: ~$25.00 - $45.00 USD (If storage exceeds free tier and Vercel Pro is required).
+
+7. Actionable Next Steps
+
+Infrastructure: Set up accounts on Vercel, Cloudflare, and CockroachDB.
+
+Initialization: Run npx create-next-app@latest crc-platform --typescript --tailwind --eslint.
+
+Environment: Configure .env.local with your DATABASE_URL and R2_SECRET_KEY.
+
+Baseline Build: Implement the globals.css and tailwind.config.ts we defined to lock in the brand identity.

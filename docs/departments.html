@@ -1,403 +1,575 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Departments & Ministries | SDA Cross River Conference</title>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <style>
-        /* --- GLOBAL STYLES (Matches previous files) --- */
-        :root {
-            --primary: #003087; /* SDA Blue */
-            --primary-dark: #002266;
-            --secondary: #F9A01B; /* Gold */
-            --accent: #009A44; /* Green */
-            --text-dark: #1a1a1a;
-            --text-gray: #666666;
-            --bg-light: #f8f9fa;
-            --white: #ffffff;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --radius: 12px;
+      /* --- GLOBAL STYLES (Matches previous files) --- */
+      :root {
+        --primary: #003087; /* SDA Blue */
+        --primary-dark: #002266;
+        --secondary: #f9a01b; /* Gold */
+        --accent: #009a44; /* Green */
+        --text-dark: #1a1a1a;
+        --text-gray: #666666;
+        --bg-light: #f8f9fa;
+        --white: #ffffff;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --radius: 12px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        color: var(--text-dark);
+        background-color: var(--bg-light);
+        line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+        transition: 0.3s;
+      }
+      ul {
+        list-style: none;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      /* Header styles moved to styles.css */
+
+      /* --- HERO SECTION --- */
+      .page-header {
+        background: linear-gradient(
+            rgba(0, 48, 135, 0.9),
+            rgba(0, 48, 135, 0.8)
+          ),
+          url("https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&q=80");
+        background-size: cover;
+        background-position: center;
+        color: var(--white);
+        padding: 100px 5%;
+        text-align: center;
+      }
+
+      .page-header h1 {
+        font-size: 3.5rem;
+        margin-bottom: 15px;
+        font-weight: 800;
+      }
+      .page-header p {
+        font-size: 1.25rem;
+        opacity: 0.9;
+        max-width: 700px;
+        margin: 0 auto;
+      }
+
+      /* --- DEPARTMENTS GRID --- */
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 80px 5%;
+      }
+
+      .section-title {
+        text-align: center;
+        margin-bottom: 60px;
+      }
+      .section-title h2 {
+        font-size: 2.2rem;
+        color: var(--primary);
+        margin-bottom: 10px;
+      }
+      .section-title p {
+        color: var(--text-gray);
+      }
+
+      .dept-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+      }
+
+      .dept-card {
+        background: var(--white);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        border: 1px solid #eee;
+        transition: transform 0.3s, box-shadow 0.3s;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .dept-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        border-color: var(--primary);
+      }
+
+      /* Card Header with Color Strips */
+      .card-header {
+        height: 8px;
+        width: 100%;
+      }
+      .card-header.amo {
+        background: #003087;
+      }
+      .card-header.awm {
+        background: #e91e63;
+      }
+      .card-header.ayo {
+        background: #f9a01b;
+      }
+      .card-header.dorcas {
+        background: #673ab7;
+      }
+      .card-header.children {
+        background: #00bcd4;
+      }
+      .card-header.health {
+        background: #4caf50;
+      }
+
+      .card-body {
+        padding: 30px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .dept-icon {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        margin-bottom: 20px;
+        transition: 0.3s;
+      }
+
+      /* Specific Icon Colors */
+      .amo .dept-icon {
+        background: rgba(0, 48, 135, 0.1);
+        color: #003087;
+      }
+      .awm .dept-icon {
+        background: rgba(233, 30, 99, 0.1);
+        color: #e91e63;
+      }
+      .ayo .dept-icon {
+        background: rgba(249, 160, 27, 0.1);
+        color: #f9a01b;
+      }
+      .dorcas .dept-icon {
+        background: rgba(103, 58, 183, 0.1);
+        color: #673ab7;
+      }
+      .children .dept-icon {
+        background: rgba(0, 188, 212, 0.1);
+        color: #00bcd4;
+      }
+      .health .dept-icon {
+        background: rgba(76, 175, 80, 0.1);
+        color: #4caf50;
+      }
+
+      .dept-card:hover .dept-icon {
+        transform: scale(1.1);
+      }
+
+      .dept-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 5px;
+        color: var(--text-dark);
+      }
+
+      .dept-subtitle {
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: var(--text-gray);
+        margin-bottom: 15px;
+      }
+
+      .dept-desc {
+        font-size: 0.95rem;
+        color: var(--text-gray);
+        margin-bottom: 25px;
+        line-height: 1.6;
+      }
+
+      .card-footer {
+        margin-top: auto;
+        width: 100%;
+      }
+
+      .btn-outline {
+        display: block;
+        width: 100%;
+        padding: 10px 0;
+        border: 1px solid #ddd;
+        border-radius: 50px;
+        color: var(--text-gray);
+        font-weight: 600;
+        transition: 0.3s;
+      }
+
+      .btn-outline:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+        background: #f0f7ff;
+      }
+
+      /* --- CALL TO ACTION --- */
+      .cta-section {
+        background: var(--primary);
+        color: var(--white);
+        padding: 80px 5%;
+        text-align: center;
+      }
+
+      .cta-content {
+        max-width: 800px;
+        margin: 0 auto;
+      }
+
+      .cta-content h2 {
+        font-size: 2rem;
+        margin-bottom: 20px;
+      }
+      .cta-content p {
+        font-size: 1.1rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+      }
+
+      .btn-white {
+        background: var(--white);
+        color: var(--primary);
+        padding: 12px 30px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .btn-white:hover {
+        background: var(--secondary);
+        color: var(--text-dark);
+      }
+
+      /* --- FOOTER (Same as other pages) --- */
+      footer {
+        background: #111;
+        color: #aaa;
+        padding: 60px 5% 20px;
+        margin-top: auto;
+      }
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+      .footer-col h4 {
+        color: white;
+        margin-bottom: 20px;
+      }
+      .footer-col ul li {
+        margin-bottom: 10px;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .nav-links,
+        .nav-action {
+          display: none;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; color: var(--text-dark); background-color: var(--bg-light); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
-        ul { list-style: none; }
-        img { max-width: 100%; display: block; }
-
-        /* Header styles moved to styles.css */
-
-        /* --- HERO SECTION --- */
-        .page-header {
-            background: linear-gradient(rgba(0, 48, 135, 0.9), rgba(0, 48, 135, 0.8)), url('https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&q=80');
-            background-size: cover;
-            background-position: center;
-            color: var(--white);
-            padding: 100px 5%;
-            text-align: center;
+        .menu-toggle {
+          display: block;
         }
-
-        .page-header h1 { font-size: 3.5rem; margin-bottom: 15px; font-weight: 800; }
-        .page-header p { font-size: 1.25rem; opacity: 0.9; max-width: 700px; margin: 0 auto; }
-
-        /* --- DEPARTMENTS GRID --- */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 80px 5%;
+        .page-header h1 {
+          font-size: 2.5rem;
         }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 60px;
-        }
-        .section-title h2 { font-size: 2.2rem; color: var(--primary); margin-bottom: 10px; }
-        .section-title p { color: var(--text-gray); }
-
         .dept-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 30px;
+          grid-template-columns: 1fr;
         }
-
-        .dept-card {
-            background: var(--white);
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            border: 1px solid #eee;
-            transition: transform 0.3s, box-shadow 0.3s;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .dept-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 24px rgba(0,0,0,0.1);
-            border-color: var(--primary);
-        }
-
-        /* Card Header with Color Strips */
-        .card-header {
-            height: 8px;
-            width: 100%;
-        }
-        .card-header.amo { background: #003087; }
-        .card-header.awm { background: #E91E63; }
-        .card-header.ayo { background: #F9A01B; }
-        .card-header.dorcas { background: #673AB7; }
-        .card-header.children { background: #00BCD4; }
-        .card-header.health { background: #4CAF50; }
-
-        .card-body {
-            padding: 30px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-        }
-
-        .dept-icon {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            margin-bottom: 20px;
-            transition: 0.3s;
-        }
-
-        /* Specific Icon Colors */
-        .amo .dept-icon { background: rgba(0, 48, 135, 0.1); color: #003087; }
-        .awm .dept-icon { background: rgba(233, 30, 99, 0.1); color: #E91E63; }
-        .ayo .dept-icon { background: rgba(249, 160, 27, 0.1); color: #F9A01B; }
-        .dorcas .dept-icon { background: rgba(103, 58, 183, 0.1); color: #673AB7; }
-        .children .dept-icon { background: rgba(0, 188, 212, 0.1); color: #00BCD4; }
-        .health .dept-icon { background: rgba(76, 175, 80, 0.1); color: #4CAF50; }
-
-        .dept-card:hover .dept-icon { transform: scale(1.1); }
-
-        .dept-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 5px;
-            color: var(--text-dark);
-        }
-
-        .dept-subtitle {
-            font-size: 0.85rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-gray);
-            margin-bottom: 15px;
-        }
-
-        .dept-desc {
-            font-size: 0.95rem;
-            color: var(--text-gray);
-            margin-bottom: 25px;
-            line-height: 1.6;
-        }
-
-        .card-footer {
-            margin-top: auto;
-            width: 100%;
-        }
-
-        .btn-outline {
-            display: block;
-            width: 100%;
-            padding: 10px 0;
-            border: 1px solid #ddd;
-            border-radius: 50px;
-            color: var(--text-gray);
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .btn-outline:hover {
-            border-color: var(--primary);
-            color: var(--primary);
-            background: #f0f7ff;
-        }
-
-        /* --- CALL TO ACTION --- */
-        .cta-section {
-            background: var(--primary);
-            color: var(--white);
-            padding: 80px 5%;
-            text-align: center;
-        }
-
-        .cta-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .cta-content h2 { font-size: 2rem; margin-bottom: 20px; }
-        .cta-content p { font-size: 1.1rem; margin-bottom: 30px; opacity: 0.9; }
-        
-        .btn-white {
-            background: var(--white);
-            color: var(--primary);
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1.1rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .btn-white:hover { background: var(--secondary); color: var(--text-dark); }
-
-        /* --- FOOTER (Same as other pages) --- */
-        footer { background: #111; color: #aaa; padding: 60px 5% 20px; margin-top: auto; }
-        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; }
-        .footer-col h4 { color: white; margin-bottom: 20px; }
-        .footer-col ul li { margin-bottom: 10px; }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            .nav-links, .nav-action { display: none; }
-            .menu-toggle { display: block; }
-            .page-header h1 { font-size: 2.5rem; }
-            .dept-grid { grid-template-columns: 1fr; }
-        }
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <!-- Navigation -->
     <nav class="navbar">
-        <div class="logo">
-            <img src="./logo.png" alt="Seventh Day Adventist Church CRC logo" class="site-logo">
-            <div class="site-title">
-                <span class="church-name">Seventh Day Adventist Church</span>
-                <span class="church-sub">CRC</span>
-            </div>
+      <div class="logo">
+        <img
+          src="./logo.png"
+          alt="Seventh Day Adventist Church CRC logo"
+          class="site-logo"
+        />
+        <div class="site-title">
+          <span class="church-name">Seventh Day Adventist Church</span>
+          <span class="church-sub">CRC</span>
         </div>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="small-groups.html">Small Groups</a></li>
-            <li><a href="join.html">Join</a></li>
-            <li><a href="sermons.html">Sermons</a></li>
-            <li><a href="evangelism.html">Evangelism</a></li>
-            <li><a href="departments.html">Departments</a></li>
-            <li><a href="events.html">Events</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="admin/admin-dashboard.html" class="admin-link" aria-label="Admin area (prototype)">Admin</a></li>
-        </ul>
-        <div class="nav-action">
-            <a href="live.html" class="btn-primary">
-                <i class="ph ph-video-camera"></i> Watch Live
-            </a>
-        </div>
-        <div class="menu-toggle" onclick="toggleMenu()"><i class="ph ph-list"></i></div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="small-groups.html">Small Groups</a></li>
+        <li><a href="join.html">Join</a></li>
+        <li><a href="sermons.html">Sermons</a></li>
+        <li><a href="evangelism.html">Evangelism</a></li>
+        <li><a href="departments.html">Departments</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li>
+          <a
+            href="admin/admin-dashboard.html"
+            class="admin-link"
+            aria-label="Admin area (prototype)"
+            >Admin</a
+          >
+        </li>
+      </ul>
+      <div class="nav-action">
+        <a href="live.html" class="btn-primary">
+          <i class="ph ph-video-camera"></i> Watch Live
+        </a>
+      </div>
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <i class="ph ph-list"></i>
+      </div>
     </nav>
 
     <!-- Header -->
     <header class="page-header">
-        <h1>Ministries & Departments</h1>
-        <p>There is a place for everyone to serve. Discover the ministries of the Cross River Conference and find where God is calling you to work.</p>
+      <h1>Ministries & Departments</h1>
+      <p>
+        There is a place for everyone to serve. Discover the ministries of the
+        Cross River Conference and find where God is calling you to work.
+      </p>
     </header>
 
     <!-- Ministries Grid -->
     <div class="container">
-        <div class="section-title">
-            <h2>Our Organizations</h2>
-            <p>Empowering every member of the family for service.</p>
+      <div class="section-title">
+        <h2>Our Organizations</h2>
+        <p>Empowering every member of the family for service.</p>
+      </div>
+
+      <div class="dept-grid">
+        <!-- AMO -->
+        <div
+          class="dept-card amo"
+          onclick="window.location.href='department-view.html'"
+        >
+          <div class="card-header amo"></div>
+          <div class="card-body">
+            <div class="dept-icon"><i class="ph-fill ph-user-check"></i></div>
+            <h3 class="dept-title">AMO</h3>
+            <div class="dept-subtitle">Adventist Men's Organization</div>
+            <p class="dept-desc">
+              Men united in mission, leadership, and service to the home,
+              church, and community. Building strong fathers and husbands.
+            </p>
+            <div class="card-footer">
+              <button class="btn-outline">Visit Department</button>
+            </div>
+          </div>
         </div>
 
-        <div class="dept-grid">
-            
-            <!-- AMO -->
-            <div class="dept-card amo" onclick="window.location.href='department-view.html'">
-                <div class="card-header amo"></div>
-                <div class="card-body">
-                    <div class="dept-icon"><i class="ph-fill ph-user-check"></i></div>
-                    <h3 class="dept-title">AMO</h3>
-                    <div class="dept-subtitle">Adventist Men's Organization</div>
-                    <p class="dept-desc">Men united in mission, leadership, and service to the home, church, and community. Building strong fathers and husbands.</p>
-                    <div class="card-footer">
-                        <button class="btn-outline">Visit Department</button>
-                    </div>
-                </div>
+        <!-- AWM -->
+        <div
+          class="dept-card awm"
+          onclick="window.location.href='department-view.html'"
+        >
+          <div class="card-header awm"></div>
+          <div class="card-body">
+            <div class="dept-icon"><i class="ph-fill ph-heart"></i></div>
+            <h3 class="dept-title">AWM</h3>
+            <div class="dept-subtitle">Women's Ministries</div>
+            <p class="dept-desc">
+              Upholding, encouraging, and challenging women in their daily walk
+              as disciples of Jesus Christ.
+            </p>
+            <div class="card-footer">
+              <button class="btn-outline">Visit Department</button>
             </div>
-
-            <!-- AWM -->
-            <div class="dept-card awm" onclick="window.location.href='department-view.html'">
-                <div class="card-header awm"></div>
-                <div class="card-body">
-                    <div class="dept-icon"><i class="ph-fill ph-heart"></i></div>
-                    <h3 class="dept-title">AWM</h3>
-                    <div class="dept-subtitle">Women's Ministries</div>
-                    <p class="dept-desc">Upholding, encouraging, and challenging women in their daily walk as disciples of Jesus Christ.</p>
-                    <div class="card-footer">
-                        <button class="btn-outline">Visit Department</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- AYO -->
-            <div class="dept-card ayo" onclick="window.location.href='department-view.html'">
-                <div class="card-header ayo"></div>
-                <div class="card-body">
-                    <div class="dept-icon"><i class="ph-fill ph-fire"></i></div>
-                    <h3 class="dept-title">AYO</h3>
-                    <div class="dept-subtitle">Adventist Youth Organization</div>
-                    <p class="dept-desc">The vibrant future of the church. Including Adventurers, Pathfinders, and Senior Youth working for the salvation of their peers.</p>
-                    <div class="card-footer">
-                        <button class="btn-outline">Visit Department</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dorcas / Community Services -->
-            <div class="dept-card dorcas" onclick="window.location.href='department-view.html'">
-                <div class="card-header dorcas"></div>
-                <div class="card-body">
-                    <div class="dept-icon"><i class="ph-fill ph-hand-heart"></i></div>
-                    <h3 class="dept-title">Small Care Groups</h3>
-                    <div class="dept-subtitle">Community Services</div>
-                    <p class="dept-desc">Serving the poor and hurting in Christ's name. "Inasmuch as ye have done it unto one of the least of these..."</p>
-                    <div class="card-footer">
-                        <button class="btn-outline">Visit Department</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Children's Ministry -->
-            <div class="dept-card children" onclick="window.location.href='department-view.html'">
-                <div class="card-header children"></div>
-                <div class="card-body">
-                    <div class="dept-icon"><i class="ph-fill ph-baby"></i></div>
-                    <h3 class="dept-title">Children</h3>
-                    <div class="dept-subtitle">Children's Ministries</div>
-                    <p class="dept-desc">Nurturing the faith of children ages 0-14, leading them into a loving, serving relationship with Jesus.</p>
-                    <div class="card-footer">
-                        <button class="btn-outline">Visit Department</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Health Ministries -->
-            <div class="dept-card health" onclick="window.location.href='department-view.html'">
-                <div class="card-header health"></div>
-                <div class="card-body">
-                    <div class="dept-icon"><i class="ph-fill ph-first-aid"></i></div>
-                    <h3 class="dept-title">Health</h3>
-                    <div class="dept-subtitle">Medical Missionary</div>
-                    <p class="dept-desc">Promoting the "right arm" of the gospel message through healthy living, temperance, and wholeness.</p>
-                    <div class="card-footer">
-                        <button class="btn-outline">Visit Department</button>
-                    </div>
-                </div>
-            </div>
-
+          </div>
         </div>
+
+        <!-- AYO -->
+        <div
+          class="dept-card ayo"
+          onclick="window.location.href='department-view.html'"
+        >
+          <div class="card-header ayo"></div>
+          <div class="card-body">
+            <div class="dept-icon"><i class="ph-fill ph-fire"></i></div>
+            <h3 class="dept-title">AYO</h3>
+            <div class="dept-subtitle">Adventist Youth Organization</div>
+            <p class="dept-desc">
+              The vibrant future of the church. Including Adventurers,
+              Pathfinders, and Senior Youth working for the salvation of their
+              peers.
+            </p>
+            <div class="card-footer">
+              <button class="btn-outline">Visit Department</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dorcas / Community Services -->
+        <div
+          class="dept-card dorcas"
+          onclick="window.location.href='department-view.html'"
+        >
+          <div class="card-header dorcas"></div>
+          <div class="card-body">
+            <div class="dept-icon"><i class="ph-fill ph-hand-heart"></i></div>
+            <h3 class="dept-title">Small Care Groups</h3>
+            <div class="dept-subtitle">Community Services</div>
+            <p class="dept-desc">
+              Serving the poor and hurting in Christ's name. "Inasmuch as ye
+              have done it unto one of the least of these..."
+            </p>
+            <div class="card-footer">
+              <button class="btn-outline">Visit Department</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Children's Ministry -->
+        <div
+          class="dept-card children"
+          onclick="window.location.href='department-view.html'"
+        >
+          <div class="card-header children"></div>
+          <div class="card-body">
+            <div class="dept-icon"><i class="ph-fill ph-baby"></i></div>
+            <h3 class="dept-title">Children</h3>
+            <div class="dept-subtitle">Children's Ministries</div>
+            <p class="dept-desc">
+              Nurturing the faith of children ages 0-14, leading them into a
+              loving, serving relationship with Jesus.
+            </p>
+            <div class="card-footer">
+              <button class="btn-outline">Visit Department</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Health Ministries -->
+        <div
+          class="dept-card health"
+          onclick="window.location.href='department-view.html'"
+        >
+          <div class="card-header health"></div>
+          <div class="card-body">
+            <div class="dept-icon"><i class="ph-fill ph-first-aid"></i></div>
+            <h3 class="dept-title">Health</h3>
+            <div class="dept-subtitle">Medical Missionary</div>
+            <p class="dept-desc">
+              Promoting the "right arm" of the gospel message through healthy
+              living, temperance, and wholeness.
+            </p>
+            <div class="card-footer">
+              <button class="btn-outline">Visit Department</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Call to Action -->
     <section class="cta-section">
-        <div class="cta-content">
-            <h2>Don't Stand on the Sidelines</h2>
-            <p>God has given everyone a talent. If you are unsure where to serve, contact the Personal Ministries department today.</p>
-            <a href="contact.html" class="btn-white"><i class="ph-fill ph-paper-plane-right"></i> Volunteer Today</a>
-        </div>
+      <div class="cta-content">
+        <h2>Don't Stand on the Sidelines</h2>
+        <p>
+          God has given everyone a talent. If you are unsure where to serve,
+          contact the Personal Ministries department today.
+        </p>
+        <a href="contact.html" class="btn-white"
+          ><i class="ph-fill ph-paper-plane-right"></i> Volunteer Today</a
+        >
+      </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-content">
-            <div class="footer-col">
-                <h4>CRC</h4>
-                <p>Preparing a people for the soon coming of our Lord Jesus Christ.</p>
-            </div>
-            <div class="footer-col">
-                <h4>Quick Links</h4>
-                <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="small-groups.html">Small Groups</a></li>
-                    <li><a href="evangelism.html">Evangelism</a></li>
-                    <li><a href="join.html">Join</a></li>
-                    <li><a href="sermons.html">Sermons</a></li>
-                    <li><a href="departments.html">Departments</a></li>
-                    <li><a href="events.html">Events</a></li>
-                    <li><a href="contact.html">Contact</a></li>
-                </ul>
-            </div>
-            <div class="footer-col">
-                <h4>Contact</h4>
-                <ul>
-                    <li><i class="ph ph-map-pin"></i> 101 Goldie/Marian Road, Calabar</li>
-                    <li><i class="ph ph-envelope"></i> secsec2013@gmail.com</li>
-                </ul>
-            </div>
+      <div class="footer-content">
+        <div class="footer-col">
+          <h4>CRC</h4>
+          <p>
+            Preparing a people for the soon coming of our Lord Jesus Christ.
+          </p>
         </div>
-        <div style="border-top: 1px solid #333; padding-top: 20px; text-align: center; font-size: 0.9rem;">
-            &copy; 2025 Seventh-Day Adventist Church Cross River Conference.
+        <div class="footer-col">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="small-groups.html">Small Groups</a></li>
+            <li><a href="evangelism.html">Evangelism</a></li>
+            <li><a href="join.html">Join</a></li>
+            <li><a href="sermons.html">Sermons</a></li>
+            <li><a href="departments.html">Departments</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="contact.html">Contact</a></li>
+          </ul>
         </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <ul>
+            <li>
+              <i class="ph ph-map-pin"></i> 101 Goldie/Marian Road, Calabar
+            </li>
+            <li><i class="ph ph-envelope"></i> secsec2013@gmail.com</li>
+          </ul>
+        </div>
+      </div>
+      <div
+        style="
+          border-top: 1px solid #333;
+          padding-top: 20px;
+          text-align: center;
+          font-size: 0.9rem;
+        "
+      >
+        &copy; 2025 Seventh-Day Adventist Church Cross River Conference.
+      </div>
     </footer>
 
     <script>
-        function toggleMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.toggle('active');
+      function toggleMenu() {
+        const navLinks = document.querySelector(".nav-links");
+        navLinks.classList.toggle("active");
+      }
+      document.addEventListener("click", function (event) {
+        const nav = document.querySelector(".navbar");
+        const menuToggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+        if (!nav.contains(event.target) && !menuToggle.contains(event.target)) {
+          navLinks.classList.remove("active");
         }
-        document.addEventListener('click', function(event) {
-            const nav = document.querySelector('.navbar');
-            const menuToggle = document.querySelector('.menu-toggle');
-            const navLinks = document.querySelector('.nav-links');
-            if (!nav.contains(event.target) && !menuToggle.contains(event.target)) {
-                navLinks.classList.remove('active');
-            }
-        });
+      });
     </script>
-</body>
+  </body>
 </html>

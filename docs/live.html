@@ -1,474 +1,712 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Live Stream | SDA Cross River Conference</title>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <style>
-        /* --- GLOBAL STYLES (Matches index.html) --- */
-        :root {
-            --primary: #003087;
-            --primary-dark: #002266;
-            --secondary: #F9A01B;
-            --accent: #009A44;
-            --text-dark: #1a1a1a;
-            --text-gray: #666666;
-            --bg-light: #f8f9fa;
-            --white: #ffffff;
-            --chat-bg: #f0f2f5;
-            --radius: 12px;
+      /* --- GLOBAL STYLES (Matches index.html) --- */
+      :root {
+        --primary: #003087;
+        --primary-dark: #002266;
+        --secondary: #f9a01b;
+        --accent: #009a44;
+        --text-dark: #1a1a1a;
+        --text-gray: #666666;
+        --bg-light: #f8f9fa;
+        --white: #ffffff;
+        --chat-bg: #f0f2f5;
+        --radius: 12px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        color: var(--text-dark);
+        background-color: var(--bg-light);
+        line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+        transition: 0.3s;
+      }
+      ul {
+        list-style: none;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+
+      /* Header styles moved to styles.css */
+
+      /* --- LIVE STREAM LAYOUT --- */
+
+      .main-stage {
+        flex: 1;
+        background: #000; /* Theater mode background */
+        display: grid;
+        grid-template-columns: 1fr 350px; /* Video takes remaining space, Chat fixed 350px */
+        height: calc(100vh - 80px); /* Fill screen minus navbar */
+        overflow: hidden;
+      }
+
+      /* Left Column: Video & Info */
+      .stream-column {
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .video-container {
+        width: 100%;
+        aspect-ratio: 16/9;
+        background: #000;
+        position: relative;
+      }
+
+      .video-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: url("https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&q=80")
+          center/cover;
+        position: relative;
+      }
+
+      .video-placeholder::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.5);
+      }
+
+      .live-badge {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        background: #ff0000;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 4px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0% {
+          opacity: 1;
         }
+        50% {
+          opacity: 0.6;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; color: var(--text-dark); background-color: var(--bg-light); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
-        ul { list-style: none; }
-        img { max-width: 100%; display: block; }
+      .play-overlay {
+        z-index: 2;
+        width: 80px;
+        height: 80px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(5px);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2rem;
+        cursor: pointer;
+        border: 2px solid white;
+        transition: 0.3s;
+      }
+      .play-overlay:hover {
+        transform: scale(1.1);
+        background: var(--primary);
+        border-color: var(--primary);
+      }
 
-        /* Header styles moved to styles.css */
+      /* Stream Info Section */
+      .stream-info {
+        padding: 30px;
+        background: var(--bg-light);
+        flex: 1;
+      }
 
-        /* --- LIVE STREAM LAYOUT --- */
-        
+      .stream-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        flex-wrap: wrap;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+
+      .stream-title h1 {
+        font-size: 1.8rem;
+        color: var(--text-dark);
+        margin-bottom: 5px;
+      }
+      .stream-meta {
+        color: var(--text-gray);
+        font-size: 0.95rem;
+        display: flex;
+        gap: 15px;
+        align-items: center;
+      }
+      .view-count {
+        color: #ff0000;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+      }
+
+      .action-buttons {
+        display: flex;
+        gap: 12px;
+      }
+
+      .btn-icon {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        border: 1px solid #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        color: var(--text-gray);
+        background: white;
+        cursor: pointer;
+      }
+      .btn-icon:hover {
+        color: var(--primary);
+        border-color: var(--primary);
+        background: #f0f7ff;
+      }
+
+      .tabs {
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 20px;
+        display: flex;
+        gap: 30px;
+      }
+      .tab {
+        padding-bottom: 10px;
+        font-weight: 600;
+        color: var(--text-gray);
+        cursor: pointer;
+        border-bottom: 2px solid transparent;
+      }
+      .tab.active {
+        color: var(--primary);
+        border-color: var(--primary);
+      }
+
+      .tab-content {
+        color: var(--text-dark);
+        line-height: 1.7;
+        max-width: 800px;
+      }
+
+      /* Right Column: Chat */
+      .chat-column {
+        background: white;
+        border-left: 1px solid #ddd;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+      }
+
+      .chat-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        font-weight: 700;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+      }
+
+      .chat-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        background: var(--chat-bg);
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .message {
+        display: flex;
+        gap: 10px;
+        align-items: flex-start;
+        animation: fadeIn 0.3s ease;
+      }
+
+      .avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: #ddd;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: white;
+        flex-shrink: 0;
+      }
+
+      .msg-content {
+        background: white;
+        padding: 10px 14px;
+        border-radius: 0 12px 12px 12px;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        max-width: 85%;
+      }
+
+      .msg-author {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--text-gray);
+        margin-bottom: 2px;
+      }
+      .msg-text {
+        font-size: 0.95rem;
+        word-wrap: break-word;
+      }
+      .msg-time {
+        font-size: 0.7rem;
+        color: #aaa;
+        margin-top: 4px;
+        display: block;
+        text-align: right;
+      }
+
+      /* Admin/Mod Message Style */
+      .message.mod .msg-content {
+        background: #e3f2fd;
+        border: 1px solid #bbdefb;
+      }
+      .message.mod .msg-author {
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        gap: 4px;
+      }
+
+      .chat-input-area {
+        padding: 15px;
+        border-top: 1px solid #eee;
+        background: white;
+      }
+
+      .input-wrapper {
+        display: flex;
+        gap: 10px;
+      }
+
+      .chat-input {
+        flex: 1;
+        padding: 10px 15px;
+        border: 1px solid #ddd;
+        border-radius: 50px;
+        outline: none;
+        transition: 0.2s;
+      }
+      .chat-input:focus {
+        border-color: var(--primary);
+      }
+
+      .send-btn {
+        width: 40px;
+        height: 40px;
+        background: var(--primary);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: none;
+        cursor: pointer;
+      }
+      .send-btn:hover {
+        background: var(--primary-dark);
+      }
+
+      /* Support Button Floating */
+      .floating-support {
+        display: none; /* Shows on mobile */
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(5px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* --- RESPONSIVE --- */
+      @media (max-width: 900px) {
         .main-stage {
-            flex: 1;
-            background: #000; /* Theater mode background */
-            display: grid;
-            grid-template-columns: 1fr 350px; /* Video takes remaining space, Chat fixed 350px */
-            height: calc(100vh - 80px); /* Fill screen minus navbar */
-            overflow: hidden;
+          grid-template-columns: 1fr; /* Stack layout */
+          height: auto;
+          overflow: visible;
         }
 
-        /* Left Column: Video & Info */
         .stream-column {
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
+          height: auto;
+          overflow: visible;
         }
 
-        .video-container {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: #000;
-            position: relative;
-        }
-
-        .video-placeholder {
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: url('https://images.unsplash.com/photo-1438232992991-995b7058bbb3?auto=format&fit=crop&q=80') center/cover;
-            position: relative;
-        }
-        
-        .video-placeholder::before {
-            content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.5);
-        }
-
-        .live-badge {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: #ff0000;
-            color: white;
-            padding: 5px 12px;
-            border-radius: 4px;
-            font-weight: 700;
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            display: flex; align-items: center; gap: 6px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.6; } 100% { opacity: 1; } }
-
-        .play-overlay {
-            z-index: 2;
-            width: 80px; height: 80px;
-            background: rgba(255,255,255,0.2);
-            backdrop-filter: blur(5px);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 2rem;
-            cursor: pointer;
-            border: 2px solid white;
-            transition: 0.3s;
-        }
-        .play-overlay:hover { transform: scale(1.1); background: var(--primary); border-color: var(--primary); }
-
-        /* Stream Info Section */
-        .stream-info {
-            padding: 30px;
-            background: var(--bg-light);
-            flex: 1;
-        }
-
-        .stream-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            gap: 20px;
-            margin-bottom: 20px;
-        }
-
-        .stream-title h1 { font-size: 1.8rem; color: var(--text-dark); margin-bottom: 5px; }
-        .stream-meta { color: var(--text-gray); font-size: 0.95rem; display: flex; gap: 15px; align-items: center; }
-        .view-count { color: #ff0000; font-weight: 600; display: flex; align-items: center; gap: 5px; }
-
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-        }
-
-        .btn-icon {
-            width: 45px; height: 45px;
-            border-radius: 50%;
-            border: 1px solid #ddd;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem;
-            color: var(--text-gray);
-            background: white;
-            cursor: pointer;
-        }
-        .btn-icon:hover { color: var(--primary); border-color: var(--primary); background: #f0f7ff; }
-
-        .tabs { border-bottom: 1px solid #ddd; margin-bottom: 20px; display: flex; gap: 30px; }
-        .tab { padding-bottom: 10px; font-weight: 600; color: var(--text-gray); cursor: pointer; border-bottom: 2px solid transparent; }
-        .tab.active { color: var(--primary); border-color: var(--primary); }
-
-        .tab-content { color: var(--text-dark); line-height: 1.7; max-width: 800px; }
-
-        /* Right Column: Chat */
         .chat-column {
-            background: white;
-            border-left: 1px solid #ddd;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
+          height: 500px; /* Fixed height for chat on mobile */
+          border-left: none;
+          border-top: 1px solid #ddd;
         }
 
-        .chat-header {
-            padding: 15px 20px;
-            border-bottom: 1px solid #eee;
-            font-weight: 700;
-            display: flex; justify-content: space-between; align-items: center;
-            background: white;
+        .navbar {
+          padding: 0 20px;
         }
-
-        .chat-messages {
-            flex: 1;
-            padding: 20px;
-            overflow-y: auto;
-            background: var(--chat-bg);
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+        .nav-links,
+        .nav-action {
+          display: none;
         }
-
-        .message { display: flex; gap: 10px; align-items: flex-start; animation: fadeIn 0.3s ease; }
-        
-        .avatar {
-            width: 32px; height: 32px;
-            border-radius: 50%;
-            background: #ddd;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: white;
-            flex-shrink: 0;
+        .menu-toggle {
+          display: block;
         }
+      }
 
-        .msg-content {
-            background: white;
-            padding: 10px 14px;
-            border-radius: 0 12px 12px 12px;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-            max-width: 85%;
+      @media (max-width: 600px) {
+        .stream-header {
+          flex-direction: column;
+          gap: 15px;
         }
-        
-        .msg-author { font-size: 0.8rem; font-weight: 700; color: var(--text-gray); margin-bottom: 2px; }
-        .msg-text { font-size: 0.95rem; word-wrap: break-word; }
-        .msg-time { font-size: 0.7rem; color: #aaa; margin-top: 4px; display: block; text-align: right; }
-
-        /* Admin/Mod Message Style */
-        .message.mod .msg-content { background: #e3f2fd; border: 1px solid #bbdefb; }
-        .message.mod .msg-author { color: var(--primary); display: flex; align-items: center; gap: 4px; }
-
-        .chat-input-area {
-            padding: 15px;
-            border-top: 1px solid #eee;
-            background: white;
+        .action-buttons {
+          width: 100%;
+          justify-content: space-between;
         }
-
-        .input-wrapper {
-            display: flex;
-            gap: 10px;
+        .btn-secondary {
+          flex: 1;
+          justify-content: center;
         }
-
-        .chat-input {
-            flex: 1;
-            padding: 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 50px;
-            outline: none;
-            transition: 0.2s;
-        }
-        .chat-input:focus { border-color: var(--primary); }
-
-        .send-btn {
-            width: 40px; height: 40px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            border: none;
-            cursor: pointer;
-        }
-        .send-btn:hover { background: var(--primary-dark); }
-
-        /* Support Button Floating */
-        .floating-support {
-            display: none; /* Shows on mobile */
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- RESPONSIVE --- */
-        @media (max-width: 900px) {
-            .main-stage {
-                grid-template-columns: 1fr; /* Stack layout */
-                height: auto;
-                overflow: visible;
-            }
-            
-            .stream-column {
-                height: auto;
-                overflow: visible;
-            }
-
-            .chat-column {
-                height: 500px; /* Fixed height for chat on mobile */
-                border-left: none;
-                border-top: 1px solid #ddd;
-            }
-
-            .navbar { padding: 0 20px; }
-            .nav-links, .nav-action { display: none; }
-            .menu-toggle { display: block; }
-        }
-
-        @media (max-width: 600px) {
-            .stream-header { flex-direction: column; gap: 15px; }
-            .action-buttons { width: 100%; justify-content: space-between; }
-            .btn-secondary { flex: 1; justify-content: center; }
-        }
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <!-- Navigation -->
     <nav class="navbar">
-        <div class="logo">
-            <img src="./logo.png" alt="Seventh Day Adventist Church CRC logo" class="site-logo">
-            <div class="site-title">
-                <span class="church-name">Seventh Day Adventist Church</span>
-                <span class="church-sub">CRC</span>
-            </div>
+      <div class="logo">
+        <img
+          src="./logo.png"
+          alt="Seventh Day Adventist Church CRC logo"
+          class="site-logo"
+        />
+        <div class="site-title">
+          <span class="church-name">Seventh Day Adventist Church</span>
+          <span class="church-sub">CRC</span>
         </div>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="small-groups.html">Small Groups</a></li>
-            <li><a href="join.html">Join</a></li>
-            <li><a href="sermons.html">Sermons</a></li>
-            <li><a href="evangelism.html">Evangelism</a></li>
-            <li><a href="departments.html">Departments</a></li>
-            <li><a href="events.html">Events</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="admin/admin-dashboard.html" class="admin-link" aria-label="Admin area (prototype)">Admin</a></li>
-        </ul>
-        <div class="nav-action">
-            <a href="live.html" class="btn-primary" style="background-color: #ff0000;">
-                <span style="width: 8px; height: 8px; background: white; border-radius: 50%; display: inline-block;"></span>
-                Live Now
-            </a>
-        </div>
-        <div class="menu-toggle" onclick="toggleMenu()"><i class="ph ph-list"></i></div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="small-groups.html">Small Groups</a></li>
+        <li><a href="join.html">Join</a></li>
+        <li><a href="sermons.html">Sermons</a></li>
+        <li><a href="evangelism.html">Evangelism</a></li>
+        <li><a href="departments.html">Departments</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li>
+          <a
+            href="admin/admin-dashboard.html"
+            class="admin-link"
+            aria-label="Admin area (prototype)"
+            >Admin</a
+          >
+        </li>
+      </ul>
+      <div class="nav-action">
+        <a
+          href="live.html"
+          class="btn-primary"
+          style="background-color: #ff0000"
+        >
+          <span
+            style="
+              width: 8px;
+              height: 8px;
+              background: white;
+              border-radius: 50%;
+              display: inline-block;
+            "
+          ></span>
+          Live Now
+        </a>
+      </div>
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <i class="ph ph-list"></i>
+      </div>
     </nav>
 
     <!-- Main Stage Layout -->
     <main class="main-stage">
-        
-        <!-- Left: Video Stream -->
-        <div class="stream-column">
-            <!-- Video Player -->
-            <div class="video-container">
-                <div class="video-placeholder">
-                    <div class="live-badge"><i class="ph-fill ph-broadcast"></i> Live</div>
-                    <div class="play-overlay"><i class="ph-fill ph-play"></i></div>
-                </div>
-                <!-- Embed Code Example (Hidden for mockup)
+      <!-- Left: Video Stream -->
+      <div class="stream-column">
+        <!-- Video Player -->
+        <div class="video-container">
+          <div class="video-placeholder">
+            <div class="live-badge">
+              <i class="ph-fill ph-broadcast"></i> Live
+            </div>
+            <div class="play-overlay"><i class="ph-fill ph-play"></i></div>
+          </div>
+          <!-- Embed Code Example (Hidden for mockup)
                 <iframe width="100%" height="100%" src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1" frameborder="0" allowfullscreen></iframe> 
                 -->
-            </div>
-
-            <!-- Info Section -->
-            <div class="stream-info">
-                <div class="stream-header">
-                    <div class="stream-title">
-                        <h1>Sabbath Divine Service</h1>
-                        <div class="stream-meta">
-                            <span class="view-count"><i class="ph-fill ph-eye"></i> 245 Watching</span>
-                            <span>•</span>
-                            <span>Started 45 mins ago</span>
-                        </div>
-                    </div>
-                    <div class="action-buttons">
-                        <button class="btn-secondary">
-                            <i class="ph-fill ph-heart"></i> Give Offering
-                        </button>
-                        <button class="btn-icon" title="Share"><i class="ph ph-share-network"></i></button>
-                        <button class="btn-icon" title="Bible"><i class="ph ph-book-open-text"></i></button>
-                    </div>
-                </div>
-
-                <div class="tabs">
-                    <div class="tab active">Description</div>
-                    <div class="tab">Order of Service</div>
-                    <div class="tab">Notes</div>
-                </div>
-
-                <div class="tab-content">
-                    <p>Welcome to our live Sabbath worship service from the Conference Headquarters in Calabar. Today's sermon is titled "The Anchor Holds" by President Edy Ubi Ewoh.</p>
-                    <br>
-                    <h4 style="margin-bottom: 8px;">Connect with us:</h4>
-                    <p style="font-size: 0.9rem; color: var(--text-gray);">
-                        • Prayer Line: +234 800 000 0000<br>
-                        • Email: prayer@crc-adventist.org
-                    </p>
-                </div>
-            </div>
-            
-            <!-- Footer -->
-            <footer style="background: #111; color: #aaa; padding: 40px 5% 20px;">
-                <div style="max-width:1200px; margin: 0 auto; display:grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap:30px; align-items:start;">
-                    <div>
-                        <h4 style="color:white; margin-bottom: 10px;">CRC</h4>
-                        <p style="color:#aaa;">Preparing a people for the soon coming of our Lord Jesus Christ.</p>
-                    </div>
-                    <div>
-                        <h4 style="color:white; margin-bottom: 10px;">Quick Links</h4>
-                        <ul style="color:#aaa;">
-                            <li><a href="index.html">Home</a></li>
-                            <li><a href="small-groups.html">Small Groups</a></li>
-                            <li><a href="evangelism.html">Evangelism</a></li>
-                            <li><a href="join.html">Join</a></li>
-                            <li><a href="sermons.html">Sermons</a></li>
-                            <li><a href="departments.html">Departments</a></li>
-                            <li><a href="events.html">Events</a></li>
-                            <li><a href="contact.html">Contact</a></li>
-                        </ul>
-                    </div>
-                    <div>
-                        <h4 style="color:white; margin-bottom: 10px;">Contact</h4>
-                        <p style="color:#aaa;">101 Goldie/Marian Road, Calabar<br>secsec2013@gmail.com</p>
-                    </div>
-                </div>
-                <div style="border-top:1px solid #222; text-align:center; padding-top:12px; color:#666;">&copy; 2025 SDA Cross River Conference.</div>
-            </footer>
         </div>
 
-        <!-- Right: Chat -->
-        <aside class="chat-column">
-            <div class="chat-header">
-                <span>Live Chat</span>
-                <i class="ph ph-dots-three" style="cursor: pointer;"></i>
+        <!-- Info Section -->
+        <div class="stream-info">
+          <div class="stream-header">
+            <div class="stream-title">
+              <h1>Sabbath Divine Service</h1>
+              <div class="stream-meta">
+                <span class="view-count"
+                  ><i class="ph-fill ph-eye"></i> 245 Watching</span
+                >
+                <span>•</span>
+                <span>Started 45 mins ago</span>
+              </div>
             </div>
-            
-            <div class="chat-messages" id="chatContainer">
-                <!-- System Message -->
-                <div class="message mod">
-                    <div class="avatar" style="background: var(--primary);"><i class="ph-fill ph-crown"></i></div>
-                    <div class="msg-content">
-                        <div class="msg-author">CRC Media Team <i class="ph-fill ph-check-circle" style="font-size: 0.8rem;"></i></div>
-                        <div class="msg-text">Happy Sabbath Church! Welcome to our online worship. Where are you watching from?</div>
-                        <span class="msg-time">10:00 AM</span>
-                    </div>
-                </div>
-
-                <!-- User Message 1 -->
-                <div class="message">
-                    <div class="avatar" style="background: #e91e63;">EA</div>
-                    <div class="msg-content">
-                        <div class="msg-author">Emem Akpan</div>
-                        <div class="msg-text">Happy Sabbath from Calabar Municipal! The audio is very clear today.</div>
-                        <span class="msg-time">10:02 AM</span>
-                    </div>
-                </div>
-
-                 <!-- User Message 2 -->
-                 <div class="message">
-                    <div class="avatar" style="background: #ff9800;">JO</div>
-                    <div class="msg-content">
-                        <div class="msg-author">James Okon</div>
-                        <div class="msg-text">Amen! Watching from Uyo. God bless the choir.</div>
-                        <span class="msg-time">10:04 AM</span>
-                    </div>
-                </div>
-
-                <!-- User Message 3 -->
-                <div class="message">
-                    <div class="avatar" style="background: #2196f3;">SP</div>
-                    <div class="msg-content">
-                        <div class="msg-author">Sister Patience</div>
-                        <div class="msg-text">Please pray for my family, we are traveling this week.</div>
-                        <span class="msg-time">10:05 AM</span>
-                    </div>
-                </div>
-
-                <!-- User Message 4 -->
-                 <div class="message">
-                    <div class="avatar" style="background: var(--accent);">D</div>
-                    <div class="msg-content">
-                        <div class="msg-author">David</div>
-                        <div class="msg-text">Hallelujah! Powerful song.</div>
-                        <span class="msg-time">10:06 AM</span>
-                    </div>
-                </div>
+            <div class="action-buttons">
+              <button class="btn-secondary">
+                <i class="ph-fill ph-heart"></i> Give Offering
+              </button>
+              <button class="btn-icon" title="Share">
+                <i class="ph ph-share-network"></i>
+              </button>
+              <button class="btn-icon" title="Bible">
+                <i class="ph ph-book-open-text"></i>
+              </button>
             </div>
+          </div>
 
-            <div class="chat-input-area">
-                <div class="input-wrapper">
-                    <input type="text" class="chat-input" placeholder="Say something..." id="chatInput">
-                    <button class="send-btn" onclick="sendMessage()"><i class="ph-fill ph-paper-plane-right"></i></button>
-                </div>
-                <div style="font-size: 0.75rem; color: #999; margin-top: 8px; text-align: center;">
-                    Remember to be kind and respectful.
-                </div>
+          <div class="tabs">
+            <div class="tab active">Description</div>
+            <div class="tab">Order of Service</div>
+            <div class="tab">Notes</div>
+          </div>
+
+          <div class="tab-content">
+            <p>
+              Welcome to our live Sabbath worship service from the Conference
+              Headquarters in Calabar. Today's sermon is titled "The Anchor
+              Holds" by President Edy Ubi Ewoh.
+            </p>
+            <br />
+            <h4 style="margin-bottom: 8px">Connect with us:</h4>
+            <p style="font-size: 0.9rem; color: var(--text-gray)">
+              • Prayer Line: +234 800 000 0000<br />
+              • Email: prayer@crc-adventist.org
+            </p>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <footer style="background: #111; color: #aaa; padding: 40px 5% 20px">
+          <div
+            style="
+              max-width: 1200px;
+              margin: 0 auto;
+              display: grid;
+              grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+              gap: 30px;
+              align-items: start;
+            "
+          >
+            <div>
+              <h4 style="color: white; margin-bottom: 10px">CRC</h4>
+              <p style="color: #aaa">
+                Preparing a people for the soon coming of our Lord Jesus Christ.
+              </p>
             </div>
-        </aside>
+            <div>
+              <h4 style="color: white; margin-bottom: 10px">Quick Links</h4>
+              <ul style="color: #aaa">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="small-groups.html">Small Groups</a></li>
+                <li><a href="evangelism.html">Evangelism</a></li>
+                <li><a href="join.html">Join</a></li>
+                <li><a href="sermons.html">Sermons</a></li>
+                <li><a href="departments.html">Departments</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="contact.html">Contact</a></li>
+              </ul>
+            </div>
+            <div>
+              <h4 style="color: white; margin-bottom: 10px">Contact</h4>
+              <p style="color: #aaa">
+                101 Goldie/Marian Road, Calabar<br />secsec2013@gmail.com
+              </p>
+            </div>
+          </div>
+          <div
+            style="
+              border-top: 1px solid #222;
+              text-align: center;
+              padding-top: 12px;
+              color: #666;
+            "
+          >
+            &copy; 2025 SDA Cross River Conference.
+          </div>
+        </footer>
+      </div>
 
+      <!-- Right: Chat -->
+      <aside class="chat-column">
+        <div class="chat-header">
+          <span>Live Chat</span>
+          <i class="ph ph-dots-three" style="cursor: pointer"></i>
+        </div>
+
+        <div class="chat-messages" id="chatContainer">
+          <!-- System Message -->
+          <div class="message mod">
+            <div class="avatar" style="background: var(--primary)">
+              <i class="ph-fill ph-crown"></i>
+            </div>
+            <div class="msg-content">
+              <div class="msg-author">
+                CRC Media Team
+                <i
+                  class="ph-fill ph-check-circle"
+                  style="font-size: 0.8rem"
+                ></i>
+              </div>
+              <div class="msg-text">
+                Happy Sabbath Church! Welcome to our online worship. Where are
+                you watching from?
+              </div>
+              <span class="msg-time">10:00 AM</span>
+            </div>
+          </div>
+
+          <!-- User Message 1 -->
+          <div class="message">
+            <div class="avatar" style="background: #e91e63">EA</div>
+            <div class="msg-content">
+              <div class="msg-author">Emem Akpan</div>
+              <div class="msg-text">
+                Happy Sabbath from Calabar Municipal! The audio is very clear
+                today.
+              </div>
+              <span class="msg-time">10:02 AM</span>
+            </div>
+          </div>
+
+          <!-- User Message 2 -->
+          <div class="message">
+            <div class="avatar" style="background: #ff9800">JO</div>
+            <div class="msg-content">
+              <div class="msg-author">James Okon</div>
+              <div class="msg-text">
+                Amen! Watching from Uyo. God bless the choir.
+              </div>
+              <span class="msg-time">10:04 AM</span>
+            </div>
+          </div>
+
+          <!-- User Message 3 -->
+          <div class="message">
+            <div class="avatar" style="background: #2196f3">SP</div>
+            <div class="msg-content">
+              <div class="msg-author">Sister Patience</div>
+              <div class="msg-text">
+                Please pray for my family, we are traveling this week.
+              </div>
+              <span class="msg-time">10:05 AM</span>
+            </div>
+          </div>
+
+          <!-- User Message 4 -->
+          <div class="message">
+            <div class="avatar" style="background: var(--accent)">D</div>
+            <div class="msg-content">
+              <div class="msg-author">David</div>
+              <div class="msg-text">Hallelujah! Powerful song.</div>
+              <span class="msg-time">10:06 AM</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-input-area">
+          <div class="input-wrapper">
+            <input
+              type="text"
+              class="chat-input"
+              placeholder="Say something..."
+              id="chatInput"
+            />
+            <button class="send-btn" onclick="sendMessage()">
+              <i class="ph-fill ph-paper-plane-right"></i>
+            </button>
+          </div>
+          <div
+            style="
+              font-size: 0.75rem;
+              color: #999;
+              margin-top: 8px;
+              text-align: center;
+            "
+          >
+            Remember to be kind and respectful.
+          </div>
+        </div>
+      </aside>
     </main>
 
     <script>
-        // Auto-scroll chat to bottom on load
-        const chatContainer = document.getElementById('chatContainer');
-        chatContainer.scrollTop = chatContainer.scrollHeight;
+      // Auto-scroll chat to bottom on load
+      const chatContainer = document.getElementById("chatContainer");
+      chatContainer.scrollTop = chatContainer.scrollHeight;
 
-        // Simple mock function to add a message
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const text = input.value;
-            
-            if(text.trim() === '') return;
+      // Simple mock function to add a message
+      function sendMessage() {
+        const input = document.getElementById("chatInput");
+        const text = input.value;
 
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'message';
-            msgDiv.innerHTML = `
+        if (text.trim() === "") return;
+
+        const msgDiv = document.createElement("div");
+        msgDiv.className = "message";
+        msgDiv.innerHTML = `
                 <div class="avatar" style="background: #666;">Me</div>
                 <div class="msg-content">
                     <div class="msg-author">You</div>
@@ -476,34 +714,36 @@
                     <span class="msg-time">Just now</span>
                 </div>
             `;
-            
-            chatContainer.appendChild(msgDiv);
-            chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom
-            input.value = '';
-        }
 
-        // Allow 'Enter' key to send
-        document.getElementById('chatInput').addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') {
-                sendMessage();
-            }
+        chatContainer.appendChild(msgDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll to bottom
+        input.value = "";
+      }
+
+      // Allow 'Enter' key to send
+      document
+        .getElementById("chatInput")
+        .addEventListener("keypress", function (e) {
+          if (e.key === "Enter") {
+            sendMessage();
+          }
         });
 
-        // Mobile menu toggle
-        function toggleMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.toggle('active');
-        }
+      // Mobile menu toggle
+      function toggleMenu() {
+        const navLinks = document.querySelector(".nav-links");
+        navLinks.classList.toggle("active");
+      }
 
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const nav = document.querySelector('.navbar');
-            const menuToggle = document.querySelector('.menu-toggle');
-            const navLinks = document.querySelector('.nav-links');
-            if (!nav.contains(event.target) && !menuToggle.contains(event.target)) {
-                navLinks.classList.remove('active');
-            }
-        });
+      // Close mobile menu when clicking outside
+      document.addEventListener("click", function (event) {
+        const nav = document.querySelector(".navbar");
+        const menuToggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+        if (!nav.contains(event.target) && !menuToggle.contains(event.target)) {
+          navLinks.classList.remove("active");
+        }
+      });
     </script>
-</body>
+  </body>
 </html>

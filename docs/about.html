@@ -1,349 +1,583 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>About Us | SDA Cross River Conference</title>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css" />
     <style>
-        /* --- GLOBAL STYLES --- */
-        :root {
-            --primary: #003087;
-            --primary-dark: #002266;
-            --secondary: #F9A01B;
-            --accent: #009A44;
-            --text-dark: #1a1a1a;
-            --text-gray: #666666;
-            --bg-light: #f8f9fa;
-            --white: #ffffff;
-            --radius: 12px;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
+      /* --- GLOBAL STYLES --- */
+      :root {
+        --primary: #003087;
+        --primary-dark: #002266;
+        --secondary: #f9a01b;
+        --accent: #009a44;
+        --text-dark: #1a1a1a;
+        --text-gray: #666666;
+        --bg-light: #f8f9fa;
+        --white: #ffffff;
+        --radius: 12px;
+        --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', system-ui, sans-serif; color: var(--text-dark); background-color: var(--bg-light); line-height: 1.6; display: flex; flex-direction: column; min-height: 100vh; }
-        a { text-decoration: none; color: inherit; transition: 0.3s; }
-        ul { list-style: none; }
-        img { max-width: 100%; display: block; }
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "Segoe UI", system-ui, sans-serif;
+        color: var(--text-dark);
+        background-color: var(--bg-light);
+        line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+      }
+      a {
+        text-decoration: none;
+        color: inherit;
+        transition: 0.3s;
+      }
+      ul {
+        list-style: none;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
 
-        /* Header styles moved to styles.css */
+      /* Header styles moved to styles.css */
 
-        /* --- HERO SECTION --- */
-        .about-hero {
-            position: relative;
-            height: 60vh;
-            min-height: 400px;
-            background: linear-gradient(rgba(0, 48, 135, 0.8), rgba(0, 48, 135, 0.7)), url('https://images.unsplash.com/photo-1548625361-1b913d9646b9?auto=format&fit=crop&q=80');
-            background-size: cover;
-            background-position: center;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            padding: 0 20px;
-        }
-        .hero-content { max-width: 800px; animation: fadeIn 1s ease-out; }
-        .about-hero h1 { font-size: 3.5rem; font-weight: 800; margin-bottom: 20px; }
-        .about-hero p { font-size: 1.3rem; opacity: 0.9; }
+      /* --- HERO SECTION --- */
+      .about-hero {
+        position: relative;
+        height: 60vh;
+        min-height: 400px;
+        background: linear-gradient(
+            rgba(0, 48, 135, 0.8),
+            rgba(0, 48, 135, 0.7)
+          ),
+          url("https://images.unsplash.com/photo-1548625361-1b913d9646b9?auto=format&fit=crop&q=80");
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+        padding: 0 20px;
+      }
+      .hero-content {
+        max-width: 800px;
+        animation: fadeIn 1s ease-out;
+      }
+      .about-hero h1 {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+      }
+      .about-hero p {
+        font-size: 1.3rem;
+        opacity: 0.9;
+      }
 
-        /* --- CONTENT SECTIONS --- */
-        .section-padding { padding: 80px 5%; }
-        .container { max-width: 1200px; margin: 0 auto; }
+      /* --- CONTENT SECTIONS --- */
+      .section-padding {
+        padding: 80px 5%;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
 
+      .story-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+      }
+
+      .story-text h2 {
+        color: var(--primary);
+        font-size: 2.2rem;
+        margin-bottom: 20px;
+      }
+      .story-text p {
+        margin-bottom: 20px;
+        font-size: 1.05rem;
+        color: #444;
+      }
+
+      .story-image {
+        position: relative;
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      }
+      .story-image img {
+        width: 100%;
+        height: auto;
+      }
+      .story-year {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        background: var(--secondary);
+        color: var(--text-dark);
+        padding: 10px 20px;
+        font-weight: 800;
+        font-size: 1.5rem;
+        border-radius: 8px;
+      }
+
+      /* Mission & Vision */
+      .mv-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 60px;
+      }
+      .mv-card {
+        background: white;
+        padding: 40px;
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        border-top: 5px solid var(--primary);
+        text-align: center;
+      }
+      .mv-icon {
+        font-size: 3rem;
+        color: var(--primary);
+        margin-bottom: 20px;
+      }
+      .mv-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+      }
+
+      /* Leadership */
+      .leadership-section {
+        background: white;
+        text-align: center;
+      }
+      .section-header {
+        margin-bottom: 50px;
+      }
+      .section-header h2 {
+        font-size: 2.5rem;
+        color: var(--primary);
+        margin-bottom: 10px;
+      }
+
+      .leaders-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 40px;
+      }
+
+      .leader-card {
+        transition: transform 0.3s;
+      }
+      .leader-card:hover {
+        transform: translateY(-10px);
+      }
+      .leader-img {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 20px;
+        border: 4px solid #eee;
+      }
+      .leader-card h3 {
+        font-size: 1.3rem;
+        margin-bottom: 5px;
+      }
+      .leader-role {
+        color: var(--primary);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+      }
+      .leader-bio {
+        font-size: 0.9rem;
+        color: var(--text-gray);
+      }
+
+      /* Beliefs */
+      .beliefs-section {
+        background: var(--primary);
+        color: white;
+      }
+      .beliefs-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+      }
+      .belief-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 30px;
+        border-radius: var(--radius);
+        backdrop-filter: blur(5px);
+      }
+      .belief-item h3 {
+        color: var(--secondary);
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .belief-item p {
+        opacity: 0.9;
+        font-size: 0.95rem;
+      }
+
+      /* Footer */
+      footer {
+        background: #111;
+        color: #aaa;
+        padding: 60px 5% 20px;
+        margin-top: auto;
+      }
+      .footer-content {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 40px;
+        margin-bottom: 40px;
+      }
+
+      /* Responsive */
+      @media (max-width: 900px) {
         .story-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
+          grid-template-columns: 1fr;
         }
+        .nav-links,
+        .nav-action {
+          display: none;
+        }
+        .menu-toggle {
+          display: block;
+        }
+        .about-hero h1 {
+          font-size: 2.5rem;
+        }
+      }
 
-        .story-text h2 { color: var(--primary); font-size: 2.2rem; margin-bottom: 20px; }
-        .story-text p { margin-bottom: 20px; font-size: 1.05rem; color: #444; }
-        
-        .story-image {
-            position: relative;
-            border-radius: var(--radius);
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
         }
-        .story-image img { width: 100%; height: auto; }
-        .story-year {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            background: var(--secondary);
-            color: var(--text-dark);
-            padding: 10px 20px;
-            font-weight: 800;
-            font-size: 1.5rem;
-            border-radius: 8px;
+        to {
+          opacity: 1;
+          transform: translateY(0);
         }
-
-        /* Mission & Vision */
-        .mv-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 60px;
-        }
-        .mv-card {
-            background: white;
-            padding: 40px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            border-top: 5px solid var(--primary);
-            text-align: center;
-        }
-        .mv-icon { font-size: 3rem; color: var(--primary); margin-bottom: 20px; }
-        .mv-card h3 { font-size: 1.5rem; margin-bottom: 15px; }
-
-        /* Leadership */
-        .leadership-section { background: white; text-align: center; }
-        .section-header { margin-bottom: 50px; }
-        .section-header h2 { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
-        
-        .leaders-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-        }
-        
-        .leader-card { transition: transform 0.3s; }
-        .leader-card:hover { transform: translateY(-10px); }
-        .leader-img {
-            width: 200px; height: 200px;
-            border-radius: 50%;
-            object-fit: cover;
-            margin: 0 auto 20px;
-            border: 4px solid #eee;
-        }
-        .leader-card h3 { font-size: 1.3rem; margin-bottom: 5px; }
-        .leader-role { color: var(--primary); font-weight: 700; text-transform: uppercase; font-size: 0.9rem; margin-bottom: 10px; }
-        .leader-bio { font-size: 0.9rem; color: var(--text-gray); }
-
-        /* Beliefs */
-        .beliefs-section { background: var(--primary); color: white; }
-        .beliefs-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-        }
-        .belief-item {
-            background: rgba(255,255,255,0.1);
-            padding: 30px;
-            border-radius: var(--radius);
-            backdrop-filter: blur(5px);
-        }
-        .belief-item h3 { color: var(--secondary); font-size: 1.3rem; margin-bottom: 10px; display: flex; align-items: center; gap: 10px; }
-        .belief-item p { opacity: 0.9; font-size: 0.95rem; }
-
-        /* Footer */
-        footer { background: #111; color: #aaa; padding: 60px 5% 20px; margin-top: auto; }
-        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-bottom: 40px; }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .story-grid { grid-template-columns: 1fr; }
-            .nav-links, .nav-action { display: none; }
-            .menu-toggle { display: block; }
-            .about-hero h1 { font-size: 2.5rem; }
-        }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+      }
     </style>
-</head>
-<body>
-
+  </head>
+  <body>
     <!-- Navigation -->
     <nav class="navbar">
-        <div class="logo">
-            <img src="./logo.png" alt="Seventh Day Adventist Church CRC logo" class="site-logo">
-            <div class="site-title">
-                <span class="church-name">Seventh Day Adventist Church</span>
-                <span class="church-sub">CRC</span>
-            </div>
+      <div class="logo">
+        <img
+          src="./logo.png"
+          alt="Seventh Day Adventist Church CRC logo"
+          class="site-logo"
+        />
+        <div class="site-title">
+          <span class="church-name">Seventh Day Adventist Church</span>
+          <span class="church-sub">CRC</span>
         </div>
-        <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="small-groups.html">Small Groups</a></li>
-            <li><a href="evangelism.html">Evangelism</a></li>
-            <li><a href="join.html">Join</a></li>
-            <li><a href="sermons.html">Sermons</a></li>
-            <li><a href="departments.html">Departments</a></li>
-            <li><a href="events.html">Events</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="admin/admin-dashboard.html" class="admin-link" aria-label="Admin area (prototype)">Admin</a></li>
-        </ul>
-        <div class="nav-action">
-            <a href="live.html" class="btn-primary">
-                <i class="ph ph-video-camera"></i> Watch Live
-            </a>
-        </div>
-        <div class="menu-toggle" onclick="toggleMenu()"><i class="ph ph-list"></i></div>
+      </div>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="small-groups.html">Small Groups</a></li>
+        <li><a href="evangelism.html">Evangelism</a></li>
+        <li><a href="join.html">Join</a></li>
+        <li><a href="sermons.html">Sermons</a></li>
+        <li><a href="departments.html">Departments</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li>
+          <a
+            href="admin/admin-dashboard.html"
+            class="admin-link"
+            aria-label="Admin area (prototype)"
+            >Admin</a
+          >
+        </li>
+      </ul>
+      <div class="nav-action">
+        <a href="live.html" class="btn-primary">
+          <i class="ph ph-video-camera"></i> Watch Live
+        </a>
+      </div>
+      <div class="menu-toggle" onclick="toggleMenu()">
+        <i class="ph ph-list"></i>
+      </div>
     </nav>
 
     <!-- Hero -->
     <header class="about-hero">
-        <div class="hero-content">
-            <h1>Our Story & Heritage</h1>
-            <p>Tracing the providential leading of God in the Cross River Conference.</p>
-        </div>
+      <div class="hero-content">
+        <h1>Our Story & Heritage</h1>
+        <p>
+          Tracing the providential leading of God in the Cross River Conference.
+        </p>
+      </div>
     </header>
 
     <!-- History Section -->
     <section class="section-padding">
-        <div class="container">
-            <div class="story-grid">
-                <div class="story-text">
-                    <h2>The Legacy of 101 Goldie</h2>
-                    <p>The history of the Seventh-day Adventist Church in Calabar is a testament to the power of small beginnings. What began as a small gathering of faithful believers has grown into the vibrant Cross River Conference we know today.</p>
-                    <p>The strategic location at <strong>101 Goldie/Marian Road</strong> has served not just as a headquarters, but as a beacon of hope in the heart of Calabar. From this center, the "Everlasting Gospel" has radiated out to Uyo, Ogoja, Ikom, and the riverine areas.</p>
-                    <p>We stand on the shoulders of pioneers who sacrificed to establish schools, hospitals, and churches, ensuring that the Three Angels' Messages would be heard clearly in this region.</p>
-                </div>
-                <div class="story-image">
-                    <img src="https://images.unsplash.com/photo-1548625361-1b913d9646b9?auto=format&fit=crop&q=80" alt="Church History">
-                    <div class="story-year">Est. 19XX</div>
-                </div>
-            </div>
-
-            <!-- Mission/Vision -->
-            <div class="mv-grid">
-                <div class="mv-card">
-                    <div class="mv-icon"><i class="ph-fill ph-target"></i></div>
-                    <h3>Our Mission</h3>
-                    <p>To make disciples of Jesus Christ who live as His loving witnesses and proclaim to all people the everlasting gospel of the Three Angels’ Messages in preparation for His soon return.</p>
-                </div>
-                <div class="mv-card" style="border-top-color: var(--secondary);">
-                    <div class="mv-icon" style="color: var(--secondary);"><i class="ph-fill ph-eye"></i></div>
-                    <h3>Our Vision</h3>
-                    <p>In harmony with Bible revelation, Seventh-day Adventists see as the climax of God’s plan the restoration of all His creation to full harmony with His perfect will and righteousness.</p>
-                </div>
-                <div class="mv-card" style="border-top-color: var(--accent);">
-                    <div class="mv-icon" style="color: var(--accent);"><i class="ph-fill ph-hands-praying"></i></div>
-                    <h3>Our Method</h3>
-                    <p>Christ's method alone will give true success in reaching the people. The Saviour mingled with men as one who desired their good.</p>
-                </div>
-            </div>
+      <div class="container">
+        <div class="story-grid">
+          <div class="story-text">
+            <h2>The Legacy of 101 Goldie</h2>
+            <p>
+              The history of the Seventh-day Adventist Church in Calabar is a
+              testament to the power of small beginnings. What began as a small
+              gathering of faithful believers has grown into the vibrant Cross
+              River Conference we know today.
+            </p>
+            <p>
+              The strategic location at
+              <strong>101 Goldie/Marian Road</strong> has served not just as a
+              headquarters, but as a beacon of hope in the heart of Calabar.
+              From this center, the "Everlasting Gospel" has radiated out to
+              Uyo, Ogoja, Ikom, and the riverine areas.
+            </p>
+            <p>
+              We stand on the shoulders of pioneers who sacrificed to establish
+              schools, hospitals, and churches, ensuring that the Three Angels'
+              Messages would be heard clearly in this region.
+            </p>
+          </div>
+          <div class="story-image">
+            <img
+              src="https://images.unsplash.com/photo-1548625361-1b913d9646b9?auto=format&fit=crop&q=80"
+              alt="Church History"
+            />
+            <div class="story-year">Est. 19XX</div>
+          </div>
         </div>
+
+        <!-- Mission/Vision -->
+        <div class="mv-grid">
+          <div class="mv-card">
+            <div class="mv-icon"><i class="ph-fill ph-target"></i></div>
+            <h3>Our Mission</h3>
+            <p>
+              To make disciples of Jesus Christ who live as His loving witnesses
+              and proclaim to all people the everlasting gospel of the Three
+              Angels’ Messages in preparation for His soon return.
+            </p>
+          </div>
+          <div class="mv-card" style="border-top-color: var(--secondary)">
+            <div class="mv-icon" style="color: var(--secondary)">
+              <i class="ph-fill ph-eye"></i>
+            </div>
+            <h3>Our Vision</h3>
+            <p>
+              In harmony with Bible revelation, Seventh-day Adventists see as
+              the climax of God’s plan the restoration of all His creation to
+              full harmony with His perfect will and righteousness.
+            </p>
+          </div>
+          <div class="mv-card" style="border-top-color: var(--accent)">
+            <div class="mv-icon" style="color: var(--accent)">
+              <i class="ph-fill ph-hands-praying"></i>
+            </div>
+            <h3>Our Method</h3>
+            <p>
+              Christ's method alone will give true success in reaching the
+              people. The Saviour mingled with men as one who desired their
+              good.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Fundamental Beliefs -->
     <section class="section-padding beliefs-section">
-        <div class="container">
-            <div class="section-header" style="text-align: center; color: white;">
-                <h2 style="color: white;">What We Believe</h2>
-                <p style="opacity: 0.8;">Seventh-day Adventists accept the Bible as the only source of our beliefs.</p>
-            </div>
-            <div class="beliefs-grid">
-                <div class="belief-item">
-                    <h3><i class="ph-fill ph-book-open-text"></i> The Holy Scriptures</h3>
-                    <p>The Holy Scriptures, Old and New Testaments, are the written Word of God, given by divine inspiration.</p>
-                </div>
-                <div class="belief-item">
-                    <h3><i class="ph-fill ph-users-three"></i> The Trinity</h3>
-                    <p>There is one God: Father, Son, and Holy Spirit, a unity of three co-eternal Persons.</p>
-                </div>
-                <div class="belief-item">
-                    <h3><i class="ph-fill ph-calendar-check"></i> The Sabbath</h3>
-                    <p>The beneficent Creator, after the six days of Creation, rested on the seventh day and instituted the Sabbath for all people as a memorial of Creation.</p>
-                </div>
-                <div class="belief-item">
-                    <h3><i class="ph-fill ph-cloud-arrow-up"></i> Second Coming</h3>
-                    <p>The second coming of Christ is the blessed hope of the church, the grand climax of the gospel.</p>
-                </div>
-                <div class="belief-item">
-                    <h3><i class="ph-fill ph-heartbeat"></i> State of the Dead</h3>
-                    <p>The wages of sin is death. But God, who alone is immortal, will grant eternal life to His redeemed.</p>
-                </div>
-                <div class="belief-item">
-                    <h3><i class="ph-fill ph-church"></i> The Remnant</h3>
-                    <p>The universal church is composed of all who truly believe in Christ, but in the last days, a remnant has been called out to keep the commandments of God.</p>
-                </div>
-            </div>
+      <div class="container">
+        <div class="section-header" style="text-align: center; color: white">
+          <h2 style="color: white">What We Believe</h2>
+          <p style="opacity: 0.8">
+            Seventh-day Adventists accept the Bible as the only source of our
+            beliefs.
+          </p>
         </div>
+        <div class="beliefs-grid">
+          <div class="belief-item">
+            <h3>
+              <i class="ph-fill ph-book-open-text"></i> The Holy Scriptures
+            </h3>
+            <p>
+              The Holy Scriptures, Old and New Testaments, are the written Word
+              of God, given by divine inspiration.
+            </p>
+          </div>
+          <div class="belief-item">
+            <h3><i class="ph-fill ph-users-three"></i> The Trinity</h3>
+            <p>
+              There is one God: Father, Son, and Holy Spirit, a unity of three
+              co-eternal Persons.
+            </p>
+          </div>
+          <div class="belief-item">
+            <h3><i class="ph-fill ph-calendar-check"></i> The Sabbath</h3>
+            <p>
+              The beneficent Creator, after the six days of Creation, rested on
+              the seventh day and instituted the Sabbath for all people as a
+              memorial of Creation.
+            </p>
+          </div>
+          <div class="belief-item">
+            <h3><i class="ph-fill ph-cloud-arrow-up"></i> Second Coming</h3>
+            <p>
+              The second coming of Christ is the blessed hope of the church, the
+              grand climax of the gospel.
+            </p>
+          </div>
+          <div class="belief-item">
+            <h3><i class="ph-fill ph-heartbeat"></i> State of the Dead</h3>
+            <p>
+              The wages of sin is death. But God, who alone is immortal, will
+              grant eternal life to His redeemed.
+            </p>
+          </div>
+          <div class="belief-item">
+            <h3><i class="ph-fill ph-church"></i> The Remnant</h3>
+            <p>
+              The universal church is composed of all who truly believe in
+              Christ, but in the last days, a remnant has been called out to
+              keep the commandments of God.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Leadership -->
     <section class="section-padding leadership-section">
-        <div class="container">
-            <div class="section-header">
-                <h2>Conference Leadership</h2>
-                <p>Servants called to lead God's people in the Cross River Conference.</p>
-            </div>
-            
-            <div class="leaders-grid">
-                <!-- President -->
-                <div class="leader-card">
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80" alt="President" class="leader-img">
-                    <h3>Pastor Edy Ubi Ewoh</h3>
-                    <div class="leader-role">President</div>
-                    <p class="leader-bio">Leading with a vision for evangelism and spiritual growth.</p>
-                </div>
-
-                <!-- Secretary -->
-                <div class="leader-card">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80" alt="Secretary" class="leader-img">
-                    <h3>Pastor [Name Here]</h3>
-                    <div class="leader-role">Executive Secretary</div>
-                    <p class="leader-bio">Ensuring the smooth administration of conference affairs.</p>
-                </div>
-
-                <!-- Treasurer -->
-                <div class="leader-card">
-                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80" alt="Treasurer" class="leader-img">
-                    <h3>Elder [Name Here]</h3>
-                    <div class="leader-role">Treasurer</div>
-                    <p class="leader-bio">Faithful stewardship of the resources entrusted to the church.</p>
-                </div>
-            </div>
+      <div class="container">
+        <div class="section-header">
+          <h2>Conference Leadership</h2>
+          <p>
+            Servants called to lead God's people in the Cross River Conference.
+          </p>
         </div>
+
+        <div class="leaders-grid">
+          <!-- President -->
+          <div class="leader-card">
+            <img
+              src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80"
+              alt="President"
+              class="leader-img"
+            />
+            <h3>Pastor Edy Ubi Ewoh</h3>
+            <div class="leader-role">President</div>
+            <p class="leader-bio">
+              Leading with a vision for evangelism and spiritual growth.
+            </p>
+          </div>
+
+          <!-- Secretary -->
+          <div class="leader-card">
+            <img
+              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80"
+              alt="Secretary"
+              class="leader-img"
+            />
+            <h3>Pastor [Name Here]</h3>
+            <div class="leader-role">Executive Secretary</div>
+            <p class="leader-bio">
+              Ensuring the smooth administration of conference affairs.
+            </p>
+          </div>
+
+          <!-- Treasurer -->
+          <div class="leader-card">
+            <img
+              src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80"
+              alt="Treasurer"
+              class="leader-img"
+            />
+            <h3>Elder [Name Here]</h3>
+            <div class="leader-role">Treasurer</div>
+            <p class="leader-bio">
+              Faithful stewardship of the resources entrusted to the church.
+            </p>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div>
-                    <h4 style="color: white; margin-bottom: 20px;">CRC</h4>
-                    <p>Preparing a people for the soon coming of our Lord Jesus Christ.</p>
-                </div>
-                <div>
-                    <h4 style="color: white; margin-bottom: 20px;">Quick Links</h4>
-                    <ul>
-                        <li style="margin-bottom: 10px;"><a href="index.html">Home</a></li>
-                        <li style="margin-bottom: 10px;"><a href="sermons.html">Sermons</a></li>
-                        <li style="margin-bottom: 10px;"><a href="contact.html">Contact Us</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <h4 style="color: white; margin-bottom: 20px;">Contact</h4>
-                    <ul>
-                        <li><i class="ph-fill ph-map-pin"></i> 101 Goldie/Marian Road, Calabar</li>
-                        <li><i class="ph-fill ph-envelope"></i> secsec2013@gmail.com</li>
-                    </ul>
-                </div>
-            </div>
-            <div style="border-top: 1px solid #333; padding-top: 20px; text-align: center; font-size: 0.9rem;">
-                &copy; 2025 Seventh-Day Adventist Church Cross River Conference.
-            </div>
+      <div class="container">
+        <div class="footer-content">
+          <div>
+            <h4 style="color: white; margin-bottom: 20px">CRC</h4>
+            <p>
+              Preparing a people for the soon coming of our Lord Jesus Christ.
+            </p>
+          </div>
+          <div>
+            <h4 style="color: white; margin-bottom: 20px">Quick Links</h4>
+            <ul>
+              <li style="margin-bottom: 10px"><a href="index.html">Home</a></li>
+              <li style="margin-bottom: 10px">
+                <a href="sermons.html">Sermons</a>
+              </li>
+              <li style="margin-bottom: 10px">
+                <a href="contact.html">Contact Us</a>
+              </li>
+            </ul>
+          </div>
+          <div>
+            <h4 style="color: white; margin-bottom: 20px">Contact</h4>
+            <ul>
+              <li>
+                <i class="ph-fill ph-map-pin"></i> 101 Goldie/Marian Road,
+                Calabar
+              </li>
+              <li><i class="ph-fill ph-envelope"></i> secsec2013@gmail.com</li>
+            </ul>
+          </div>
         </div>
+        <div
+          style="
+            border-top: 1px solid #333;
+            padding-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+          "
+        >
+          &copy; 2025 Seventh-Day Adventist Church Cross River Conference.
+        </div>
+      </div>
     </footer>
 
     <script>
-        function toggleMenu() {
-            const navLinks = document.querySelector('.nav-links');
-            navLinks.classList.toggle('active');
+      function toggleMenu() {
+        const navLinks = document.querySelector(".nav-links");
+        navLinks.classList.toggle("active");
+      }
+      document.addEventListener("click", function (event) {
+        const nav = document.querySelector(".navbar");
+        const menuToggle = document.querySelector(".menu-toggle");
+        const navLinks = document.querySelector(".nav-links");
+        if (!nav.contains(event.target) && !menuToggle.contains(event.target)) {
+          navLinks.classList.remove("active");
         }
-        document.addEventListener('click', function(event) {
-            const nav = document.querySelector('.navbar');
-            const menuToggle = document.querySelector('.menu-toggle');
-            const navLinks = document.querySelector('.nav-links');
-            if (!nav.contains(event.target) && !menuToggle.contains(event.target)) {
-                navLinks.classList.remove('active');
-            }
-        });
+      });
     </script>
-</body>
+  </body>
 </html>
