@@ -26,7 +26,9 @@ export function ChatPanel({ chatUrl, className }: ChatPanelProps) {
         </div>
       ) : (
         <div className="mt-4 rounded-xl border border-dashed border-[var(--border)] p-3">
-          <p className="text-xs text-[var(--text-tertiary)]">Chat coming soon.</p>
+          <p className="text-xs text-[var(--text-tertiary)]">
+            Chat coming soon.
+          </p>
         </div>
       )}
     </Card>

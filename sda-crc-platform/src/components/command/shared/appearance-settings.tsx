@@ -56,7 +56,7 @@ export function AppearanceSettings() {
   return (
     <Card className="p-6">
       <h3 className="font-semibold text-lg mb-6">Appearance Settings</h3>
-      
+
       {/* Theme Selection */}
       <div className="mb-6">
         <label className="block text-sm font-medium mb-3">Theme</label>
@@ -73,7 +73,9 @@ export function AppearanceSettings() {
               }`}
             >
               <p className="font-medium">{option.label}</p>
-              <p className="text-sm text-muted-foreground">{option.description}</p>
+              <p className="text-sm text-muted-foreground">
+                {option.description}
+              </p>
             </button>
           ))}
         </div>

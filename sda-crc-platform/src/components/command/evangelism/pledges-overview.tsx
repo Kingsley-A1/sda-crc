@@ -16,7 +16,7 @@ interface Pledge {
   member: {
     firstName: string;
     lastName: string;
-  };
+  } | null;
   campaign: {
     name: string;
   } | null;
@@ -64,7 +64,8 @@ async function getPledges(): Promise<PledgesData> {
 export async function PledgesOverview() {
   const { pledges, totalPledged, totalWon } = await getPledges();
 
-  const progressPercent = totalPledged > 0 ? Math.round((totalWon / totalPledged) * 100) : 0;
+  const progressPercent =
+    totalPledged > 0 ? Math.round((totalWon / totalPledged) * 100) : 0;
 
   return (
     <div className="space-y-6">
@@ -114,15 +115,21 @@ export async function PledgesOverview() {
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
               {pledges.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-4 py-8 text-center text-muted-foreground">
+                  <td
+                    colSpan={5}
+                    className="px-4 py-8 text-center text-muted-foreground"
+                  >
                     No pledges yet.
                   </td>
                 </tr>
               ) : (
                 pledges.map((pledge) => {
-                  const progress = pledge.pledgedSouls > 0
-                    ? Math.round((pledge.wonSouls / pledge.pledgedSouls) * 100)
-                    : 0;
+                  const progress =
+                    pledge.pledgedSouls > 0
+                      ? Math.round(
+                          (pledge.wonSouls / pledge.pledgedSouls) * 100
+                        )
+                      : 0;
                   return (
                     <tr
                       key={pledge.id}
@@ -130,7 +137,9 @@ export async function PledgesOverview() {
                     >
                       <td className="px-4 py-3">
                         <p className="font-medium">
-                          {pledge.member.firstName} {pledge.member.lastName}
+                          {pledge.member
+                            ? `${pledge.member.firstName} ${pledge.member.lastName}`
+                            : "Anonymous"}
                         </p>
                       </td>
                       <td className="px-4 py-3 text-sm">

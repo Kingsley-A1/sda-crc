@@ -6,7 +6,11 @@ import type { Worker } from "@/types/worker";
 import { getRoleLabel } from "@/lib/worker-roles";
 
 import { Badge } from "@/components/ui";
-import { ActionMenu, DataTable, type DataTableColumn } from "@/components/command/shared";
+import {
+  ActionMenu,
+  DataTable,
+  type DataTableColumn,
+} from "@/components/command/shared";
 
 export interface WorkersTableProps {
   rows: Worker[];
@@ -14,7 +18,11 @@ export interface WorkersTableProps {
   onDeactivate?: (worker: Worker) => void;
 }
 
-export function WorkersTable({ rows, onEdit, onDeactivate }: WorkersTableProps) {
+export function WorkersTable({
+  rows,
+  onEdit,
+  onDeactivate,
+}: WorkersTableProps) {
   const columns = React.useMemo<Array<DataTableColumn<Worker>>>(
     () => [
       {
@@ -22,15 +30,23 @@ export function WorkersTable({ rows, onEdit, onDeactivate }: WorkersTableProps) 
         header: "Worker",
         cell: (w) => (
           <div className="min-w-0">
-            <p className="truncate font-semibold">{w.firstName} {w.lastName}</p>
-            <p className="mt-0.5 truncate text-xs text-[var(--text-tertiary)]">{getRoleLabel(w.role)}</p>
+            <p className="truncate font-semibold">
+              {w.firstName} {w.lastName}
+            </p>
+            <p className="mt-0.5 truncate text-xs text-[var(--text-tertiary)]">
+              {getRoleLabel(w.role)}
+            </p>
           </div>
         ),
       },
       {
         key: "department",
         header: "Department",
-        cell: (w) => <span className="text-sm text-[var(--text-secondary)]">{w.department ?? "—"}</span>,
+        cell: (w) => (
+          <span className="text-sm text-[var(--text-secondary)]">
+            {w.department ?? "—"}
+          </span>
+        ),
         className: "w-[170px]",
       },
       {
@@ -38,10 +54,18 @@ export function WorkersTable({ rows, onEdit, onDeactivate }: WorkersTableProps) 
         header: "Status",
         cell: (w) => (
           <div className="flex flex-wrap items-center gap-2">
-            <Badge variant={w.isActive ? "success-subtle" : "subtle"} size="sm" rounded="full">
+            <Badge
+              variant={w.isActive ? "success-subtle" : "subtle"}
+              size="sm"
+              rounded="full"
+            >
               {w.isActive ? "Active" : "Inactive"}
             </Badge>
-            <Badge variant={w.showOnWebsite ? "warning-subtle" : "subtle"} size="sm" rounded="full">
+            <Badge
+              variant={w.showOnWebsite ? "warning-subtle" : "subtle"}
+              size="sm"
+              rounded="full"
+            >
               {w.showOnWebsite ? "Public" : "Hidden"}
             </Badge>
           </div>
@@ -55,9 +79,16 @@ export function WorkersTable({ rows, onEdit, onDeactivate }: WorkersTableProps) 
           <div className="flex justify-end">
             <ActionMenu
               items={[
-                ...(onEdit ? [{ label: "Edit", onSelect: () => onEdit(w) }] : []),
+                ...(onEdit
+                  ? [{ label: "Edit", onSelect: () => onEdit(w) }]
+                  : []),
                 ...(onDeactivate
-                  ? [{ label: w.isActive ? "Deactivate" : "Activate", onSelect: () => onDeactivate(w) }]
+                  ? [
+                      {
+                        label: w.isActive ? "Deactivate" : "Activate",
+                        onSelect: () => onDeactivate(w),
+                      },
+                    ]
                   : []),
               ]}
             />
@@ -69,5 +100,7 @@ export function WorkersTable({ rows, onEdit, onDeactivate }: WorkersTableProps) 
     [onDeactivate, onEdit]
   );
 
-  return <DataTable columns={columns} rows={rows} emptyMessage="No workers yet." />;
+  return (
+    <DataTable columns={columns} rows={rows} emptyMessage="No workers yet." />
+  );
 }

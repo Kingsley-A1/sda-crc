@@ -2,7 +2,7 @@
  * Sermons Management Page
  * =======================
  * CRUD interface for managing sermons in the Command Center.
- * 
+ *
  * "Preach the word; be prepared in season and out of season." — 2 Timothy 4:2
  */
 
@@ -24,6 +24,8 @@ export const metadata: Metadata = {
   description: "Create, edit, and manage sermons",
 };
 
+export const dynamic = 'force-dynamic';
+
 // ============================================================================
 // Data Fetching
 // ============================================================================
@@ -32,38 +34,26 @@ async function getSermons() {
   const sermons = await db.sermon.findMany({
     orderBy: { date: "desc" },
     take: 50,
-    include: { series: true },
   });
 
-  return sermons.map((s: {
-    id: string;
-    title: string;
-    slug: string;
-    preacher: string;
-    date: Date;
-    scriptureReference: string | null;
-    description: string | null;
-    series: { name: string } | null;
-    videoUrl: string | null;
-    audioUrl: string | null;
-    thumbnailUrl: string | null;
-    duration: number | null;
-    isPublished: boolean;
-  }) => ({
+  return sermons.map((s) => ({
     id: s.id,
     title: s.title,
     slug: s.slug,
-    speaker: s.preacher,
+    speaker: s.speaker,
     date: s.date.toISOString(),
-    scriptureReference: s.scriptureReference || undefined,
-    description: s.description || undefined,
-    series: s.series?.name || undefined,
-    videoUrl: s.videoUrl || undefined,
-    audioUrl: s.audioUrl || undefined,
-    thumbnailUrl: s.thumbnailUrl || undefined,
-    duration: s.duration || undefined,
-    published: s.isPublished,
-    tags: [],
+    description: s.description,
+    audioUrl: s.audioUrl,
+    videoUrl: s.videoUrl,
+    thumbnailUrl: s.thumbnailUrl,
+    duration: s.duration,
+    scriptureReference: s.scriptureReference,
+    series: s.series,
+    tags: s.tags,
+    published: s.published,
+    viewCount: s.viewCount,
+    createdAt: s.createdAt.toISOString(),
+    updatedAt: s.updatedAt.toISOString(),
   }));
 }
 

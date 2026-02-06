@@ -1,0 +1,12 @@
+{
+  "chat.tools.terminal.autoApprove": {
+    "/^Get-ChildItem -Path \"src\\\\app\\\\api\\\\departments\" -Recurse -Filter \"\\*\\.ts\" \\| Select-String -Pattern \"isActive\" \\| ForEach-Object \\{ \"\\$\\(\\$_\\.Filename\\):\\$\\(\\$_\\.LineNumber\\): \\$\\(\\$_\\.Line\\.Trim\\(\\)\\)\" \\}$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^Get-ChildItem -Path \"src\" -Recurse -Include \"\\*\\.ts\",\"\\*\\.tsx\" \\| Select-String -Pattern \"\\\\\\.date\\\\b\" \\| Where-Object \\{ \\$_\\.Path -match \"event\" \\} \\| ForEach-Object \\{ \"\\$\\(\\$_\\.Path\\):\\$\\(\\$_\\.LineNumber\\): \\$\\(\\$_\\.Line\\.Trim\\(\\)\\)\" \\}$/": {
+      "approve": true,
+      "matchCommandLine": true
+    }
+  }
+}

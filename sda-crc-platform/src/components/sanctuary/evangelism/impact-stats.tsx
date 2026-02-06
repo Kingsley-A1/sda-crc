@@ -22,7 +22,9 @@ export function ImpactStats({ stats, className }: ImpactStatsProps) {
       {items.map((it) => (
         <Card key={it.label} className="p-4">
           <p className="text-xs text-[var(--text-secondary)]">{it.label}</p>
-          <p className="mt-1 text-lg font-extrabold text-[var(--text-primary)]">{it.value}</p>
+          <p className="mt-1 text-lg font-extrabold text-[var(--text-primary)]">
+            {it.value}
+          </p>
         </Card>
       ))}
     </div>

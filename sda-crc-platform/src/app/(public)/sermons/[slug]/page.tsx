@@ -2,7 +2,7 @@
  * Sermon Detail Page
  * ==================
  * Individual sermon page with video/audio player and details.
- * 
+ *
  * "Your word is a lamp for my feet, a light on my path." — Psalm 119:105
  */
 
@@ -12,6 +12,8 @@ import { Container } from "@/components/layout/container";
 import { SermonDetails } from "@/components/sanctuary/sermons/sermon-details";
 import { SermonPlayer } from "@/components/sanctuary/sermons/sermon-player";
 import { db } from "@/lib/db";
+
+export const dynamic = 'force-dynamic';
 
 // ============================================================================
 // Types
@@ -31,16 +33,7 @@ async function getSermon(slug: string) {
   const sermon = await db.sermon.findFirst({
     where: {
       slug,
-      isPublished: true,
-    },
-    include: {
-      series: {
-        select: {
-          id: true,
-          name: true,
-          slug: true,
-        },
-      },
+      published: true,
     },
   });
 
@@ -51,7 +44,9 @@ async function getSermon(slug: string) {
 // Metadata
 // ============================================================================
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const sermon = await getSermon(slug);
 
@@ -63,7 +58,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   return {
     title: sermon.title,
-    description: sermon.description || `Listen to "${sermon.title}" by ${sermon.preacher}`,
+    description:
+      sermon.description || `Listen to "${sermon.title}" by ${sermon.speaker}`,
     openGraph: {
       title: sermon.title,
       description: sermon.description || undefined,
@@ -82,25 +78,25 @@ export default async function SermonPage({ params }: PageProps) {
   const sermon = await getSermon(slug);
 
   if (!sermon) {
-    notFound();
+    return notFound();
   }
 
   // Map database sermon to component expected type
   const sermonData = {
     id: sermon.id,
     title: sermon.title,
-    speaker: sermon.preacher,
+    speaker: sermon.speaker,
     date: sermon.date.toISOString(),
     description: sermon.description || null,
     scriptureReference: sermon.scriptureReference || null,
-    series: sermon.series?.name || null,
+    series: sermon.series || null,
     videoUrl: sermon.videoUrl || null,
     audioUrl: sermon.audioUrl || null,
     thumbnailUrl: sermon.thumbnailUrl || null,
     duration: sermon.duration || null,
     tags: [],
     slug: sermon.slug,
-    published: sermon.isPublished,
+    published: sermon.published,
     viewCount: sermon.viewCount || 0,
     createdAt: sermon.createdAt.toISOString(),
     updatedAt: sermon.updatedAt.toISOString(),

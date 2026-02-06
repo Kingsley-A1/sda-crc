@@ -9,24 +9,24 @@ import { Card } from "@/components/ui/card";
 
 async function getStats() {
   const now = new Date();
-  
-  const [totalEvents, upcoming, thisMonth, registrations] = await Promise.all([
+
+  const [totalEvents, upcoming, thisMonth, featured] = await Promise.all([
     db.event.count(),
     db.event.count({
-      where: { date: { gte: now } },
+      where: { startDate: { gte: now } },
     }),
     db.event.count({
       where: {
-        date: {
+        startDate: {
           gte: new Date(now.getFullYear(), now.getMonth(), 1),
           lt: new Date(now.getFullYear(), now.getMonth() + 1, 1),
         },
       },
     }),
-    db.eventRegistration.count(),
+    db.event.count({ where: { featured: true } }),
   ]);
 
-  return { totalEvents, upcoming, thisMonth, registrations };
+  return { totalEvents, upcoming, thisMonth, featured };
 }
 
 export async function EventStats() {
@@ -49,9 +49,9 @@ export async function EventStats() {
       icon: "📆",
     },
     {
-      label: "Registrations",
-      value: stats.registrations,
-      icon: "✅",
+      label: "Featured",
+      value: stats.featured,
+      icon: "⭐",
     },
   ];
 

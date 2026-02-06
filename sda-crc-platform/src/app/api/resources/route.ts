@@ -11,7 +11,12 @@ import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { CreateResourceSchema, ResourceQuerySchema } from "@/lib/validators";
-import { apiError, apiResponse, buildPaginationMeta, parsePaginationParams } from "@/lib/utils";
+import {
+  apiError,
+  apiResponse,
+  buildPaginationMeta,
+  parsePaginationParams,
+} from "@/lib/utils";
 
 // ============================================================================
 // GET /api/resources - Fetch resources (Public: published only)
@@ -31,7 +36,11 @@ export async function GET(request: NextRequest) {
     });
 
     if (!queryResult.success) {
-      return apiError("Invalid query parameters", 400, queryResult.error.flatten().fieldErrors);
+      return apiError(
+        "Invalid query parameters",
+        400,
+        queryResult.error.flatten().fieldErrors
+      );
     }
 
     const { category, search, published } = queryResult.data;
@@ -107,7 +116,11 @@ export async function POST(request: NextRequest) {
     const result = CreateResourceSchema.safeParse(body);
 
     if (!result.success) {
-      return apiError("Validation failed", 400, result.error.flatten().fieldErrors);
+      return apiError(
+        "Validation failed",
+        400,
+        result.error.flatten().fieldErrors
+      );
     }
 
     const resource = await db.resource.create({

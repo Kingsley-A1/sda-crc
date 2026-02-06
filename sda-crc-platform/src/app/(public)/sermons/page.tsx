@@ -3,7 +3,7 @@
  * ============
  * Browse and watch/listen to sermons from the SDA Cross River Conference.
  * Features filtering, search, and featured sermon highlighting.
- * 
+ *
  * "Faith comes from hearing the message." — Romans 10:17
  */
 
@@ -26,6 +26,8 @@ export const metadata: Metadata = {
     "Watch and listen to inspiring sermons from the SDA Cross River Conference. Search by preacher, topic, or series.",
 };
 
+export const dynamic = 'force-dynamic';
+
 // ============================================================================
 // Data Fetching
 // ============================================================================
@@ -33,13 +35,13 @@ export const metadata: Metadata = {
 async function getSermonsPageData() {
   const [featuredSermon, sermons] = await Promise.all([
     db.sermon.findFirst({
-      where: { isFeatured: true },
-      include: { series: true },
+      where: { published: true },
+      orderBy: { date: "desc" },
     }),
     db.sermon.findMany({
+      where: { published: true },
       orderBy: { date: "desc" },
       take: 12,
-      include: { series: true },
     }),
   ]);
 

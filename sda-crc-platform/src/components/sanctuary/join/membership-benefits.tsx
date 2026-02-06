@@ -9,22 +9,26 @@ export function MembershipBenefits() {
     {
       icon: "🙏",
       title: "Spiritual Growth",
-      description: "Access to Bible study resources, prayer groups, and discipleship programs.",
+      description:
+        "Access to Bible study resources, prayer groups, and discipleship programs.",
     },
     {
       icon: "👥",
       title: "Community",
-      description: "Connect with fellow believers through small groups and church activities.",
+      description:
+        "Connect with fellow believers through small groups and church activities.",
     },
     {
       icon: "📚",
       title: "Resources",
-      description: "Exclusive access to sermons, publications, and educational materials.",
+      description:
+        "Exclusive access to sermons, publications, and educational materials.",
     },
     {
       icon: "🎯",
       title: "Service Opportunities",
-      description: "Use your gifts to serve in various ministries and outreach programs.",
+      description:
+        "Use your gifts to serve in various ministries and outreach programs.",
     },
   ];
 

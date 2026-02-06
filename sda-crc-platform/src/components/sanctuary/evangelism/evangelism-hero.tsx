@@ -57,8 +57,8 @@ export function EvangelismHero() {
           Be Part of the Harvest
         </h2>
         <p className="max-w-2xl mx-auto mb-6">
-          No active campaigns at the moment, but our mission continues. 
-          Contact us to learn about upcoming evangelism opportunities.
+          No active campaigns at the moment, but our mission continues. Contact
+          us to learn about upcoming evangelism opportunities.
         </p>
         <Button variant="secondary" asChild>
           <Link href="/contact">Get Involved</Link>
@@ -67,7 +67,9 @@ export function EvangelismHero() {
     );
   }
 
-  const progress = Math.round((campaign.currentSouls / campaign.targetSouls) * 100);
+  const progress = Math.round(
+    (campaign.currentSouls / campaign.targetSouls) * 100
+  );
 
   return (
     <div className="rounded-2xl overflow-hidden bg-white dark:bg-gray-800 shadow-xl">

@@ -19,10 +19,11 @@ export const metadata: Metadata = {
   title: "Edit Sermon | Command Center",
 };
 
+export const dynamic = 'force-dynamic';
+
 async function getSermon(id: string) {
   const sermon = await db.sermon.findUnique({
     where: { id },
-    include: { series: true },
   });
   return sermon;
 }
@@ -32,13 +33,13 @@ export default async function EditSermonPage({ params }: PageProps) {
   const sermon = await getSermon(id);
 
   if (!sermon) {
-    notFound();
+    return notFound();
   }
 
   // Map to form input
   const initialData = {
     title: sermon.title,
-    speaker: sermon.preacher,
+    speaker: sermon.speaker,
     date: sermon.date.toISOString().split("T")[0],
     description: sermon.description || "",
     scriptureReference: sermon.scriptureReference || "",
@@ -49,12 +50,12 @@ export default async function EditSermonPage({ params }: PageProps) {
 
   async function handleSubmit(data: CreateSermonInput) {
     "use server";
-    
+
     await db.sermon.update({
       where: { id },
       data: {
         title: data.title,
-        preacher: data.speaker,
+        speaker: data.speaker,
         date: new Date(data.date),
         description: data.description || null,
         scriptureReference: data.scriptureReference || null,
@@ -76,8 +77,8 @@ export default async function EditSermonPage({ params }: PageProps) {
         </p>
       </div>
 
-      <SermonForm 
-        initial={initialData} 
+      <SermonForm
+        initial={initialData}
         onSubmit={handleSubmit}
         submitLabel="Update Sermon"
       />

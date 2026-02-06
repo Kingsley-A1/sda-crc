@@ -12,7 +12,12 @@ export interface StreamInfoProps {
   className?: string;
 }
 
-export function StreamInfo({ title, isLive, watchUrl, className }: StreamInfoProps) {
+export function StreamInfo({
+  title,
+  isLive,
+  watchUrl,
+  className,
+}: StreamInfoProps) {
   return (
     <Card className={cn("p-4", className)}>
       <div className="flex items-start justify-between gap-3">
@@ -21,7 +26,9 @@ export function StreamInfo({ title, isLive, watchUrl, className }: StreamInfoPro
             {title || "Worship Service"}
           </p>
           <p className="mt-1 text-xs text-[var(--text-secondary)]">
-            {isLive ? "We are live now. Join and worship with us." : "Stream is currently offline."}
+            {isLive
+              ? "We are live now. Join and worship with us."
+              : "Stream is currently offline."}
           </p>
         </div>
         {isLive ? <LiveBadge /> : null}

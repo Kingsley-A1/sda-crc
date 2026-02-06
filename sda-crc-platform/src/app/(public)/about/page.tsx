@@ -2,7 +2,7 @@
  * About Page
  * ==========
  * Information about the SDA Cross River Conference.
- * 
+ *
  * "I will build my church, and the gates of Hades will not overcome it." — Matthew 16:18
  */
 
@@ -44,9 +44,9 @@ export default function AboutPage() {
             Welcome to the SDA Cross River Conference
           </h2>
           <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
-            The Seventh-day Adventist Church in Cross River State, Nigeria, is 
-            committed to sharing the everlasting gospel in the context of the 
-            three angels&apos; messages. We are a diverse, welcoming community 
+            The Seventh-day Adventist Church in Cross River State, Nigeria, is
+            committed to sharing the everlasting gospel in the context of the
+            three angels&apos; messages. We are a diverse, welcoming community
             dedicated to worship, discipleship, and service.
           </p>
         </section>

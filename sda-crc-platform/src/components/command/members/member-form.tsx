@@ -26,7 +26,12 @@ export interface MemberFormProps {
   className?: string;
 }
 
-export function MemberForm({ initial, onSubmit, submitLabel = "Save member", className }: MemberFormProps) {
+export function MemberForm({
+  initial,
+  onSubmit,
+  submitLabel = "Save member",
+  className,
+}: MemberFormProps) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -35,10 +40,16 @@ export function MemberForm({ initial, onSubmit, submitLabel = "Save member", cla
   const [email, setEmail] = React.useState(initial?.email ?? "");
   const [phone, setPhone] = React.useState(initial?.phone ?? "");
 
-  const [gender, setGender] = React.useState<string>(String(initial?.gender ?? ""));
-  const [membershipType, setMembershipType] = React.useState<string>(String(initial?.membershipType ?? "FULL"));
+  const [gender, setGender] = React.useState<string>(
+    String(initial?.gender ?? "")
+  );
+  const [membershipType, setMembershipType] = React.useState<string>(
+    String(initial?.membershipType ?? "FULL")
+  );
 
-  const [dateOfBirth, setDateOfBirth] = React.useState<string>(String(initial?.dateOfBirth ?? ""));
+  const [dateOfBirth, setDateOfBirth] = React.useState<string>(
+    String(initial?.dateOfBirth ?? "")
+  );
   const [address, setAddress] = React.useState(initial?.address ?? "");
   const [city, setCity] = React.useState(initial?.city ?? "");
   const [state, setState] = React.useState(initial?.state ?? "");
@@ -77,22 +88,49 @@ export function MemberForm({ initial, onSubmit, submitLabel = "Save member", cla
     <Card className={cn("p-4", className)}>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Input label="First name" required value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-          <Input label="Last name" required value={lastName} onChange={(e) => setLastName(e.target.value)} />
-          <Input label="Email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
-          <Input label="Phone" required value={phone} onChange={(e) => setPhone(e.target.value)} />
+          <Input
+            label="First name"
+            required
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <Input
+            label="Last name"
+            required
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+          <Input
+            label="Email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            label="Phone"
+            required
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
           <Select
             label="Gender"
             value={gender}
             onChange={setGender}
             placeholder="Select gender"
-            options={GENDER_OPTIONS.map((g) => ({ value: g.value, label: g.label }))}
+            options={GENDER_OPTIONS.map((g) => ({
+              value: g.value,
+              label: g.label,
+            }))}
           />
           <Select
             label="Membership type"
             value={membershipType}
             onChange={setMembershipType}
-            options={MEMBERSHIP_OPTIONS.map((m) => ({ value: m.value, label: m.label }))}
+            options={MEMBERSHIP_OPTIONS.map((m) => ({
+              value: m.value,
+              label: m.label,
+            }))}
           />
           <Input
             label="Date of birth"
@@ -100,21 +138,46 @@ export function MemberForm({ initial, onSubmit, submitLabel = "Save member", cla
             value={dateOfBirth}
             onChange={(e) => setDateOfBirth(e.target.value)}
           />
-          <Input label="Occupation" value={occupation} onChange={(e) => setOccupation(e.target.value)} />
+          <Input
+            label="Occupation"
+            value={occupation}
+            onChange={(e) => setOccupation(e.target.value)}
+          />
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Input label="Address" value={address} onChange={(e) => setAddress(e.target.value)} />
-          <Input label="City" value={city} onChange={(e) => setCity(e.target.value)} />
-          <Input label="State" value={state} onChange={(e) => setState(e.target.value)} />
+          <Input
+            label="Address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+          <Input
+            label="City"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+          />
+          <Input
+            label="State"
+            value={state}
+            onChange={(e) => setState(e.target.value)}
+          />
         </div>
 
-        <Textarea label="Notes" value={notes} onChange={(e) => setNotes(e.target.value)} rows={5} />
+        <Textarea
+          label="Notes"
+          value={notes}
+          onChange={(e) => setNotes(e.target.value)}
+          rows={5}
+        />
 
         {error ? <p className="text-sm text-[var(--error)]">{error}</p> : null}
 
         <div className="flex justify-end">
-          <Button type="submit" isLoading={isSubmitting} loadingText="Saving...">
+          <Button
+            type="submit"
+            isLoading={isSubmitting}
+            loadingText="Saving..."
+          >
             {submitLabel}
           </Button>
         </div>

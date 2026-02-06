@@ -24,14 +24,24 @@ export function PastorCard({ worker, className }: PastorCardProps) {
       <div className="flex items-center gap-4">
         <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-full border-4 border-[var(--secondary)] bg-[var(--background-alt)]">
           {worker.photoUrl ? (
-            <Image src={worker.photoUrl} alt={fullName} fill className="object-cover" sizes="80px" />
+            <Image
+              src={worker.photoUrl}
+              alt={fullName}
+              fill
+              className="object-cover"
+              sizes="80px"
+            />
           ) : null}
         </div>
 
         <div className="min-w-0 flex-1">
-          <p className="truncate text-base font-extrabold text-[var(--text-primary)]">{fullName}</p>
+          <p className="truncate text-base font-extrabold text-[var(--text-primary)]">
+            {fullName}
+          </p>
           {worker.title ? (
-            <p className="mt-1 text-sm text-[var(--text-secondary)]">{worker.title}</p>
+            <p className="mt-1 text-sm text-[var(--text-secondary)]">
+              {worker.title}
+            </p>
           ) : null}
           <div className="mt-3">
             <GoldBadge>{worker.roleLabel}</GoldBadge>

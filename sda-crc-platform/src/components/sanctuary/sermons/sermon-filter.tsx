@@ -22,12 +22,18 @@ export function SermonFilter({
   className,
 }: SermonFilterProps) {
   const speakerSelectOptions = React.useMemo(
-    () => [{ value: "", label: "All speakers" }, ...speakers.map((s) => ({ value: s, label: s }))],
+    () => [
+      { value: "", label: "All speakers" },
+      ...speakers.map((s) => ({ value: s, label: s })),
+    ],
     [speakers]
   );
 
   const seriesSelectOptions = React.useMemo(
-    () => [{ value: "", label: "All series" }, ...seriesOptions.map((s) => ({ value: s, label: s }))],
+    () => [
+      { value: "", label: "All series" },
+      ...seriesOptions.map((s) => ({ value: s, label: s })),
+    ],
     [seriesOptions]
   );
 
@@ -37,7 +43,9 @@ export function SermonFilter({
         type="search"
         placeholder="Search sermons…"
         value={value.search ?? ""}
-        onChange={(e) => onChange({ ...value, search: e.target.value || undefined })}
+        onChange={(e) =>
+          onChange({ ...value, search: e.target.value || undefined })
+        }
         className="min-h-11"
       />
 

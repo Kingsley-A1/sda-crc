@@ -14,7 +14,7 @@ interface Campaign {
   name: string;
   theme: string | null;
   startDate: Date;
-  endDate: Date;
+  endDate: Date | null;
   _count: {
     pledges: number;
   };
@@ -33,10 +33,13 @@ async function getCampaigns(): Promise<Campaign[]> {
   return campaigns;
 }
 
-function getCampaignStatus(startDate: Date, endDate: Date): "upcoming" | "active" | "ended" {
+function getCampaignStatus(
+  startDate: Date,
+  endDate: Date | null
+): "upcoming" | "active" | "ended" {
   const now = new Date();
   if (now < startDate) return "upcoming";
-  if (now > endDate) return "ended";
+  if (endDate && now > endDate) return "ended";
   return "active";
 }
 
@@ -82,7 +85,10 @@ export async function CampaignsTable() {
           </thead>
           <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
             {campaigns.map((campaign) => {
-              const status = getCampaignStatus(campaign.startDate, campaign.endDate);
+              const status = getCampaignStatus(
+                campaign.startDate,
+                campaign.endDate
+              );
               return (
                 <tr
                   key={campaign.id}
@@ -91,20 +97,20 @@ export async function CampaignsTable() {
                   <td className="px-4 py-3">
                     <p className="font-medium">{campaign.name}</p>
                   </td>
-                  <td className="px-4 py-3 text-sm">
-                    {campaign.theme || "—"}
-                  </td>
+                  <td className="px-4 py-3 text-sm">{campaign.theme || "—"}</td>
                   <td className="px-4 py-3 text-sm">
                     {campaign.startDate.toLocaleDateString("en-NG", {
                       day: "numeric",
                       month: "short",
                     })}{" "}
                     -{" "}
-                    {campaign.endDate.toLocaleDateString("en-NG", {
-                      day: "numeric",
-                      month: "short",
-                      year: "numeric",
-                    })}
+                    {campaign.endDate
+                      ? campaign.endDate.toLocaleDateString("en-NG", {
+                          day: "numeric",
+                          month: "short",
+                          year: "numeric",
+                        })
+                      : "Ongoing"}
                   </td>
                   <td className="px-4 py-3">
                     <Badge

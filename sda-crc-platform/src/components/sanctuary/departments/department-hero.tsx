@@ -41,7 +41,8 @@ export function DepartmentHero({ department, className }: DepartmentHeroProps) {
           ) : null}
           {department.leader ? (
             <p className="mt-3 text-xs text-white/80">
-              Director: {department.leader.firstName} {department.leader.lastName}
+              Director: {department.leader.firstName}{" "}
+              {department.leader.lastName}
             </p>
           ) : null}
         </div>

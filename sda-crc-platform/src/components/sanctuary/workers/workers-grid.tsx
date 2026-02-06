@@ -1,5 +1,10 @@
 import type { WorkerRole } from "@/lib/validators";
-import { ROLE_CATEGORIES, groupWorkersByCategory, isLeadershipRole, getRoleLabel } from "@/lib/worker-roles";
+import {
+  ROLE_CATEGORIES,
+  groupWorkersByCategory,
+  isLeadershipRole,
+  getRoleLabel,
+} from "@/lib/worker-roles";
 import { cn } from "@/lib/utils";
 import type { WorkerWithLabel } from "@/types/worker";
 
@@ -13,14 +18,21 @@ export interface WorkersGridProps {
 
 function ensureRoleLabel(worker: WorkerWithLabel): WorkerWithLabel {
   if (worker.roleLabel) return worker;
-  return { ...worker, roleLabel: getRoleLabel(worker.role as unknown as WorkerRole) };
+  return {
+    ...worker,
+    roleLabel: getRoleLabel(worker.role as unknown as WorkerRole),
+  };
 }
 
 export function WorkersGrid({ workers, className }: WorkersGridProps) {
   const normalized = workers.map(ensureRoleLabel);
 
-  const featured = normalized.filter((w) => isLeadershipRole(w.role as unknown as WorkerRole));
-  const rest = normalized.filter((w) => !isLeadershipRole(w.role as unknown as WorkerRole));
+  const featured = normalized.filter((w) =>
+    isLeadershipRole(w.role as unknown as WorkerRole)
+  );
+  const rest = normalized.filter(
+    (w) => !isLeadershipRole(w.role as unknown as WorkerRole)
+  );
 
   const grouped = groupWorkersByCategory(rest as Array<{ role: WorkerRole }>);
 
@@ -28,7 +40,9 @@ export function WorkersGrid({ workers, className }: WorkersGridProps) {
     <div className={cn("space-y-6", className)}>
       {featured.length ? (
         <section aria-label="Featured leadership" className="space-y-3">
-          <h2 className="text-base font-extrabold text-[var(--text-primary)]">Leadership</h2>
+          <h2 className="text-base font-extrabold text-[var(--text-primary)]">
+            Leadership
+          </h2>
           <div className="space-y-3">
             {featured.map((w) => (
               <PastorCard key={w.id} worker={w} />

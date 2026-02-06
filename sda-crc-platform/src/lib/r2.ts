@@ -3,7 +3,7 @@
  * ============================
  * Handles file uploads to Cloudflare R2 (S3-compatible storage).
  * Zero egress fees = perfect for serving media content.
- * 
+ *
  * "And God said, 'Let there be light,' and there was light." — Genesis 1:3
  */
 
@@ -29,7 +29,12 @@ const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME!;
 const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL!;
 
 // Validate environment variables
-if (!R2_ACCOUNT_ID || !R2_ACCESS_KEY_ID || !R2_SECRET_ACCESS_KEY || !R2_BUCKET_NAME) {
+if (
+  !R2_ACCOUNT_ID ||
+  !R2_ACCESS_KEY_ID ||
+  !R2_SECRET_ACCESS_KEY ||
+  !R2_BUCKET_NAME
+) {
   console.warn("⚠️ R2 environment variables not fully configured");
 }
 
@@ -50,12 +55,12 @@ const r2Client = new S3Client({
 // Types
 // ============================================================================
 
-export type UploadCategory = 
-  | "sermons" 
-  | "events" 
-  | "members" 
-  | "workers" 
-  | "departments" 
+export type UploadCategory =
+  | "sermons"
+  | "events"
+  | "members"
+  | "workers"
+  | "departments"
   | "general";
 
 export interface UploadResult {
@@ -87,7 +92,7 @@ function generateStorageKey(
   const extension = filename.split(".").pop()?.toLowerCase() || "";
   const slug = generateUniqueSlug(filename.replace(/\.[^/.]+$/, ""));
   const date = new Date().toISOString().split("T")[0]; // YYYY-MM-DD
-  
+
   return `${category}/${date}/${slug}.${extension}`;
 }
 
@@ -111,26 +116,28 @@ function validateContentType(
 ): boolean {
   const allowedTypes: Record<UploadCategory, string[]> = {
     sermons: [
-      "audio/mpeg", "audio/mp3", "audio/wav", "audio/ogg",
-      "video/mp4", "video/webm",
-      "image/jpeg", "image/png", "image/webp",
+      "audio/mpeg",
+      "audio/mp3",
+      "audio/wav",
+      "audio/ogg",
+      "video/mp4",
+      "video/webm",
+      "image/jpeg",
+      "image/png",
+      "image/webp",
     ],
-    events: [
-      "image/jpeg", "image/png", "image/webp", "image/gif",
-    ],
-    members: [
-      "image/jpeg", "image/png", "image/webp",
-    ],
-    workers: [
-      "image/jpeg", "image/png", "image/webp",
-    ],
-    departments: [
-      "image/jpeg", "image/png", "image/webp", "image/gif",
-    ],
+    events: ["image/jpeg", "image/png", "image/webp", "image/gif"],
+    members: ["image/jpeg", "image/png", "image/webp"],
+    workers: ["image/jpeg", "image/png", "image/webp"],
+    departments: ["image/jpeg", "image/png", "image/webp", "image/gif"],
     general: [
-      "image/jpeg", "image/png", "image/webp", "image/gif",
+      "image/jpeg",
+      "image/png",
+      "image/webp",
+      "image/gif",
       "application/pdf",
-      "audio/mpeg", "audio/mp3",
+      "audio/mpeg",
+      "audio/mp3",
       "video/mp4",
     ],
   };
@@ -190,7 +197,10 @@ export async function getPresignedUploadUrl(
     console.error("Error generating presigned URL:", error);
     return {
       success: false,
-      error: error instanceof Error ? error.message : "Failed to generate upload URL",
+      error:
+        error instanceof Error
+          ? error.message
+          : "Failed to generate upload URL",
     };
   }
 }
@@ -247,7 +257,9 @@ export async function uploadFile(
 /**
  * Delete a file from R2
  */
-export async function deleteFile(key: string): Promise<{ success: boolean; error?: string }> {
+export async function deleteFile(
+  key: string
+): Promise<{ success: boolean; error?: string }> {
   try {
     const command = new DeleteObjectCommand({
       Bucket: R2_BUCKET_NAME,

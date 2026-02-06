@@ -54,7 +54,9 @@ export function GeneralSettings() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Site Description</label>
+          <label className="block text-sm font-medium mb-1">
+            Site Description
+          </label>
           <Textarea
             value={siteDescription}
             onChange={(e) => setSiteDescription(e.target.value)}
@@ -63,7 +65,9 @@ export function GeneralSettings() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Contact Email</label>
+          <label className="block text-sm font-medium mb-1">
+            Contact Email
+          </label>
           <Input
             type="email"
             value={contactEmail}
@@ -72,7 +76,9 @@ export function GeneralSettings() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Contact Phone</label>
+          <label className="block text-sm font-medium mb-1">
+            Contact Phone
+          </label>
           <Input
             value={contactPhone}
             onChange={(e) => setContactPhone(e.target.value)}

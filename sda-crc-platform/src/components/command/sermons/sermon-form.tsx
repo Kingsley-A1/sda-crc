@@ -33,16 +33,24 @@ export function SermonForm({
   const [title, setTitle] = React.useState(initial?.title ?? "");
   const [speaker, setSpeaker] = React.useState(initial?.speaker ?? "");
   const [date, setDate] = React.useState<string>(String(initial?.date ?? ""));
-  const [published, setPublished] = React.useState<string>(initial?.published ? "true" : "false");
+  const [published, setPublished] = React.useState<string>(
+    initial?.published ? "true" : "false"
+  );
 
-  const [description, setDescription] = React.useState(initial?.description ?? "");
+  const [description, setDescription] = React.useState(
+    initial?.description ?? ""
+  );
   const [audioUrl, setAudioUrl] = React.useState(initial?.audioUrl ?? "");
   const [videoUrl, setVideoUrl] = React.useState(initial?.videoUrl ?? "");
-  const [thumbnailUrl, setThumbnailUrl] = React.useState(initial?.thumbnailUrl ?? "");
+  const [thumbnailUrl, setThumbnailUrl] = React.useState(
+    initial?.thumbnailUrl ?? ""
+  );
   const [duration, setDuration] = React.useState<string>(
     typeof initial?.duration === "number" ? String(initial.duration) : ""
   );
-  const [scriptureReference, setScriptureReference] = React.useState(initial?.scriptureReference ?? "");
+  const [scriptureReference, setScriptureReference] = React.useState(
+    initial?.scriptureReference ?? ""
+  );
   const [series, setSeries] = React.useState(initial?.series ?? "");
   const [tags, setTags] = React.useState((initial?.tags ?? []).join(", "));
 
@@ -77,8 +85,18 @@ export function SermonForm({
     <Card className={cn("p-4", className)}>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Input label="Title" required value={title} onChange={(e) => setTitle(e.target.value)} />
-          <Input label="Speaker" required value={speaker} onChange={(e) => setSpeaker(e.target.value)} />
+          <Input
+            label="Title"
+            required
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <Input
+            label="Speaker"
+            required
+            value={speaker}
+            onChange={(e) => setSpeaker(e.target.value)}
+          />
           <Input
             label="Date"
             required
@@ -98,8 +116,16 @@ export function SermonForm({
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Input label="Audio URL" value={audioUrl} onChange={(e) => setAudioUrl(e.target.value)} />
-          <Input label="Video URL" value={videoUrl} onChange={(e) => setVideoUrl(e.target.value)} />
+          <Input
+            label="Audio URL"
+            value={audioUrl}
+            onChange={(e) => setAudioUrl(e.target.value)}
+          />
+          <Input
+            label="Video URL"
+            value={videoUrl}
+            onChange={(e) => setVideoUrl(e.target.value)}
+          />
           <Input
             label="Thumbnail URL"
             value={thumbnailUrl}
@@ -117,7 +143,11 @@ export function SermonForm({
             value={scriptureReference}
             onChange={(e) => setScriptureReference(e.target.value)}
           />
-          <Input label="Series" value={series} onChange={(e) => setSeries(e.target.value)} />
+          <Input
+            label="Series"
+            value={series}
+            onChange={(e) => setSeries(e.target.value)}
+          />
           <Input
             label="Tags (comma separated)"
             className="sm:col-span-2"
@@ -136,7 +166,11 @@ export function SermonForm({
         {error ? <p className="text-sm text-[var(--error)]">{error}</p> : null}
 
         <div className="flex justify-end">
-          <Button type="submit" isLoading={isSubmitting} loadingText="Saving...">
+          <Button
+            type="submit"
+            isLoading={isSubmitting}
+            loadingText="Saving..."
+          >
             {submitLabel}
           </Button>
         </div>

@@ -2,7 +2,7 @@
  * Contact Page
  * ============
  * Contact information and inquiry form for the SDA Cross River Conference.
- * 
+ *
  * "Ask and it will be given to you; seek and you will find." — Matthew 7:7
  */
 
@@ -80,7 +80,9 @@ export default function ContactPage() {
             {/* Map */}
             <div>
               <h3 className="text-lg font-semibold mb-4">Find Us</h3>
-              <Suspense fallback={<Skeleton className="h-[300px] rounded-xl" />}>
+              <Suspense
+                fallback={<Skeleton className="h-[300px] rounded-xl" />}
+              >
                 <ContactMap />
               </Suspense>
             </div>
@@ -98,25 +100,21 @@ export default function ContactPage() {
                 What time are Sabbath services?
               </h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Our Sabbath School begins at 9:00 AM, followed by Divine Worship 
+                Our Sabbath School begins at 9:00 AM, followed by Divine Worship
                 at 11:00 AM. Afternoon programs vary by church.
               </p>
             </div>
             <div className="rounded-xl border p-6">
-              <h3 className="font-semibold mb-2">
-                How can I become a member?
-              </h3>
+              <h3 className="font-semibold mb-2">How can I become a member?</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Visit our Join Us page to register your interest. You can also 
+                Visit our Join Us page to register your interest. You can also
                 attend any of our local churches and speak with the pastor.
               </p>
             </div>
             <div className="rounded-xl border p-6">
-              <h3 className="font-semibold mb-2">
-                How can I request prayer?
-              </h3>
+              <h3 className="font-semibold mb-2">How can I request prayer?</h3>
               <p className="text-gray-600 dark:text-gray-400">
-                Use the contact form above to send a prayer request, or call our 
+                Use the contact form above to send a prayer request, or call our
                 office. All requests are treated with confidentiality.
               </p>
             </div>

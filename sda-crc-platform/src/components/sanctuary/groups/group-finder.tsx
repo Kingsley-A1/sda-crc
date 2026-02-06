@@ -36,7 +36,10 @@ export function GroupFinder({ groups, className }: GroupFinderProps) {
   };
 
   return (
-    <section className={cn("space-y-4", className)} aria-label="Small group finder">
+    <section
+      className={cn("space-y-4", className)}
+      aria-label="Small group finder"
+    >
       <Input
         type="search"
         placeholder="Search by area, city, or group name…"

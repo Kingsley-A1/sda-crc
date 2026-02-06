@@ -13,7 +13,7 @@ interface Leader {
   email?: string | null;
   phone?: string | null;
   photoUrl?: string | null;
-  role: string;
+  role?: string;
   bio?: string | null;
 }
 
@@ -25,7 +25,7 @@ export function DepartmentLeader({ leader }: DepartmentLeaderProps) {
   return (
     <div className="rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 p-6">
       <h3 className="font-semibold text-lg mb-4">Department Leader</h3>
-      
+
       <div className="text-center">
         {/* Photo */}
         <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
@@ -49,9 +49,7 @@ export function DepartmentLeader({ leader }: DepartmentLeaderProps) {
         <h4 className="font-semibold text-lg">
           {leader.firstName} {leader.lastName}
         </h4>
-        <p className="text-primary text-sm font-medium mb-3">
-          Director
-        </p>
+        <p className="text-primary text-sm font-medium mb-3">Director</p>
 
         {/* Bio */}
         {leader.bio && (

@@ -2,7 +2,7 @@
  * Departments API Route
  * =====================
  * Handles fetching all departments.
- * 
+ *
  * "Now you are the body of Christ, and each one of you is a part of it." — 1 Corinthians 12:27
  */
 
@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
 
     // Build where clause
     const where: Record<string, unknown> = {};
-    
+
     // For public API, only show active departments
     const session = await auth();
     if (!session?.user && activeOnly) {
@@ -92,14 +92,18 @@ export async function POST(request: NextRequest) {
     const result = CreateDepartmentSchema.safeParse(body);
 
     if (!result.success) {
-      return apiError("Validation failed", 400, result.error.flatten().fieldErrors);
+      return apiError(
+        "Validation failed",
+        400,
+        result.error.flatten().fieldErrors
+      );
     }
 
     const data = result.data;
 
     // Generate slug from name if not provided
     let slug = data.slug || generateSlug(data.name);
-    
+
     // Check for slug uniqueness
     let counter = 1;
     const baseSlug = slug;

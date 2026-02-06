@@ -2,7 +2,7 @@
  * Live Stream Page
  * ================
  * Live worship services and real-time streaming page.
- * 
+ *
  * "They will see the Son of Man coming in clouds with great power and glory." — Mark 13:26
  */
 
@@ -48,7 +48,9 @@ export default function LivePage() {
           {/* Main Player Area */}
           <div className="lg:col-span-2 space-y-6">
             {/* Live Player */}
-            <Suspense fallback={<Skeleton className="aspect-video rounded-2xl" />}>
+            <Suspense
+              fallback={<Skeleton className="aspect-video rounded-2xl" />}
+            >
               <LivePlayer />
             </Suspense>
 
@@ -58,8 +60,8 @@ export default function LivePage() {
                 Sabbath Divine Worship
               </h2>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Join us for our weekly Sabbath worship service. 
-                Experience praise, prayer, and the preaching of God&apos;s Word.
+                Join us for our weekly Sabbath worship service. Experience
+                praise, prayer, and the preaching of God&apos;s Word.
               </p>
               <div className="flex flex-wrap gap-4 text-sm">
                 <div className="flex items-center gap-2">

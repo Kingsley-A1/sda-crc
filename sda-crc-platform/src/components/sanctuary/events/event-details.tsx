@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { Globe, MapPin } from "@phosphor-icons/react";
@@ -19,7 +21,11 @@ export function EventDetails({ event }: EventDetailsProps) {
         </h1>
 
         <div className="mt-3 flex flex-wrap items-center gap-2">
-          <Badge variant={event.featured ? "secondary" : "subtle"} rounded="full" size="sm">
+          <Badge
+            variant={event.featured ? "secondary" : "subtle"}
+            rounded="full"
+            size="sm"
+          >
             {event.category}
           </Badge>
           <Badge variant="outline" rounded="full" size="sm">
@@ -49,7 +55,13 @@ export function EventDetails({ event }: EventDetailsProps) {
 
         {event.imageUrl ? (
           <div className="relative mt-4 aspect-[16/9] overflow-hidden rounded-2xl border border-[var(--border)]">
-            <Image src={event.imageUrl} alt={event.title} fill className="object-cover" sizes="100vw" />
+            <Image
+              src={event.imageUrl}
+              alt={event.title}
+              fill
+              className="object-cover"
+              sizes="100vw"
+            />
           </div>
         ) : null}
 
@@ -64,7 +76,9 @@ export function EventDetails({ event }: EventDetailsProps) {
 
       <div className="lg:col-span-1">
         <Card className="p-4">
-          <p className="text-sm font-bold text-[var(--text-primary)]">Event Info</p>
+          <p className="text-sm font-bold text-[var(--text-primary)]">
+            Event Info
+          </p>
           <p className="mt-2 text-sm text-[var(--text-secondary)]">
             Starts: {formatDateTime(event.startDate)}
           </p>

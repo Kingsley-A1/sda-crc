@@ -39,7 +39,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
       return apiError("Resource not found", 404);
     }
 
-    const shouldIncrement = request.nextUrl.searchParams.get("download") === "true";
+    const shouldIncrement =
+      request.nextUrl.searchParams.get("download") === "true";
 
     if (shouldIncrement) {
       const updated = await db.resource.update({
@@ -83,7 +84,11 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     const result = UpdateResourceSchema.safeParse(body);
 
     if (!result.success) {
-      return apiError("Validation failed", 400, result.error.flatten().fieldErrors);
+      return apiError(
+        "Validation failed",
+        400,
+        result.error.flatten().fieldErrors
+      );
     }
 
     const updated = await db.resource.update({

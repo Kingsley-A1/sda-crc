@@ -2,7 +2,7 @@
  * Login Page
  * ==========
  * Authentication page for the Command Center.
- * 
+ *
  * "Knock and the door will be opened to you." — Matthew 7:7
  */
 
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 export default async function LoginPage() {
   // Redirect if already logged in
   const session = await getServerSession(authOptions);
-  
+
   if (session) {
     redirect("/command");
   }

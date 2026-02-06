@@ -53,7 +53,9 @@ export function EventsCalendar() {
       currentMonth.getFullYear(),
       currentMonth.getMonth(),
       day
-    ).toISOString().split("T")[0];
+    )
+      .toISOString()
+      .split("T")[0];
 
     return events.filter((event) => {
       const eventStart = new Date(event.startDate).toISOString().split("T")[0];
@@ -74,8 +76,18 @@ export function EventsCalendar() {
   };
 
   const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
   return (

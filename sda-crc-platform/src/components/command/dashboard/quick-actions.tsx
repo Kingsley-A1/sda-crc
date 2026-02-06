@@ -10,7 +10,9 @@ export interface QuickActionsProps {
 export function QuickActions({ className }: QuickActionsProps) {
   return (
     <Card className={cn("p-4", className)}>
-      <p className="text-sm font-bold text-[var(--text-primary)]">Quick actions</p>
+      <p className="text-sm font-bold text-[var(--text-primary)]">
+        Quick actions
+      </p>
       <div className="mt-4 grid grid-cols-2 gap-2">
         <Button asChild variant="outline" className="min-h-11">
           <Link href="/command/sermons/new">New sermon</Link>

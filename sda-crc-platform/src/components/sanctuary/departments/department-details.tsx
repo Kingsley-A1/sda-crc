@@ -9,7 +9,7 @@ interface Department {
   name: string;
   description: string | null;
   mission: string | null;
-  vision: string | null;
+  vision?: string | null;
 }
 
 interface DepartmentDetailsProps {

@@ -2,7 +2,7 @@
  * Departments Page
  * ================
  * Browse all departments and ministries of the SDA Cross River Conference.
- * 
+ *
  * "Now you are the body of Christ, and each one of you is a part of it." — 1 Corinthians 12:27
  */
 
@@ -22,13 +22,15 @@ export const metadata: Metadata = {
     "Explore the various departments and ministries of the SDA Cross River Conference. Find your place to serve and grow.",
 };
 
+export const dynamic = 'force-dynamic';
+
 // ============================================================================
 // Data Fetching
 // ============================================================================
 
 async function getDepartments() {
   const departments = await db.department.findMany({
-    where: { isActive: true },
+    where: { active: true },
     orderBy: { name: "asc" },
     include: {
       leader: {
@@ -41,25 +43,33 @@ async function getDepartments() {
     },
   });
 
-  return departments.map((dept: {
-    id: string;
-    name: string;
-    slug: string;
-    description: string | null;
-    iconName: string | null;
-    colorScheme: string | null;
-    imageUrl: string | null;
-    leader?: { firstName: string; lastName: string; photoUrl: string | null } | null;
-  }) => ({
-    id: dept.id,
-    name: dept.name,
-    slug: dept.slug,
-    description: dept.description || "",
-    iconName: dept.iconName || "Users",
-    colorScheme: (dept.colorScheme as "blue" | "green" | "purple" | "orange" | "pink") || "blue",
-    memberCount: 0,
-    imageUrl: dept.imageUrl || undefined,
-  }));
+  return departments.map(
+    (dept: {
+      id: string;
+      name: string;
+      slug: string;
+      description: string | null;
+      iconName: string | null;
+      colorScheme: string | null;
+      imageUrl: string | null;
+      leader?: {
+        firstName: string;
+        lastName: string;
+        photoUrl: string | null;
+      } | null;
+    }) => ({
+      id: dept.id,
+      name: dept.name,
+      slug: dept.slug,
+      description: dept.description || "",
+      iconName: dept.iconName || "Users",
+      colorScheme:
+        (dept.colorScheme as "blue" | "green" | "purple" | "orange" | "pink") ||
+        "blue",
+      memberCount: 0,
+      imageUrl: dept.imageUrl,
+    })
+  );
 }
 
 // ============================================================================
@@ -80,9 +90,9 @@ export default async function DepartmentsPage() {
       <Container className="py-8 md:py-12">
         <div className="max-w-3xl mx-auto text-center mb-12">
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            The SDA Cross River Conference operates through various departments, 
-            each dedicated to fulfilling specific aspects of our mission. 
-            Find your passion and connect with a ministry where you can serve.
+            The SDA Cross River Conference operates through various departments,
+            each dedicated to fulfilling specific aspects of our mission. Find
+            your passion and connect with a ministry where you can serve.
           </p>
         </div>
 

@@ -2,7 +2,7 @@
  * Department Detail Page
  * ======================
  * Individual department page with leader info, programs, and resources.
- * 
+ *
  * "So in Christ we, though many, form one body, and each member belongs to all the others." — Romans 12:5
  */
 
@@ -14,6 +14,8 @@ import { DepartmentDetails } from "@/components/sanctuary/departments/department
 import { DepartmentPrograms } from "@/components/sanctuary/departments/department-programs";
 import { DepartmentLeader } from "@/components/sanctuary/departments/department-leader";
 import { db } from "@/lib/db";
+
+export const dynamic = 'force-dynamic';
 
 // ============================================================================
 // Types
@@ -33,7 +35,7 @@ async function getDepartment(slug: string) {
   const department = await db.department.findFirst({
     where: {
       slug,
-      isActive: true,
+      active: true,
     },
     include: {
       leader: {
@@ -44,8 +46,6 @@ async function getDepartment(slug: string) {
           email: true,
           phone: true,
           photoUrl: true,
-          role: true,
-          bio: true,
         },
       },
     },
@@ -58,7 +58,9 @@ async function getDepartment(slug: string) {
 // Metadata
 // ============================================================================
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const department = await getDepartment(slug);
 
@@ -83,15 +85,17 @@ export default async function DepartmentPage({ params }: PageProps) {
   const department = await getDepartment(slug);
 
   if (!department) {
-    notFound();
+    return notFound();
   }
 
   return (
     <>
       <PageHeader
         title={department.name}
-        subtitle={department.tagline || undefined}
-        backgroundImage={department.coverImage || "/images/departments-header.jpg"}
+        subtitle={department.mission || undefined}
+        backgroundImage={
+          department.imageUrl || "/images/departments-header.jpg"
+        }
       />
 
       <Container className="py-8 md:py-12">
@@ -114,27 +118,20 @@ export default async function DepartmentPage({ params }: PageProps) {
 
             {/* Contact Information */}
             <div className="rounded-xl bg-gray-50 dark:bg-gray-800/50 p-6">
-              <h3 className="font-semibold text-lg mb-4">Contact Us</h3>
-              {department.email && (
+              <h3 className="font-semibold text-lg mb-4">Meeting Details</h3>
+              {department.meetingDay && (
                 <p className="text-gray-600 dark:text-gray-400 mb-2">
-                  <strong>Email:</strong>{" "}
-                  <a
-                    href={`mailto:${department.email}`}
-                    className="text-primary hover:underline"
-                  >
-                    {department.email}
-                  </a>
+                  <strong>Day:</strong> {department.meetingDay}
                 </p>
               )}
-              {department.phone && (
+              {department.meetingTime && (
+                <p className="text-gray-600 dark:text-gray-400 mb-2">
+                  <strong>Time:</strong> {department.meetingTime}
+                </p>
+              )}
+              {department.meetingLocation && (
                 <p className="text-gray-600 dark:text-gray-400">
-                  <strong>Phone:</strong>{" "}
-                  <a
-                    href={`tel:${department.phone}`}
-                    className="text-primary hover:underline"
-                  >
-                    {department.phone}
-                  </a>
+                  <strong>Location:</strong> {department.meetingLocation}
                 </p>
               )}
             </div>

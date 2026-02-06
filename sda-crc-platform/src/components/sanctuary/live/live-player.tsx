@@ -17,8 +17,8 @@ export function LivePlayer() {
         <div className="text-6xl mb-4">📺</div>
         <h3 className="text-xl font-semibold mb-2">No Live Stream</h3>
         <p className="text-gray-400 text-center max-w-md">
-          We&apos;re not currently streaming. Check back during service times 
-          or browse our sermon archive.
+          We&apos;re not currently streaming. Check back during service times or
+          browse our sermon archive.
         </p>
       </div>
     );

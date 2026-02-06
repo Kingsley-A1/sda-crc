@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Play } from "@phosphor-icons/react";
@@ -55,7 +57,11 @@ export function FeaturedSermon({ sermon, className }: FeaturedSermonProps) {
           </p>
 
           <div className="mt-4">
-            <Button asChild className="min-h-11" leftIcon={<Play className="h-4 w-4" weight="fill" />}>
+            <Button
+              asChild
+              className="min-h-11"
+              leftIcon={<Play className="h-4 w-4" weight="fill" />}
+            >
               <Link href={`/sermons/${sermon.slug}`}>Watch / Listen</Link>
             </Button>
           </div>

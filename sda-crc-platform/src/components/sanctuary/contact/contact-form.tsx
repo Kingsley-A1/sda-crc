@@ -20,7 +20,9 @@ export interface ContactFormProps {
 
 export function ContactForm({ className, onSubmitted }: ContactFormProps) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [status, setStatus] = React.useState<"idle" | "success" | "error">("idle");
+  const [status, setStatus] = React.useState<"idle" | "success" | "error">(
+    "idle"
+  );
 
   const [values, setValues] = React.useState<ContactFormValues>({
     name: "",
@@ -55,7 +57,9 @@ export function ContactForm({ className, onSubmitted }: ContactFormProps) {
 
   return (
     <Card className={cn("p-4", className)}>
-      <p className="text-lg font-extrabold text-[var(--text-primary)]">Contact Us</p>
+      <p className="text-lg font-extrabold text-[var(--text-primary)]">
+        Contact Us
+      </p>
       <p className="mt-1 text-sm text-[var(--text-secondary)]">
         Send a message — we’ll respond as soon as possible.
       </p>
@@ -72,7 +76,9 @@ export function ContactForm({ className, onSubmitted }: ContactFormProps) {
             label="Email"
             type="email"
             value={values.email}
-            onChange={(e) => setValues((v) => ({ ...v, email: e.target.value }))}
+            onChange={(e) =>
+              setValues((v) => ({ ...v, email: e.target.value }))
+            }
             required
           />
         </div>
@@ -86,27 +92,39 @@ export function ContactForm({ className, onSubmitted }: ContactFormProps) {
         <Input
           label="Subject"
           value={values.subject}
-          onChange={(e) => setValues((v) => ({ ...v, subject: e.target.value }))}
+          onChange={(e) =>
+            setValues((v) => ({ ...v, subject: e.target.value }))
+          }
           required
         />
 
         <Textarea
           label="Message"
           value={values.message}
-          onChange={(e) => setValues((v) => ({ ...v, message: e.target.value }))}
+          onChange={(e) =>
+            setValues((v) => ({ ...v, message: e.target.value }))
+          }
           rows={5}
           required
         />
 
-        <Button type="submit" isLoading={isSubmitting} className="min-h-11 w-full">
+        <Button
+          type="submit"
+          isLoading={isSubmitting}
+          className="min-h-11 w-full"
+        >
           Send message
         </Button>
 
         {status === "success" ? (
-          <p className="text-xs text-[var(--success)]">Message sent. Thank you!</p>
+          <p className="text-xs text-[var(--success)]">
+            Message sent. Thank you!
+          </p>
         ) : null}
         {status === "error" ? (
-          <p className="text-xs text-[var(--error)]">Sorry — something went wrong. Please try again.</p>
+          <p className="text-xs text-[var(--error)]">
+            Sorry — something went wrong. Please try again.
+          </p>
         ) : null}
       </form>
     </Card>

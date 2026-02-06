@@ -2,7 +2,7 @@
  * Events Management Page
  * ======================
  * CRUD interface for managing events in the Command Center.
- * 
+ *
  * "Let all things be done decently and in order." — 1 Corinthians 14:40
  */
 
@@ -19,44 +19,30 @@ export const metadata: Metadata = {
   title: "Manage Events | Command Center",
 };
 
+export const dynamic = 'force-dynamic';
+
 async function getEvents() {
   const events = await db.event.findMany({
-    orderBy: { date: "desc" },
+    orderBy: { startDate: "desc" },
     take: 50,
   });
 
-  return events.map((e: {
-    id: string;
-    title: string;
-    slug: string;
-    description: string | null;
-    date: Date;
-    endDate: Date | null;
-    location: string | null;
-    isOnline: boolean;
-    onlineLink: string | null;
-    imageUrl: string | null;
-    category: string;
-    isFeatured: boolean;
-    requiresRegistration: boolean;
-    maxAttendees: number | null;
-    isPublished: boolean;
-  }) => ({
+  return events.map((e) => ({
     id: e.id,
     title: e.title,
     slug: e.slug,
-    description: e.description || undefined,
-    date: e.date.toISOString(),
-    endDate: e.endDate?.toISOString(),
-    location: e.location || undefined,
-    isOnline: e.isOnline || false,
-    onlineLink: e.onlineLink || undefined,
-    imageUrl: e.imageUrl || undefined,
-    category: (e.category as "conference" | "youth" | "prayer" | "music" | "workshop" | "social" | "other") || "other",
-    featured: e.isFeatured || false,
-    requiresRegistration: e.requiresRegistration || false,
-    maxAttendees: e.maxAttendees || undefined,
-    published: e.isPublished,
+    description: e.description,
+    startDate: e.startDate.toISOString(),
+    endDate: e.endDate?.toISOString() || null,
+    location: e.location,
+    imageUrl: e.imageUrl,
+    isOnline: e.isOnline,
+    onlineUrl: e.onlineUrl,
+    category: e.category as "WORSHIP" | "FELLOWSHIP" | "EVANGELISM" | "TRAINING" | "YOUTH" | "CHILDREN" | "SPECIAL",
+    featured: e.featured,
+    published: e.published,
+    createdAt: e.createdAt.toISOString(),
+    updatedAt: e.updatedAt.toISOString(),
   }));
 }
 

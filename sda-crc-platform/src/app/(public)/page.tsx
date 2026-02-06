@@ -3,7 +3,7 @@
  * =========
  * The main landing page for SDA Cross River Conference Digital Sanctuary.
  * Features hero slider, latest sermons, upcoming events, and more.
- * 
+ *
  * "The Lord is in his holy temple; let all the earth be silent before him." — Habakkuk 2:20
  */
 
@@ -27,6 +27,8 @@ export const metadata: Metadata = {
     "Welcome to the SDA Cross River Conference Digital Sanctuary. Experience worship, community, and spiritual growth through our sermons, events, and ministries.",
 };
 
+export const dynamic = 'force-dynamic';
+
 // ============================================================================
 // Data Fetching
 // ============================================================================
@@ -37,24 +39,24 @@ async function getHomePageData() {
     db.sermon.findMany({
       take: 4,
       orderBy: { date: "desc" },
-      include: { series: true },
+      where: { published: true },
     }),
     // Upcoming Events
     db.event.findMany({
-      where: { date: { gte: new Date() } },
+      where: { startDate: { gte: new Date() } },
       take: 4,
-      orderBy: { date: "asc" },
+      orderBy: { startDate: "asc" },
     }),
     // Active Departments
     db.department.findMany({
-      where: { isActive: true },
+      where: { active: true },
       take: 6,
     }),
     // Stats
     Promise.all([
       db.member.count(),
       db.sermon.count(),
-      db.event.count({ where: { date: { gte: new Date() } } }),
+      db.event.count({ where: { startDate: { gte: new Date() } } }),
       db.smallGroup.count({ where: { isActive: true } }),
     ]),
   ]);
@@ -107,7 +109,12 @@ const heroSlides = [
 // Stats Configuration
 // ============================================================================
 
-function getStatsItems(stats: { members: number; sermons: number; events: number; groups: number }) {
+function getStatsItems(stats: {
+  members: number;
+  sermons: number;
+  events: number;
+  groups: number;
+}) {
   return [
     { label: "Active Members", value: stats.members, suffix: "+" },
     { label: "Sermons Available", value: stats.sermons, suffix: "" },

@@ -2,7 +2,7 @@
  * Command Center Dashboard
  * ========================
  * Main admin dashboard with overview statistics and quick actions.
- * 
+ *
  * "The one who is faithful in a very little is also faithful in much." — Luke 16:10
  */
 
@@ -23,6 +23,8 @@ export const metadata: Metadata = {
   title: "Dashboard | Command Center",
   description: "SDA CRC Command Center Dashboard",
 };
+
+export const dynamic = 'force-dynamic';
 
 // ============================================================================
 // Data Fetching
@@ -48,28 +50,42 @@ async function getRecentActivity() {
   ]);
 
   const activities = [
-    ...recentMembers.map((m: { id: string; firstName: string; lastName: string; createdAt: Date }) => ({
-      id: `member-${m.id}`,
-      title: `New member: ${m.firstName} ${m.lastName}`,
-      timestamp: m.createdAt.toISOString(),
-      type: "success" as const,
-    })),
-    ...recentSermons.map((s: { id: string; title: string; createdAt: Date }) => ({
-      id: `sermon-${s.id}`,
-      title: `Sermon added: ${s.title}`,
-      timestamp: s.createdAt.toISOString(),
-      type: "info" as const,
-    })),
-    ...recentEvents.map((e: { id: string; title: string; createdAt: Date }) => ({
-      id: `event-${e.id}`,
-      title: `Event created: ${e.title}`,
-      timestamp: e.createdAt.toISOString(),
-      type: "info" as const,
-    })),
+    ...recentMembers.map(
+      (m: {
+        id: string;
+        firstName: string;
+        lastName: string;
+        createdAt: Date;
+      }) => ({
+        id: `member-${m.id}`,
+        title: `New member: ${m.firstName} ${m.lastName}`,
+        timestamp: m.createdAt.toISOString(),
+        type: "success" as const,
+      })
+    ),
+    ...recentSermons.map(
+      (s: { id: string; title: string; createdAt: Date }) => ({
+        id: `sermon-${s.id}`,
+        title: `Sermon added: ${s.title}`,
+        timestamp: s.createdAt.toISOString(),
+        type: "info" as const,
+      })
+    ),
+    ...recentEvents.map(
+      (e: { id: string; title: string; createdAt: Date }) => ({
+        id: `event-${e.id}`,
+        title: `Event created: ${e.title}`,
+        timestamp: e.createdAt.toISOString(),
+        type: "info" as const,
+      })
+    ),
   ];
 
   return activities
-    .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+    .sort(
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    )
     .slice(0, 5);
 }
 

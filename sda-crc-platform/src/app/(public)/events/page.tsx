@@ -2,7 +2,7 @@
  * Events Page
  * ===========
  * Browse upcoming and past events from the SDA Cross River Conference.
- * 
+ *
  * "And let us consider how we may spur one another on toward love and good deeds." — Hebrews 10:24
  */
 
@@ -24,6 +24,8 @@ export const metadata: Metadata = {
   description:
     "Discover upcoming events, programs, and gatherings at the SDA Cross River Conference.",
 };
+
+export const dynamic = 'force-dynamic';
 
 // ============================================================================
 // Loading Skeleton

@@ -6,7 +6,14 @@ import type { CreateWorkerInput, WorkerRole } from "@/types/worker";
 import { cn } from "@/lib/utils";
 import { getGroupedRoleOptions } from "@/lib/worker-roles";
 
-import { Button, Card, Combobox, Input, Select, Textarea } from "@/components/ui";
+import {
+  Button,
+  Card,
+  Combobox,
+  Input,
+  Select,
+  Textarea,
+} from "@/components/ui";
 
 export interface WorkerFormProps {
   initial?: Partial<CreateWorkerInput>;
@@ -15,13 +22,22 @@ export interface WorkerFormProps {
   className?: string;
 }
 
-export function WorkerForm({ initial, onSubmit, submitLabel = "Save worker", className }: WorkerFormProps) {
+export function WorkerForm({
+  initial,
+  onSubmit,
+  submitLabel = "Save worker",
+  className,
+}: WorkerFormProps) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
 
   const roleOptions = React.useMemo(() => {
     return getGroupedRoleOptions().flatMap((group) =>
-      group.options.map((opt) => ({ value: opt.value, label: opt.label, category: group.category }))
+      group.options.map((opt) => ({
+        value: opt.value,
+        label: opt.label,
+        category: group.category,
+      }))
     );
   }, []);
 
@@ -36,8 +52,12 @@ export function WorkerForm({ initial, onSubmit, submitLabel = "Save worker", cla
   const [bio, setBio] = React.useState(initial?.bio ?? "");
   const [photoUrl, setPhotoUrl] = React.useState(initial?.photoUrl ?? "");
 
-  const [isActive, setIsActive] = React.useState<string>(initial?.isActive === false ? "false" : "true");
-  const [showOnWebsite, setShowOnWebsite] = React.useState<string>(initial?.showOnWebsite ? "true" : "false");
+  const [isActive, setIsActive] = React.useState<string>(
+    initial?.isActive === false ? "false" : "true"
+  );
+  const [showOnWebsite, setShowOnWebsite] = React.useState<string>(
+    initial?.showOnWebsite ? "true" : "false"
+  );
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,10 +91,29 @@ export function WorkerForm({ initial, onSubmit, submitLabel = "Save worker", cla
     <Card className={cn("p-4", className)}>
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          <Input label="First name" required value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-          <Input label="Last name" required value={lastName} onChange={(e) => setLastName(e.target.value)} />
-          <Input label="Email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
-          <Input label="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} />
+          <Input
+            label="First name"
+            required
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+          />
+          <Input
+            label="Last name"
+            required
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
+          />
+          <Input
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            label="Phone"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+          />
 
           <Combobox
             label="Role"
@@ -86,9 +125,21 @@ export function WorkerForm({ initial, onSubmit, submitLabel = "Save worker", cla
             groupByCategory
           />
 
-          <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} />
-          <Input label="Department" value={department} onChange={(e) => setDepartment(e.target.value)} />
-          <Input label="Photo URL" value={photoUrl} onChange={(e) => setPhotoUrl(e.target.value)} />
+          <Input
+            label="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <Input
+            label="Department"
+            value={department}
+            onChange={(e) => setDepartment(e.target.value)}
+          />
+          <Input
+            label="Photo URL"
+            value={photoUrl}
+            onChange={(e) => setPhotoUrl(e.target.value)}
+          />
 
           <Select
             label="Active?"
@@ -110,12 +161,21 @@ export function WorkerForm({ initial, onSubmit, submitLabel = "Save worker", cla
           />
         </div>
 
-        <Textarea label="Bio" value={bio} onChange={(e) => setBio(e.target.value)} rows={6} />
+        <Textarea
+          label="Bio"
+          value={bio}
+          onChange={(e) => setBio(e.target.value)}
+          rows={6}
+        />
 
         {error ? <p className="text-sm text-[var(--error)]">{error}</p> : null}
 
         <div className="flex justify-end">
-          <Button type="submit" isLoading={isSubmitting} loadingText="Saving...">
+          <Button
+            type="submit"
+            isLoading={isSubmitting}
+            loadingText="Saving..."
+          >
             {submitLabel}
           </Button>
         </div>

@@ -63,7 +63,10 @@ export function HeroSlider({
       opacity: 1,
       transition: shouldReduceMotion
         ? { duration: 0 }
-        : { duration: 0.35, ease: [0.16, 1, 0.3, 1] as [number, number, number, number] },
+        : {
+            duration: 0.35,
+            ease: [0.16, 1, 0.3, 1] as [number, number, number, number],
+          },
     },
     exit: (dir: 1 | -1) => ({
       x: shouldReduceMotion ? 0 : dir === 1 ? -30 : 30,
@@ -83,7 +86,10 @@ export function HeroSlider({
   }
 
   return (
-    <section className={cn("w-full", className)} aria-roledescription="carousel">
+    <section
+      className={cn("w-full", className)}
+      aria-roledescription="carousel"
+    >
       <div className="relative">
         <div className="h-[62vh] max-h-[720px] min-h-[460px]">
           <AnimatePresence custom={direction} mode="wait">
@@ -132,7 +138,9 @@ export function HeroSlider({
                   }}
                   className={cn(
                     "h-2.5 w-2.5 rounded-full transition-all",
-                    i === index ? "bg-white w-7" : "bg-white/50 hover:bg-white/80"
+                    i === index
+                      ? "bg-white w-7"
+                      : "bg-white/50 hover:bg-white/80"
                   )}
                   aria-label={`Go to slide ${i + 1}`}
                   aria-current={i === index}

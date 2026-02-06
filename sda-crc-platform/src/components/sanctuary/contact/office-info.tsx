@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { EnvelopeSimple, Phone, MapPin } from "@phosphor-icons/react";
 
@@ -13,7 +15,9 @@ export interface OfficeInfoProps {
 export function OfficeInfo({ settings, className }: OfficeInfoProps) {
   return (
     <Card className={cn("p-4", className)}>
-      <p className="text-sm font-bold text-[var(--text-primary)]">Office Info</p>
+      <p className="text-sm font-bold text-[var(--text-primary)]">
+        Office Info
+      </p>
 
       <div className="mt-3 space-y-2">
         {settings.address ? (
@@ -26,7 +30,10 @@ export function OfficeInfo({ settings, className }: OfficeInfoProps) {
         {settings.contactPhone ? (
           <p className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
             <Phone className="h-4 w-4" weight="bold" />
-            <Link href={`tel:${settings.contactPhone}`} className="underline underline-offset-2">
+            <Link
+              href={`tel:${settings.contactPhone}`}
+              className="underline underline-offset-2"
+            >
               {settings.contactPhone}
             </Link>
           </p>
@@ -35,7 +42,10 @@ export function OfficeInfo({ settings, className }: OfficeInfoProps) {
         {settings.contactEmail ? (
           <p className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
             <EnvelopeSimple className="h-4 w-4" weight="bold" />
-            <Link href={`mailto:${settings.contactEmail}`} className="underline underline-offset-2">
+            <Link
+              href={`mailto:${settings.contactEmail}`}
+              className="underline underline-offset-2"
+            >
               {settings.contactEmail}
             </Link>
           </p>

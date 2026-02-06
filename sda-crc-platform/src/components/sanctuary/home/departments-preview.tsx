@@ -11,7 +11,10 @@ export interface DepartmentsPreviewProps {
   className?: string;
 }
 
-export function DepartmentsPreview({ departments, className }: DepartmentsPreviewProps) {
+export function DepartmentsPreview({
+  departments,
+  className,
+}: DepartmentsPreviewProps) {
   return (
     <section className={className} aria-label="Departments preview">
       <div className="flex items-end justify-between gap-4">

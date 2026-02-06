@@ -41,7 +41,9 @@ export function LiveSettings() {
       <h3 className="font-semibold text-lg mb-6">Live Stream Settings</h3>
       <div className="space-y-4 max-w-xl">
         <div>
-          <label className="block text-sm font-medium mb-1">YouTube Channel ID</label>
+          <label className="block text-sm font-medium mb-1">
+            YouTube Channel ID
+          </label>
           <Input
             value={youtubeChannel}
             onChange={(e) => setYoutubeChannel(e.target.value)}
@@ -53,7 +55,9 @@ export function LiveSettings() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Facebook Page ID</label>
+          <label className="block text-sm font-medium mb-1">
+            Facebook Page ID
+          </label>
           <Input
             value={facebookPage}
             onChange={(e) => setFacebookPage(e.target.value)}
@@ -65,7 +69,9 @@ export function LiveSettings() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-1">Stream Key (Optional)</label>
+          <label className="block text-sm font-medium mb-1">
+            Stream Key (Optional)
+          </label>
           <Input
             type="password"
             value={streamKey}

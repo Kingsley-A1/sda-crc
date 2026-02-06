@@ -2,7 +2,7 @@
  * Event Detail Page
  * =================
  * Individual event page with full details, registration, and location.
- * 
+ *
  * "For where two or three gather in my name, there am I with them." — Matthew 18:20
  */
 
@@ -12,6 +12,8 @@ import { Container } from "@/components/layout/container";
 import { EventDetails } from "@/components/sanctuary/events/event-details";
 import { EventRegistration } from "@/components/sanctuary/events/event-registration";
 import { db } from "@/lib/db";
+
+export const dynamic = 'force-dynamic';
 
 // ============================================================================
 // Types
@@ -31,7 +33,7 @@ async function getEvent(slug: string) {
   const event = await db.event.findFirst({
     where: {
       slug,
-      isPublished: true,
+      published: true,
     },
   });
 
@@ -42,7 +44,9 @@ async function getEvent(slug: string) {
 // Metadata
 // ============================================================================
 
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const event = await getEvent(slug);
 
@@ -73,10 +77,11 @@ export default async function EventPage({ params }: PageProps) {
   const event = await getEvent(slug);
 
   if (!event) {
-    notFound();
+    return notFound();
   }
 
   const isPastEvent = new Date(event.endDate || event.startDate) < new Date();
+  // event.startDate is correct here since schema is reverted
 
   return (
     <Container className="py-8 md:py-12">
@@ -93,7 +98,8 @@ export default async function EventPage({ params }: PageProps) {
               <div className="rounded-xl bg-gray-100 dark:bg-gray-800 p-6 text-center">
                 <h3 className="font-semibold text-lg mb-2">Event Concluded</h3>
                 <p className="text-gray-600 dark:text-gray-400">
-                  This event has already taken place. Check out our upcoming events!
+                  This event has already taken place. Check out our upcoming
+                  events!
                 </p>
               </div>
             ) : (

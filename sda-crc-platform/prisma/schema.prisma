@@ -99,7 +99,7 @@ model Sermon {
   id                 String       @id @default(cuid())
   title              String
   slug               String       @unique
-  preacher           String
+  speaker            String
   date               DateTime
   description        String?
   audioUrl           String?
@@ -107,20 +107,19 @@ model Sermon {
   thumbnailUrl       String?
   duration           Int?         // Duration in seconds
   scriptureReference String?
-  seriesId           String?
+  series             String?
   tags               String[]     @default([])
-  isPublished        Boolean      @default(false)
+  published          Boolean      @default(false)
   viewCount          Int          @default(0)
   createdById        String?
   createdAt          DateTime     @default(now())
   updatedAt          DateTime     @updatedAt
 
-  createdBy User?         @relation("CreatedSermons", fields: [createdById], references: [id], onDelete: SetNull)
-  series    SermonSeries? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+  createdBy User? @relation("CreatedSermons", fields: [createdById], references: [id], onDelete: SetNull)
 
   @@index([date])
-  @@index([preacher])
-  @@index([isPublished])
+  @@index([speaker])
+  @@index([published])
   @@map("sermons")
 }
 
@@ -132,8 +131,6 @@ model SermonSeries {
   imageUrl    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-
-  sermons Sermon[]
 
   @@map("sermon_series")
 }
@@ -147,15 +144,15 @@ model Event {
   title                String
   slug                 String        @unique
   description          String?
-  date                 DateTime
+  startDate            DateTime
   endDate              DateTime?
   location             String?
   imageUrl             String?
   isOnline             Boolean       @default(false)
-  onlineLink           String?
-  category             String        @default("other")
-  isFeatured           Boolean       @default(false)
-  isPublished          Boolean       @default(false)
+  onlineUrl            String?
+  category             EventCategory @default(SPECIAL)
+  featured             Boolean       @default(false)
+  published            Boolean       @default(false)
   requiresRegistration Boolean       @default(false)
   maxAttendees         Int?
   createdById          String?
@@ -164,9 +161,9 @@ model Event {
 
   createdBy User? @relation("CreatedEvents", fields: [createdById], references: [id], onDelete: SetNull)
 
-  @@index([date])
+  @@index([startDate])
   @@index([category])
-  @@index([isPublished])
+  @@index([published])
   @@map("events")
 }
 
@@ -197,7 +194,7 @@ model Department {
   meetingDay      String?
   meetingTime     String?
   meetingLocation String?
-  isActive        Boolean  @default(true)
+  active          Boolean  @default(true)
   order           Int      @default(0)
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
@@ -206,7 +203,7 @@ model Department {
   members Member[] @relation("DepartmentMembers")
 
   @@index([slug])
-  @@index([isActive])
+  @@index([active])
   @@map("departments")
 }
 

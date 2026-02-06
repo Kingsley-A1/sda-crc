@@ -60,8 +60,15 @@ export function HeroSlide({ slide, priority = false }: HeroSlideProps) {
         {(slide.primaryCta || slide.secondaryCta) && (
           <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center">
             {slide.primaryCta ? (
-              <Button asChild size="md" variant="secondary" className="min-h-12">
-                <Link href={slide.primaryCta.href}>{slide.primaryCta.label}</Link>
+              <Button
+                asChild
+                size="md"
+                variant="secondary"
+                className="min-h-12"
+              >
+                <Link href={slide.primaryCta.href}>
+                  {slide.primaryCta.label}
+                </Link>
               </Button>
             ) : null}
 
@@ -70,7 +77,9 @@ export function HeroSlide({ slide, priority = false }: HeroSlideProps) {
                 asChild
                 size="md"
                 variant="outline"
-                className={cn("min-h-12 border-white/60 text-white hover:bg-white hover:text-[var(--primary)]")}
+                className={cn(
+                  "min-h-12 border-white/60 text-white hover:bg-white hover:text-[var(--primary)]"
+                )}
               >
                 <Link href={slide.secondaryCta.href}>
                   {slide.secondaryCta.label}

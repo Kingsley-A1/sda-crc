@@ -31,9 +31,14 @@ const MEMBER_TYPE_OPTIONS = [
   { value: "MISSING_MEMBER", label: "Returning Member" },
 ];
 
-export function RegistrationForm({ className, onSubmitted }: RegistrationFormProps) {
+export function RegistrationForm({
+  className,
+  onSubmitted,
+}: RegistrationFormProps) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [status, setStatus] = React.useState<"idle" | "success" | "error">("idle");
+  const [status, setStatus] = React.useState<"idle" | "success" | "error">(
+    "idle"
+  );
 
   const [values, setValues] = React.useState<RegistrationFormValues>({
     firstName: "",
@@ -83,7 +88,9 @@ export function RegistrationForm({ className, onSubmitted }: RegistrationFormPro
 
   return (
     <Card className={cn("p-4", className)}>
-      <p className="text-lg font-extrabold text-[var(--text-primary)]">Join the Church Family</p>
+      <p className="text-lg font-extrabold text-[var(--text-primary)]">
+        Join the Church Family
+      </p>
       <p className="mt-1 text-sm text-[var(--text-secondary)]">
         Fill this form and we will reach out to you.
       </p>
@@ -93,13 +100,17 @@ export function RegistrationForm({ className, onSubmitted }: RegistrationFormPro
           <Input
             label="First name"
             value={values.firstName}
-            onChange={(e) => setValues((v) => ({ ...v, firstName: e.target.value }))}
+            onChange={(e) =>
+              setValues((v) => ({ ...v, firstName: e.target.value }))
+            }
             required
           />
           <Input
             label="Last name"
             value={values.lastName}
-            onChange={(e) => setValues((v) => ({ ...v, lastName: e.target.value }))}
+            onChange={(e) =>
+              setValues((v) => ({ ...v, lastName: e.target.value }))
+            }
             required
           />
         </div>
@@ -108,14 +119,18 @@ export function RegistrationForm({ className, onSubmitted }: RegistrationFormPro
           <Input
             label="Phone"
             value={values.phone}
-            onChange={(e) => setValues((v) => ({ ...v, phone: e.target.value }))}
+            onChange={(e) =>
+              setValues((v) => ({ ...v, phone: e.target.value }))
+            }
             required
           />
           <Input
             label="Email (optional)"
             type="email"
             value={values.email ?? ""}
-            onChange={(e) => setValues((v) => ({ ...v, email: e.target.value }))}
+            onChange={(e) =>
+              setValues((v) => ({ ...v, email: e.target.value }))
+            }
           />
         </div>
 
@@ -129,24 +144,40 @@ export function RegistrationForm({ className, onSubmitted }: RegistrationFormPro
         <Textarea
           label="Address (optional)"
           value={values.address ?? ""}
-          onChange={(e) => setValues((v) => ({ ...v, address: e.target.value }))}
+          onChange={(e) =>
+            setValues((v) => ({ ...v, address: e.target.value }))
+          }
           rows={3}
         />
 
         <WorkerCheckSection
           value={{ isWorker: values.isWorker, role: values.workerRole }}
-          onChange={(next) => setValues((v) => ({ ...v, isWorker: next.isWorker, workerRole: next.role }))}
+          onChange={(next) =>
+            setValues((v) => ({
+              ...v,
+              isWorker: next.isWorker,
+              workerRole: next.role,
+            }))
+          }
         />
 
-        <Button type="submit" isLoading={isSubmitting} className="min-h-11 w-full">
+        <Button
+          type="submit"
+          isLoading={isSubmitting}
+          className="min-h-11 w-full"
+        >
           Submit registration
         </Button>
 
         {status === "success" ? (
-          <p className="text-xs text-[var(--success)]">Registration received. Thank you!</p>
+          <p className="text-xs text-[var(--success)]">
+            Registration received. Thank you!
+          </p>
         ) : null}
         {status === "error" ? (
-          <p className="text-xs text-[var(--error)]">Sorry — something went wrong. Please try again.</p>
+          <p className="text-xs text-[var(--error)]">
+            Sorry — something went wrong. Please try again.
+          </p>
         ) : null}
       </form>
     </Card>

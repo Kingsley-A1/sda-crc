@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -62,7 +64,9 @@ export function DepartmentCard({ department, className }: DepartmentCardProps) {
               size="sm"
               rounded="full"
               className="backdrop-blur"
-              leftIcon={<DepartmentIcon className="h-3.5 w-3.5" weight="bold" />}
+              leftIcon={
+                <DepartmentIcon className="h-3.5 w-3.5" weight="bold" />
+              }
             >
               Department
             </Badge>
@@ -86,7 +90,8 @@ export function DepartmentCard({ department, className }: DepartmentCardProps) {
 
           {typeof department.memberCount === "number" ? (
             <p className="mt-2 text-xs text-[var(--text-tertiary)]">
-              {department.memberCount} member{department.memberCount === 1 ? "" : "s"}
+              {department.memberCount} member
+              {department.memberCount === 1 ? "" : "s"}
             </p>
           ) : null}
         </div>

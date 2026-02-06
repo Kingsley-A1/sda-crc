@@ -28,10 +28,16 @@ export function SermonPlayer({
   const hasAudio = !!audioUrl;
 
   const defaultMode: PlayerMode = hasVideo ? "video" : "audio";
-  const [mode, setMode] = useLocalStorage<PlayerMode>(`${storageKey}:mode`, defaultMode);
+  const [mode, setMode] = useLocalStorage<PlayerMode>(
+    `${storageKey}:mode`,
+    defaultMode
+  );
 
   const mediaRef = React.useRef<HTMLMediaElement | null>(null);
-  const [resumeSeconds, setResumeSeconds] = useLocalStorage<number>(`${storageKey}:t`, 0);
+  const [resumeSeconds, setResumeSeconds] = useLocalStorage<number>(
+    `${storageKey}:t`,
+    0
+  );
 
   React.useEffect(() => {
     // If mode becomes invalid (e.g. no video), fall back.
@@ -72,7 +78,9 @@ export function SermonPlayer({
   return (
     <Card className={cn("p-4", className)}>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="text-sm font-bold text-[var(--text-primary)]">Listen / Watch</p>
+        <p className="text-sm font-bold text-[var(--text-primary)]">
+          Listen / Watch
+        </p>
 
         <div className="flex gap-2">
           <Button

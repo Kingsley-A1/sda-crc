@@ -2,14 +2,17 @@
  * Small Groups API Route
  * ======================
  * Handles fetching small groups with location-based filtering.
- * 
+ *
  * "And let us consider how we may spur one another on toward love and good deeds." — Hebrews 10:24
  */
 
 import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
-import { CreateSmallGroupSchema, SmallGroupQuerySchema } from "@/lib/validators";
+import {
+  CreateSmallGroupSchema,
+  SmallGroupQuerySchema,
+} from "@/lib/validators";
 import { apiResponse, apiError } from "@/lib/utils";
 
 // ============================================================================
@@ -31,8 +34,10 @@ function calculateDistance(
   const dLon = toRad(lon2 - lon1);
   const a =
     Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    Math.cos(toRad(lat1)) *
+      Math.cos(toRad(lat2)) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   return R * c;
 }
@@ -48,18 +53,24 @@ function toRad(deg: number): number {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl;
-    
+
     // Parse and validate query parameters
-    const queryResult = SmallGroupQuerySchema.safeParse(Object.fromEntries(searchParams));
+    const queryResult = SmallGroupQuerySchema.safeParse(
+      Object.fromEntries(searchParams)
+    );
     if (!queryResult.success) {
-      return apiError("Invalid query parameters", 400, queryResult.error.flatten().fieldErrors);
+      return apiError(
+        "Invalid query parameters",
+        400,
+        queryResult.error.flatten().fieldErrors
+      );
     }
 
     const { lat, lng, radius, city, active } = queryResult.data;
 
     // Build where clause
     const where: Record<string, unknown> = {};
-    
+
     // For public API, only show active groups
     const session = await auth();
     if (!session?.user) {
@@ -95,19 +106,34 @@ export async function GET(request: NextRequest) {
     });
 
     // If location provided, filter by distance and add distance property
-    type SmallGroupType = typeof smallGroups[number];
+    type SmallGroupType = (typeof smallGroups)[number];
     type GroupWithDistance = SmallGroupType & { distance: number };
 
-    let groupsWithDistance: GroupWithDistance[] | SmallGroupType[] = smallGroups;
+    let groupsWithDistance: GroupWithDistance[] | SmallGroupType[] =
+      smallGroups;
 
     if (lat !== undefined && lng !== undefined) {
       groupsWithDistance = smallGroups
-        .map((group: SmallGroupType): GroupWithDistance => ({
-          ...group,
-          distance: calculateDistance(lat, lng, group.latitude, group.longitude),
-        }))
+        .filter(
+          (group: SmallGroupType) =>
+            group.latitude !== null && group.longitude !== null
+        )
+        .map(
+          (group: SmallGroupType): GroupWithDistance => ({
+            ...group,
+            distance: calculateDistance(
+              lat,
+              lng,
+              group.latitude!,
+              group.longitude!
+            ),
+          })
+        )
         .filter((group: GroupWithDistance) => group.distance <= radius)
-        .sort((a: GroupWithDistance, b: GroupWithDistance) => a.distance - b.distance);
+        .sort(
+          (a: GroupWithDistance, b: GroupWithDistance) =>
+            a.distance - b.distance
+        );
     }
 
     // Transform response
@@ -127,7 +153,10 @@ export async function GET(request: NextRequest) {
       isActive: group.isActive,
       acceptingMembers: group.acceptingMembers,
       leader: group.leader,
-      distance: "distance" in group ? (group.distance as number).toFixed(1) + " km" : undefined,
+      distance:
+        "distance" in group
+          ? (group.distance as number).toFixed(1) + " km"
+          : undefined,
     }));
 
     return apiResponse(response);
@@ -160,16 +189,34 @@ export async function POST(request: NextRequest) {
     const result = CreateSmallGroupSchema.safeParse(body);
 
     if (!result.success) {
-      return apiError("Validation failed", 400, result.error.flatten().fieldErrors);
+      return apiError(
+        "Validation failed",
+        400,
+        result.error.flatten().fieldErrors
+      );
     }
 
-    const data = result.data;
+    const d = result.data;
 
     // Create small group
     const smallGroup = await db.smallGroup.create({
       data: {
-        ...data,
-      },
+        name: d.name,
+        description: d.description ?? undefined,
+        latitude: d.latitude,
+        longitude: d.longitude,
+        address: d.address ?? undefined,
+        city: d.city ?? undefined,
+        state: d.state ?? undefined,
+        meetingDay: d.meetingDay ?? undefined,
+        meetingTime: d.meetingTime ?? undefined,
+        maxMembers: d.maxMembers,
+        isActive: d.isActive,
+        acceptingMembers: d.acceptingMembers,
+        ...(d.leaderId
+          ? { leader: { connect: { id: d.leaderId } } }
+          : {}),
+      } as Parameters<typeof db.smallGroup.create>[0]["data"],
     });
 
     return apiResponse(smallGroup, 201);

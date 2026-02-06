@@ -34,7 +34,9 @@ export function EventFilter({ value, onChange, className }: EventFilterProps) {
           type="search"
           placeholder="Search events…"
           value={value.search ?? ""}
-          onChange={(e) => onChange({ ...value, search: e.target.value || undefined })}
+          onChange={(e) =>
+            onChange({ ...value, search: e.target.value || undefined })
+          }
           className="min-h-11"
         />
       </div>
@@ -42,7 +44,12 @@ export function EventFilter({ value, onChange, className }: EventFilterProps) {
       <Select
         options={CATEGORY_OPTIONS}
         value={(value.category as string | undefined) ?? ""}
-        onChange={(next) => onChange({ ...value, category: (next || undefined) as EventCategory | undefined })}
+        onChange={(next) =>
+          onChange({
+            ...value,
+            category: (next || undefined) as EventCategory | undefined,
+          })
+        }
         placeholder="All categories"
         selectSize="md"
       />
@@ -53,7 +60,9 @@ export function EventFilter({ value, onChange, className }: EventFilterProps) {
           size="sm"
           className="min-h-11 flex-1"
           variant={hasUpcoming ? "primary" : "outline"}
-          onClick={() => onChange({ ...value, upcoming: hasUpcoming ? undefined : true })}
+          onClick={() =>
+            onChange({ ...value, upcoming: hasUpcoming ? undefined : true })
+          }
         >
           Upcoming
         </Button>
@@ -62,7 +71,9 @@ export function EventFilter({ value, onChange, className }: EventFilterProps) {
           size="sm"
           className="min-h-11 flex-1"
           variant={hasFeatured ? "primary" : "outline"}
-          onClick={() => onChange({ ...value, featured: hasFeatured ? undefined : true })}
+          onClick={() =>
+            onChange({ ...value, featured: hasFeatured ? undefined : true })
+          }
         >
           Featured
         </Button>

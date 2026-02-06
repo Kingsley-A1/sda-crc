@@ -3,7 +3,7 @@
  * =============
  * Layout for all public-facing pages (Sanctuary).
  * Includes Navbar, Footer, and Mobile PWA enhancements.
- * 
+ *
  * "How lovely is your dwelling place, Lord Almighty!" — Psalm 84:1
  */
 

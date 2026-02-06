@@ -3,7 +3,7 @@
  * =================
  * Handles fetching all workers (GET) and creating new workers (POST).
  * Workers are displayed in hierarchical order based on role.
- * 
+ *
  * "Let the elders who rule well be counted worthy of double honor." — 1 Timothy 5:17
  */
 
@@ -11,13 +11,9 @@ import { NextRequest } from "next/server";
 import { db } from "@/lib/db";
 import { auth } from "@/lib/auth";
 import { CreateWorkerSchema, WorkerQuerySchema } from "@/lib/validators";
-import { 
-  apiResponse, 
-  apiError, 
-  buildPaginationMeta,
-} from "@/lib/utils";
-import { 
-  getRoleHierarchyOrder, 
+import { apiResponse, apiError, buildPaginationMeta } from "@/lib/utils";
+import {
+  getRoleHierarchyOrder,
   WORKER_ROLE_LABELS,
   ROLE_CATEGORIES,
   groupWorkersByCategory,
@@ -30,11 +26,17 @@ import {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = request.nextUrl;
-    
+
     // Parse and validate query parameters
-    const queryResult = WorkerQuerySchema.safeParse(Object.fromEntries(searchParams));
+    const queryResult = WorkerQuerySchema.safeParse(
+      Object.fromEntries(searchParams)
+    );
     if (!queryResult.success) {
-      return apiError("Invalid query parameters", 400, queryResult.error.flatten().fieldErrors);
+      return apiError(
+        "Invalid query parameters",
+        400,
+        queryResult.error.flatten().fieldErrors
+      );
     }
 
     const { role, department, active, page, limit } = queryResult.data;
@@ -121,12 +123,14 @@ export async function GET(request: NextRequest) {
     }
 
     const sortedWorkers: WorkerWithOrder[] = workers
-      .map((worker: PrismaWorker): WorkerWithOrder => ({
-        ...worker,
-        role: worker.role as WorkerRole,
-        roleLabel: WORKER_ROLE_LABELS[worker.role as WorkerRole],
-        hierarchyOrder: getRoleHierarchyOrder(worker.role as WorkerRole),
-      }))
+      .map(
+        (worker: PrismaWorker): WorkerWithOrder => ({
+          ...worker,
+          role: worker.role as WorkerRole,
+          roleLabel: WORKER_ROLE_LABELS[worker.role as WorkerRole],
+          hierarchyOrder: getRoleHierarchyOrder(worker.role as WorkerRole),
+        })
+      )
       .sort((a: WorkerWithOrder, b: WorkerWithOrder) => {
         // First by hierarchy
         if (a.hierarchyOrder !== b.hierarchyOrder) {
@@ -146,7 +150,10 @@ export async function GET(request: NextRequest) {
     if (grouped) {
       // Return workers grouped by category
       const groupedWorkers = groupWorkersByCategory(sortedWorkers);
-      const groupedResponse: Record<string, { label: string; description: string; workers: unknown[] }> = {};
+      const groupedResponse: Record<
+        string,
+        { label: string; description: string; workers: unknown[] }
+      > = {};
 
       for (const [category, categoryWorkers] of groupedWorkers.entries()) {
         const categoryInfo = ROLE_CATEGORIES[category];
@@ -157,10 +164,18 @@ export async function GET(request: NextRequest) {
         };
       }
 
-      return apiResponse(groupedResponse, 200, buildPaginationMeta(total, page, limit));
+      return apiResponse(
+        groupedResponse,
+        200,
+        buildPaginationMeta(total, page, limit)
+      );
     }
 
-    return apiResponse(sortedWorkers, 200, buildPaginationMeta(total, page, limit));
+    return apiResponse(
+      sortedWorkers,
+      200,
+      buildPaginationMeta(total, page, limit)
+    );
   } catch (error) {
     console.error("Error fetching workers:", error);
     return apiError("Failed to fetch workers", 500);
@@ -190,7 +205,11 @@ export async function POST(request: NextRequest) {
     const result = CreateWorkerSchema.safeParse(body);
 
     if (!result.success) {
-      return apiError("Validation failed", 400, result.error.flatten().fieldErrors);
+      return apiError(
+        "Validation failed",
+        400,
+        result.error.flatten().fieldErrors
+      );
     }
 
     const data = result.data;
@@ -227,7 +246,8 @@ export async function POST(request: NextRequest) {
     return apiResponse(
       {
         ...worker,
-        roleLabel: WORKER_ROLE_LABELS[worker.role as keyof typeof WORKER_ROLE_LABELS],
+        roleLabel:
+          WORKER_ROLE_LABELS[worker.role as keyof typeof WORKER_ROLE_LABELS],
       },
       201
     );

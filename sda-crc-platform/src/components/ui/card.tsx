@@ -82,7 +82,9 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
     if (asChild) {
       if (!React.isValidElement(children)) {
         if (process.env.NODE_ENV !== "production") {
-          throw new Error("Card `asChild` expects a single React element child.");
+          throw new Error(
+            "Card `asChild` expects a single React element child."
+          );
         }
         return null;
       }

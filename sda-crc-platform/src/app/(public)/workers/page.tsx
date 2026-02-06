@@ -3,7 +3,7 @@
  * ============
  * Directory of church workers, leaders, and servants.
  * Displays workers in proper hierarchy order with honour badges.
- * 
+ *
  * "Let the elders who rule well be counted worthy of double honor." — 1 Timothy 5:17
  */
 
@@ -26,6 +26,8 @@ export const metadata: Metadata = {
     "Meet the dedicated servants who lead and serve in the SDA Cross River Conference.",
 };
 
+export const dynamic = 'force-dynamic';
+
 // ============================================================================
 // Data Fetching
 // ============================================================================
@@ -38,26 +40,34 @@ async function getWorkers() {
       id: true,
       firstName: true,
       lastName: true,
+      email: true,
+      phone: true,
       photoUrl: true,
       workerRole: true,
       workerOrder: true,
     },
   });
 
-  return workers.map((w: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    photoUrl: string | null;
-    workerRole: string | null;
-    workerOrder: number | null;
-  }) => ({
+  return workers.map((w) => ({
     id: w.id,
     firstName: w.firstName,
     lastName: w.lastName,
-    photoUrl: w.photoUrl || undefined,
-    role: w.workerRole || "OTHER",
+    email: w.email,
+    phone: w.phone,
+    role: (w.workerRole || "VOLUNTEER") as import("@/types/worker").WorkerRole,
     roleLabel: w.workerRole || "Worker",
+    title: null as string | null,
+    department: null as string | null,
+    bio: null as string | null,
+    photoUrl: w.photoUrl,
+    startDate: null as Date | string | null,
+    endDate: null as Date | string | null,
+    isActive: true,
+    displayOrder: w.workerOrder,
+    showOnWebsite: true,
+    socialLinks: null as import("@/types/worker").WorkerSocialLinks | null,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   }));
 }
 
@@ -114,8 +124,8 @@ export default async function WorkersPage() {
         {/* Introduction */}
         <div className="max-w-3xl mx-auto text-center mb-12">
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            The SDA Cross River Conference is blessed with dedicated workers who 
-            serve faithfully in various capacities. We honour those who labour 
+            The SDA Cross River Conference is blessed with dedicated workers who
+            serve faithfully in various capacities. We honour those who labour
             in the Lord&apos;s vineyard.
           </p>
         </div>

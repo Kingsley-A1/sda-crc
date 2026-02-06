@@ -83,29 +83,33 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
     },
     ref
   ) => {
-    const Component = pulse ? motion.span : "span";
-    const motionProps = pulse
-      ? {
-          animate: { scale: [1, 1.05, 1] },
-          transition: { duration: 2, repeat: Infinity, ease: "easeInOut" },
-        }
-      : {};
+    if (pulse) {
+      return (
+        <motion.span
+          ref={ref}
+          className={cn(badgeVariants({ variant, size, rounded }), className)}
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" as const }}
+        >
+          {dot && (
+            <span className={cn("h-1.5 w-1.5 rounded-full bg-current", "animate-pulse")} />
+          )}
+          {leftIcon && <span className="shrink-0">{leftIcon}</span>}
+          {children}
+          {rightIcon && <span className="shrink-0">{rightIcon}</span>}
+        </motion.span>
+      );
+    }
 
     return (
-      <Component
+      <span
         ref={ref}
         className={cn(badgeVariants({ variant, size, rounded }), className)}
-        {...motionProps}
         {...props}
       >
         {/* Dot indicator */}
         {dot && (
-          <span
-            className={cn(
-              "h-1.5 w-1.5 rounded-full bg-current",
-              pulse && "animate-pulse"
-            )}
-          />
+          <span className="h-1.5 w-1.5 rounded-full bg-current" />
         )}
 
         {/* Left icon */}
@@ -116,7 +120,7 @@ const Badge = React.forwardRef<HTMLSpanElement, BadgeProps>(
 
         {/* Right icon */}
         {rightIcon && <span className="shrink-0">{rightIcon}</span>}
-      </Component>
+      </span>
     );
   }
 );

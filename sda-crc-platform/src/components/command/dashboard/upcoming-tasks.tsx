@@ -9,14 +9,30 @@ import { Card } from "@/components/ui/card";
 export async function UpcomingTasks() {
   // In a real implementation, this would fetch from the database
   const tasks = [
-    { id: 1, title: "Review new member applications", due: "Today", priority: "high" },
-    { id: 2, title: "Upload last Sabbath's sermon", due: "Tomorrow", priority: "medium" },
-    { id: 3, title: "Update event calendar for next month", due: "This week", priority: "low" },
+    {
+      id: 1,
+      title: "Review new member applications",
+      due: "Today",
+      priority: "high",
+    },
+    {
+      id: 2,
+      title: "Upload last Sabbath's sermon",
+      due: "Tomorrow",
+      priority: "medium",
+    },
+    {
+      id: 3,
+      title: "Update event calendar for next month",
+      due: "This week",
+      priority: "low",
+    },
   ];
 
   const priorityColors = {
     high: "bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400",
-    medium: "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
+    medium:
+      "bg-yellow-100 text-yellow-700 dark:bg-yellow-900/30 dark:text-yellow-400",
     low: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
   };
 

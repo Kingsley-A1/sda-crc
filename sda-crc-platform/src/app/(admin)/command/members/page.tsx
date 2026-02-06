@@ -17,33 +17,36 @@ export const metadata: Metadata = {
   title: "Manage Members | Command Center",
 };
 
+export const dynamic = 'force-dynamic';
+
 async function getMembers() {
   const members = await db.member.findMany({
     orderBy: { createdAt: "desc" },
     take: 100,
   });
 
-  return members.map((m: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string | null;
-    photoUrl: string | null;
-    isWorker: boolean;
-    workerRole: string | null;
-    createdAt: Date;
-  }) => ({
+  return members.map((m) => ({
     id: m.id,
     firstName: m.firstName,
     lastName: m.lastName,
     email: m.email,
-    phone: m.phone || undefined,
-    photoUrl: m.photoUrl || undefined,
-    isWorker: m.isWorker,
-    workerRole: m.workerRole || undefined,
-    isActive: true,
-    joinDate: m.createdAt.toISOString(),
+    phone: m.phone || "",
+    dateOfBirth: m.dateOfBirth?.toISOString() || null,
+    gender: m.gender,
+    address: m.address,
+    city: m.city,
+    state: m.state,
+    occupation: m.occupation,
+    baptismDate: m.baptismDate?.toISOString() || null,
+    membershipType: m.membershipType,
+    photoUrl: m.photoUrl,
+    emergencyContactName: m.emergencyContactName,
+    emergencyContactPhone: m.emergencyContactPhone,
+    interests: m.interests,
+    isActive: m.isActive,
+    notes: m.notes,
+    createdAt: m.createdAt.toISOString(),
+    updatedAt: m.updatedAt.toISOString(),
   }));
 }
 

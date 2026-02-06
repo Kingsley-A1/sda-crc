@@ -14,8 +14,8 @@ export function AboutMission() {
         </div>
         <h3 className="text-2xl font-serif font-bold mb-4">Our Mission</h3>
         <p className="text-white/90 leading-relaxed">
-          To make disciples of Jesus Christ who live as His loving witnesses 
-          and proclaim to all people the everlasting gospel of the three 
+          To make disciples of Jesus Christ who live as His loving witnesses and
+          proclaim to all people the everlasting gospel of the three
           angels&apos; messages in preparation for His soon return.
         </p>
       </div>
@@ -27,8 +27,8 @@ export function AboutMission() {
         </div>
         <h3 className="text-2xl font-serif font-bold mb-4">Our Vision</h3>
         <p className="text-gray-800 leading-relaxed">
-          In harmony with Bible prophecy, we see the Seventh-day Adventist 
-          Church in Cross River as a growing, vibrant community of faith, 
+          In harmony with Bible prophecy, we see the Seventh-day Adventist
+          Church in Cross River as a growing, vibrant community of faith,
           reaching every person with the hope found in Jesus.
         </p>
       </div>

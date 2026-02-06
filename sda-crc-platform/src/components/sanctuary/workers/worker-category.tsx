@@ -10,13 +10,22 @@ export interface WorkerCategoryProps {
   className?: string;
 }
 
-export function WorkerCategory({ title, description, workers, className }: WorkerCategoryProps) {
+export function WorkerCategory({
+  title,
+  description,
+  workers,
+  className,
+}: WorkerCategoryProps) {
   return (
     <section className={cn("space-y-3", className)} aria-label={title}>
       <div>
-        <h2 className="text-base font-extrabold text-[var(--text-primary)]">{title}</h2>
+        <h2 className="text-base font-extrabold text-[var(--text-primary)]">
+          {title}
+        </h2>
         {description ? (
-          <p className="mt-1 text-sm text-[var(--text-secondary)]">{description}</p>
+          <p className="mt-1 text-sm text-[var(--text-secondary)]">
+            {description}
+          </p>
         ) : null}
       </div>
 

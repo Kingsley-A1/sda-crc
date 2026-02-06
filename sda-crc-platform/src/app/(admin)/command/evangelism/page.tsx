@@ -18,6 +18,8 @@ export const metadata: Metadata = {
   title: "Manage Evangelism | Command Center",
 };
 
+export const dynamic = 'force-dynamic';
+
 export default function EvangelismManagementPage() {
   return (
     <div className="space-y-6">

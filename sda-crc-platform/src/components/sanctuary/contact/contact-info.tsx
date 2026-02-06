@@ -9,7 +9,8 @@ export function ContactInfo() {
     {
       icon: "📍",
       title: "Address",
-      value: "SDA Cross River Conference Office\n123 Church Road, Calabar\nCross River State, Nigeria",
+      value:
+        "SDA Cross River Conference Office\n123 Church Road, Calabar\nCross River State, Nigeria",
     },
     {
       icon: "📞",
@@ -33,7 +34,7 @@ export function ContactInfo() {
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold mb-4">Contact Information</h3>
-      
+
       {contacts.map((contact) => (
         <div
           key={contact.title}

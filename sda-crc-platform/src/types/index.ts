@@ -190,12 +190,13 @@ export interface SmallGroup {
   id: string;
   name: string;
   description: string | null;
-  latitude: number;
-  longitude: number;
+  type: string;
+  latitude: number | null;
+  longitude: number | null;
   address: string | null;
   city: string | null;
   state: string | null;
-  meetingDay: string | null;
+  meetingDay: string;
   meetingTime: string | null;
   maxMembers: number;
   isActive: boolean;
@@ -212,7 +213,7 @@ export interface SmallGroupWithLeader extends SmallGroup {
     id: string;
     firstName: string;
     lastName: string;
-    phone: string;
+    phone: string | null;
     photoUrl: string | null;
   } | null;
   currentMembers: number;

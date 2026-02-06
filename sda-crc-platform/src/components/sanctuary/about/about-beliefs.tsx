@@ -10,27 +10,33 @@ export function AboutBeliefs() {
   const beliefs = [
     {
       title: "The Word of God",
-      description: "The Holy Scriptures are the infallible revelation of God's will and the standard of character.",
+      description:
+        "The Holy Scriptures are the infallible revelation of God's will and the standard of character.",
     },
     {
       title: "The Trinity",
-      description: "There is one God: Father, Son, and Holy Spirit, a unity of three co-eternal Persons.",
+      description:
+        "There is one God: Father, Son, and Holy Spirit, a unity of three co-eternal Persons.",
     },
     {
       title: "The Sabbath",
-      description: "The seventh day of the week is God's holy Sabbath, a day of rest, worship, and ministry.",
+      description:
+        "The seventh day of the week is God's holy Sabbath, a day of rest, worship, and ministry.",
     },
     {
       title: "Second Coming",
-      description: "Jesus Christ will return visibly, personally, and in glory to bring salvation to His people.",
+      description:
+        "Jesus Christ will return visibly, personally, and in glory to bring salvation to His people.",
     },
     {
       title: "Healthful Living",
-      description: "We honor God by caring for our bodies through proper diet, exercise, and rest.",
+      description:
+        "We honor God by caring for our bodies through proper diet, exercise, and rest.",
     },
     {
       title: "Spirit of Prophecy",
-      description: "The writings of Ellen G. White are a continuing source of truth, guidance, and instruction.",
+      description:
+        "The writings of Ellen G. White are a continuing source of truth, guidance, and instruction.",
     },
   ];
 
@@ -40,7 +46,7 @@ export function AboutBeliefs() {
         What We Believe
       </h2>
       <p className="text-center text-gray-600 dark:text-gray-400 mb-8 max-w-2xl mx-auto">
-        Seventh-day Adventists accept the Bible as our only creed and hold 
+        Seventh-day Adventists accept the Bible as our only creed and hold
         certain fundamental beliefs to be the teaching of the Holy Scriptures.
       </p>
 

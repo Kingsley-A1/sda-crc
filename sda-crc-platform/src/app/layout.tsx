@@ -3,7 +3,7 @@
  * ===========
  * The root layout for the entire SDA CRC Digital Sanctuary Platform.
  * Provides theme support, fonts, and core metadata.
- * 
+ *
  * "Unless the Lord builds the house, the builders labor in vain." — Psalm 127:1
  */
 

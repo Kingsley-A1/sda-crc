@@ -6,7 +6,11 @@ import type { EvangelismSite, EvangelismStatus } from "@/types/evangelism";
 import { formatDate } from "@/lib/utils";
 
 import { Badge } from "@/components/ui";
-import { ActionMenu, DataTable, type DataTableColumn } from "@/components/command/shared";
+import {
+  ActionMenu,
+  DataTable,
+  type DataTableColumn,
+} from "@/components/command/shared";
 
 export interface EvangelismSitesTableProps {
   rows: EvangelismSite[];
@@ -28,7 +32,11 @@ function statusVariant(status: EvangelismStatus) {
   }
 }
 
-export function EvangelismSitesTable({ rows, onEdit, onDelete }: EvangelismSitesTableProps) {
+export function EvangelismSitesTable({
+  rows,
+  onEdit,
+  onDelete,
+}: EvangelismSitesTableProps) {
   const columns = React.useMemo<Array<DataTableColumn<EvangelismSite>>>(
     () => [
       {
@@ -37,7 +45,9 @@ export function EvangelismSitesTable({ rows, onEdit, onDelete }: EvangelismSites
         cell: (s) => (
           <div className="min-w-0">
             <p className="truncate font-semibold">{s.name}</p>
-            <p className="mt-0.5 truncate text-xs text-[var(--text-tertiary)]">{s.city ?? "—"}</p>
+            <p className="mt-0.5 truncate text-xs text-[var(--text-tertiary)]">
+              {s.city ?? "—"}
+            </p>
           </div>
         ),
       },
@@ -64,13 +74,21 @@ export function EvangelismSitesTable({ rows, onEdit, onDelete }: EvangelismSites
       {
         key: "baptisms",
         header: "Baptisms",
-        cell: (s) => <span className="text-sm text-[var(--text-secondary)]">{s.baptisms}</span>,
+        cell: (s) => (
+          <span className="text-sm text-[var(--text-secondary)]">
+            {s.baptisms}
+          </span>
+        ),
         className: "w-[110px]",
       },
       {
         key: "decisions",
         header: "Decisions",
-        cell: (s) => <span className="text-sm text-[var(--text-secondary)]">{s.decisions}</span>,
+        cell: (s) => (
+          <span className="text-sm text-[var(--text-secondary)]">
+            {s.decisions}
+          </span>
+        ),
         className: "w-[110px]",
       },
       {
@@ -80,8 +98,18 @@ export function EvangelismSitesTable({ rows, onEdit, onDelete }: EvangelismSites
           <div className="flex justify-end">
             <ActionMenu
               items={[
-                ...(onEdit ? [{ label: "Edit", onSelect: () => onEdit(s) }] : []),
-                ...(onDelete ? [{ label: "Delete", destructive: true, onSelect: () => onDelete(s) }] : []),
+                ...(onEdit
+                  ? [{ label: "Edit", onSelect: () => onEdit(s) }]
+                  : []),
+                ...(onDelete
+                  ? [
+                      {
+                        label: "Delete",
+                        destructive: true,
+                        onSelect: () => onDelete(s),
+                      },
+                    ]
+                  : []),
               ]}
             />
           </div>
@@ -92,5 +120,11 @@ export function EvangelismSitesTable({ rows, onEdit, onDelete }: EvangelismSites
     [onDelete, onEdit]
   );
 
-  return <DataTable columns={columns} rows={rows} emptyMessage="No evangelism sites yet." />;
+  return (
+    <DataTable
+      columns={columns}
+      rows={rows}
+      emptyMessage="No evangelism sites yet."
+    />
+  );
 }

@@ -3,7 +3,7 @@
  * =====================
  * Protected layout for admin dashboard pages.
  * Includes sidebar navigation and session management.
- * 
+ *
  * "Well done, good and faithful servant!" — Matthew 25:21
  */
 
@@ -25,8 +25,10 @@ export default async function CommandLayout({
   const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect("/login");
+    return redirect("/login");
   }
+
+  const user = session.user;
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -42,18 +44,16 @@ export default async function CommandLayout({
           </div>
           <div className="flex items-center gap-4">
             <span className="text-sm text-gray-600 dark:text-gray-400">
-              {session.user.name}
+              {user.name}
             </span>
             <div className="h-8 w-8 rounded-full bg-primary text-white flex items-center justify-center text-sm font-medium">
-              {session.user.name?.charAt(0) || "A"}
+              {user.name?.charAt(0) || "A"}
             </div>
           </div>
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">
-          {children}
-        </main>
+        <main className="flex-1 overflow-y-auto p-4 md:p-6">{children}</main>
       </div>
     </div>
   );

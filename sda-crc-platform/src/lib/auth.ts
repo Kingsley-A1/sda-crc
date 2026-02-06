@@ -3,11 +3,14 @@
  * ======================
  * Authentication setup with Prisma adapter and credentials provider.
  * Implements secure session management for the Command Center.
- * 
+ *
  * "For where two or three gather in my name, there am I with them." — Matthew 18:20
  */
 
-import NextAuth, { type NextAuthOptions, type User as NextAuthUser } from "next-auth";
+import NextAuth, {
+  type NextAuthOptions,
+  type User as NextAuthUser,
+} from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import type { JWT } from "next-auth/jwt";
 import type { Session } from "next-auth";
@@ -53,7 +56,7 @@ declare module "next-auth/jwt" {
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(db) as NextAuthOptions["adapter"],
-  
+
   session: {
     strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 days
@@ -195,7 +198,10 @@ export function hasRole(
     VIEWER: 1,
   };
 
-  return (roleHierarchy[userRole as keyof typeof roleHierarchy] || 0) >= roleHierarchy[requiredRole];
+  return (
+    (roleHierarchy[userRole as keyof typeof roleHierarchy] || 0) >=
+    roleHierarchy[requiredRole]
+  );
 }
 
 /**
@@ -203,24 +209,26 @@ export function hasRole(
  */
 export async function requireAuth() {
   const session = await auth();
-  
+
   if (!session?.user) {
     throw new Error("Unauthorized");
   }
-  
+
   return session;
 }
 
 /**
  * Require specific role in server actions/API routes
  */
-export async function requireRole(role: "SUPER_ADMIN" | "ADMIN" | "EDITOR" | "VIEWER") {
+export async function requireRole(
+  role: "SUPER_ADMIN" | "ADMIN" | "EDITOR" | "VIEWER"
+) {
   const session = await requireAuth();
-  
+
   if (!hasRole(session.user.role, role)) {
     throw new Error("Forbidden");
   }
-  
+
   return session;
 }
 

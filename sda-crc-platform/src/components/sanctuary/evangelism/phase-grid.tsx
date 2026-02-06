@@ -8,7 +8,12 @@ export interface PhaseGridProps {
   className?: string;
 }
 
-const STATUSES: EvangelismStatus[] = ["PLANNING", "ACTIVE", "COMPLETED", "PAUSED"];
+const STATUSES: EvangelismStatus[] = [
+  "PLANNING",
+  "ACTIVE",
+  "COMPLETED",
+  "PAUSED",
+];
 
 export function PhaseGrid({ sites, className }: PhaseGridProps) {
   const counts = STATUSES.reduce((acc, status) => {

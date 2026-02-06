@@ -58,8 +58,15 @@ export function DataTable<T extends { id: string }>({
             rows.map((row) => (
               <tr key={row.id} className="border-b border-[var(--border)]">
                 {columns.map((col) => (
-                  <td key={col.key} className="px-3 py-3 align-top text-sm text-[var(--text-primary)]">
-                    {col.cell ? col.cell(row) : (row as Record<string, unknown>)[col.key] as React.ReactNode}
+                  <td
+                    key={col.key}
+                    className="px-3 py-3 align-top text-sm text-[var(--text-primary)]"
+                  >
+                    {col.cell
+                      ? col.cell(row)
+                      : ((row as Record<string, unknown>)[
+                          col.key
+                        ] as React.ReactNode)}
                   </td>
                 ))}
               </tr>

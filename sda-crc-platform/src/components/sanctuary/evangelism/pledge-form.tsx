@@ -28,7 +28,9 @@ const PLEDGE_TYPE_OPTIONS = [
 
 export function PledgeForm({ className, onSubmitted }: PledgeFormProps) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [status, setStatus] = React.useState<"idle" | "success" | "error">("idle");
+  const [status, setStatus] = React.useState<"idle" | "success" | "error">(
+    "idle"
+  );
 
   const [values, setValues] = React.useState<PledgeFormValues>({
     name: "",
@@ -64,7 +66,9 @@ export function PledgeForm({ className, onSubmitted }: PledgeFormProps) {
 
   return (
     <Card className={cn("p-4", className)}>
-      <p className="text-sm font-bold text-[var(--text-primary)]">Make a pledge</p>
+      <p className="text-sm font-bold text-[var(--text-primary)]">
+        Make a pledge
+      </p>
       <p className="mt-1 text-xs text-[var(--text-secondary)]">
         Commit to the mission — we will follow up to support you.
       </p>
@@ -80,7 +84,9 @@ export function PledgeForm({ className, onSubmitted }: PledgeFormProps) {
           <Input
             label="Phone"
             value={values.phone}
-            onChange={(e) => setValues((v) => ({ ...v, phone: e.target.value }))}
+            onChange={(e) =>
+              setValues((v) => ({ ...v, phone: e.target.value }))
+            }
             required
           />
         </div>
@@ -104,25 +110,37 @@ export function PledgeForm({ className, onSubmitted }: PledgeFormProps) {
           type="number"
           inputMode="numeric"
           value={String(values.soulTarget ?? 1)}
-          onChange={(e) => setValues((v) => ({ ...v, soulTarget: Number(e.target.value) }))}
+          onChange={(e) =>
+            setValues((v) => ({ ...v, soulTarget: Number(e.target.value) }))
+          }
         />
 
         <Textarea
           label="Message (optional)"
           value={values.message ?? ""}
-          onChange={(e) => setValues((v) => ({ ...v, message: e.target.value }))}
+          onChange={(e) =>
+            setValues((v) => ({ ...v, message: e.target.value }))
+          }
           rows={4}
         />
 
-        <Button type="submit" isLoading={isSubmitting} className="min-h-11 w-full">
+        <Button
+          type="submit"
+          isLoading={isSubmitting}
+          className="min-h-11 w-full"
+        >
           Submit pledge
         </Button>
 
         {status === "success" ? (
-          <p className="text-xs text-[var(--success)]">Thank you! Your pledge was received.</p>
+          <p className="text-xs text-[var(--success)]">
+            Thank you! Your pledge was received.
+          </p>
         ) : null}
         {status === "error" ? (
-          <p className="text-xs text-[var(--error)]">Sorry — something went wrong. Please try again.</p>
+          <p className="text-xs text-[var(--error)]">
+            Sorry — something went wrong. Please try again.
+          </p>
         ) : null}
       </form>
     </Card>

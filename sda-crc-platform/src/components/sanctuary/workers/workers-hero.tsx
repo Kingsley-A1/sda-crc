@@ -41,7 +41,9 @@ export function WorkersHero({
             <h1 className="text-balance text-2xl font-extrabold text-white sm:text-3xl">
               {title}
             </h1>
-            <p className="mt-2 text-sm text-white/90 sm:text-base">{subtitle}</p>
+            <p className="mt-2 text-sm text-white/90 sm:text-base">
+              {subtitle}
+            </p>
           </div>
         </div>
       </div>

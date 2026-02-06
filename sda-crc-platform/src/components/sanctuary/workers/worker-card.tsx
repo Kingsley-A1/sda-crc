@@ -17,13 +17,23 @@ export function WorkerCard({ worker, className }: WorkerCardProps) {
       <div className="flex flex-col items-center text-center">
         <div className="relative h-20 w-20 overflow-hidden rounded-full border-4 border-[var(--secondary)]/40 bg-[var(--background-alt)]">
           {worker.photoUrl ? (
-            <Image src={worker.photoUrl} alt={fullName} fill className="object-cover" sizes="80px" />
+            <Image
+              src={worker.photoUrl}
+              alt={fullName}
+              fill
+              className="object-cover"
+              sizes="80px"
+            />
           ) : null}
         </div>
 
-        <p className="mt-3 text-sm font-extrabold text-[var(--text-primary)]">{fullName}</p>
+        <p className="mt-3 text-sm font-extrabold text-[var(--text-primary)]">
+          {fullName}
+        </p>
         {worker.title ? (
-          <p className="mt-1 text-xs text-[var(--text-secondary)]">{worker.title}</p>
+          <p className="mt-1 text-xs text-[var(--text-secondary)]">
+            {worker.title}
+          </p>
         ) : null}
 
         <div className="mt-3">
@@ -31,7 +41,9 @@ export function WorkerCard({ worker, className }: WorkerCardProps) {
         </div>
 
         {worker.department ? (
-          <p className="mt-2 text-xs text-[var(--text-tertiary)]">{worker.department}</p>
+          <p className="mt-2 text-xs text-[var(--text-tertiary)]">
+            {worker.department}
+          </p>
         ) : null}
       </div>
     </Card>

@@ -25,14 +25,13 @@ export function PledgeSection() {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/pledges", {
+      const res = await fetch("/api/soul-pledges", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name,
           email,
-          type: pledgeType,
-          numberOfSouls: parseInt(souls),
+          pledgedSouls: parseInt(souls),
           notes,
         }),
       });
@@ -55,7 +54,8 @@ export function PledgeSection() {
           Thank You for Your Pledge!
         </h3>
         <p className="text-gray-600 dark:text-gray-400">
-          Your commitment to the harvest is a blessing. We&apos;ll be in touch soon.
+          Your commitment to the harvest is a blessing. We&apos;ll be in touch
+          soon.
         </p>
       </div>
     );
@@ -63,7 +63,10 @@ export function PledgeSection() {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <form onSubmit={handleSubmit} className="rounded-2xl border bg-white dark:bg-gray-800 p-6 md:p-8 space-y-6">
+      <form
+        onSubmit={handleSubmit}
+        className="rounded-2xl border bg-white dark:bg-gray-800 p-6 md:p-8 space-y-6"
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium mb-1">Your Name</label>
@@ -87,13 +90,23 @@ export function PledgeSection() {
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-3">Type of Pledge</label>
+          <label className="block text-sm font-medium mb-3">
+            Type of Pledge
+          </label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { value: "prayer", label: "🙏 Prayer", desc: "Pray for souls" },
-              { value: "witness", label: "📢 Witness", desc: "Share the gospel" },
+              {
+                value: "witness",
+                label: "📢 Witness",
+                desc: "Share the gospel",
+              },
               { value: "bring", label: "🚶 Bring", desc: "Bring someone" },
-              { value: "support", label: "💰 Support", desc: "Financial support" },
+              {
+                value: "support",
+                label: "💰 Support",
+                desc: "Financial support",
+              },
             ].map((type) => (
               <button
                 key={type.value}
@@ -106,7 +119,9 @@ export function PledgeSection() {
                 }`}
               >
                 <div className="text-2xl mb-1">{type.label.split(" ")[0]}</div>
-                <div className="text-sm font-medium">{type.label.split(" ")[1]}</div>
+                <div className="text-sm font-medium">
+                  {type.label.split(" ")[1]}
+                </div>
               </button>
             ))}
           </div>

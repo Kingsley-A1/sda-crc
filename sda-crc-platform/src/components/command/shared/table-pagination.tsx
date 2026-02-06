@@ -12,7 +12,12 @@ export interface TablePaginationProps {
   className?: string;
 }
 
-export function TablePagination({ page, totalPages, onChange, className }: TablePaginationProps) {
+export function TablePagination({
+  page,
+  totalPages,
+  onChange,
+  className,
+}: TablePaginationProps) {
   const canPrev = page > 1;
   const canNext = page < totalPages;
 
@@ -23,10 +28,22 @@ export function TablePagination({ page, totalPages, onChange, className }: Table
       </p>
 
       <div className="flex gap-2">
-        <Button size="sm" variant="outline" className="min-h-11" disabled={!canPrev} onClick={() => onChange(page - 1)}>
+        <Button
+          size="sm"
+          variant="outline"
+          className="min-h-11"
+          disabled={!canPrev}
+          onClick={() => onChange(page - 1)}
+        >
           Prev
         </Button>
-        <Button size="sm" variant="outline" className="min-h-11" disabled={!canNext} onClick={() => onChange(page + 1)}>
+        <Button
+          size="sm"
+          variant="outline"
+          className="min-h-11"
+          disabled={!canNext}
+          onClick={() => onChange(page + 1)}
+        >
           Next
         </Button>
       </div>

@@ -5,7 +5,11 @@ import * as React from "react";
 import type { Member } from "@/types/member";
 
 import { Badge } from "@/components/ui";
-import { ActionMenu, DataTable, type DataTableColumn } from "@/components/command/shared";
+import {
+  ActionMenu,
+  DataTable,
+  type DataTableColumn,
+} from "@/components/command/shared";
 
 export interface MembersTableProps {
   rows: Member[];
@@ -13,7 +17,11 @@ export interface MembersTableProps {
   onDeactivate?: (member: Member) => void;
 }
 
-export function MembersTable({ rows, onEdit, onDeactivate }: MembersTableProps) {
+export function MembersTable({
+  rows,
+  onEdit,
+  onDeactivate,
+}: MembersTableProps) {
   const columns = React.useMemo<Array<DataTableColumn<Member>>>(
     () => [
       {
@@ -21,15 +29,23 @@ export function MembersTable({ rows, onEdit, onDeactivate }: MembersTableProps) 
         header: "Member",
         cell: (m) => (
           <div className="min-w-0">
-            <p className="truncate font-semibold">{m.firstName} {m.lastName}</p>
-            <p className="mt-0.5 truncate text-xs text-[var(--text-tertiary)]">{m.email}</p>
+            <p className="truncate font-semibold">
+              {m.firstName} {m.lastName}
+            </p>
+            <p className="mt-0.5 truncate text-xs text-[var(--text-tertiary)]">
+              {m.email}
+            </p>
           </div>
         ),
       },
       {
         key: "phone",
         header: "Phone",
-        cell: (m) => <span className="text-sm text-[var(--text-secondary)]">{m.phone}</span>,
+        cell: (m) => (
+          <span className="text-sm text-[var(--text-secondary)]">
+            {m.phone}
+          </span>
+        ),
         className: "w-[160px]",
       },
       {
@@ -46,7 +62,11 @@ export function MembersTable({ rows, onEdit, onDeactivate }: MembersTableProps) 
         key: "isActive",
         header: "Status",
         cell: (m) => (
-          <Badge variant={m.isActive ? "success-subtle" : "subtle"} size="sm" rounded="full">
+          <Badge
+            variant={m.isActive ? "success-subtle" : "subtle"}
+            size="sm"
+            rounded="full"
+          >
             {m.isActive ? "Active" : "Inactive"}
           </Badge>
         ),
@@ -59,9 +79,16 @@ export function MembersTable({ rows, onEdit, onDeactivate }: MembersTableProps) 
           <div className="flex justify-end">
             <ActionMenu
               items={[
-                ...(onEdit ? [{ label: "Edit", onSelect: () => onEdit(m) }] : []),
+                ...(onEdit
+                  ? [{ label: "Edit", onSelect: () => onEdit(m) }]
+                  : []),
                 ...(onDeactivate
-                  ? [{ label: m.isActive ? "Deactivate" : "Activate", onSelect: () => onDeactivate(m) }]
+                  ? [
+                      {
+                        label: m.isActive ? "Deactivate" : "Activate",
+                        onSelect: () => onDeactivate(m),
+                      },
+                    ]
                   : []),
               ]}
             />
@@ -73,5 +100,7 @@ export function MembersTable({ rows, onEdit, onDeactivate }: MembersTableProps) 
     [onDeactivate, onEdit]
   );
 
-  return <DataTable columns={columns} rows={rows} emptyMessage="No members yet." />;
+  return (
+    <DataTable columns={columns} rows={rows} emptyMessage="No members yet." />
+  );
 }

@@ -3,7 +3,7 @@
  * ============
  * Membership registration and interest form for the SDA Cross River Conference.
  * Features worker recognition section with golden badges.
- * 
+ *
  * "Behold, I stand at the door and knock." — Revelation 3:20
  */
 
@@ -60,9 +60,9 @@ export default function JoinPage() {
                 Welcome to the Family
               </h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Whether you&apos;re a lifelong Adventist, recently baptized, or 
-                just exploring, we welcome you with open arms. The SDA Cross River 
-                Conference is more than a church—it&apos;s a family.
+                Whether you&apos;re a lifelong Adventist, recently baptized, or
+                just exploring, we welcome you with open arms. The SDA Cross
+                River Conference is more than a church—it&apos;s a family.
               </p>
               <p className="text-gray-600 dark:text-gray-400">
                 By registering, you&apos;ll:
@@ -79,8 +79,8 @@ export default function JoinPage() {
             <div className="rounded-xl border p-6">
               <h3 className="text-lg font-semibold mb-4">Need Help?</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                If you have questions about registration or membership, 
-                please reach out to us.
+                If you have questions about registration or membership, please
+                reach out to us.
               </p>
               <div className="space-y-2">
                 <p>

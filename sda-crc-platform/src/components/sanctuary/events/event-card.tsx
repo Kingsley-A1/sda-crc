@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Globe } from "@phosphor-icons/react";
@@ -33,11 +35,20 @@ export function EventCard({ event, className }: EventCardProps) {
           ) : null}
 
           <div className="absolute left-3 top-3 flex flex-wrap gap-2">
-            <Badge variant={event.featured ? "secondary" : "subtle"} size="sm" rounded="full">
+            <Badge
+              variant={event.featured ? "secondary" : "subtle"}
+              size="sm"
+              rounded="full"
+            >
               {event.category}
             </Badge>
             {event.isOnline ? (
-              <Badge variant="info-subtle" size="sm" rounded="full" leftIcon={<Globe className="h-3.5 w-3.5" weight="bold" />}>
+              <Badge
+                variant="info-subtle"
+                size="sm"
+                rounded="full"
+                leftIcon={<Globe className="h-3.5 w-3.5" weight="bold" />}
+              >
                 Online
               </Badge>
             ) : null}

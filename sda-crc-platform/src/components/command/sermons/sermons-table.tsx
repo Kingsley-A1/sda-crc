@@ -6,7 +6,11 @@ import type { Sermon } from "@/types/sermon";
 import { formatDateTime } from "@/lib/utils";
 
 import { Badge } from "@/components/ui";
-import { ActionMenu, DataTable, type DataTableColumn } from "@/components/command/shared";
+import {
+  ActionMenu,
+  DataTable,
+  type DataTableColumn,
+} from "@/components/command/shared";
 
 export interface SermonsTableProps {
   rows: Sermon[];
@@ -23,21 +27,31 @@ export function SermonsTable({ rows, onEdit, onDelete }: SermonsTableProps) {
         cell: (s) => (
           <div className="min-w-0">
             <p className="truncate font-semibold">{s.title}</p>
-            <p className="mt-0.5 truncate text-xs text-[var(--text-tertiary)]">{s.speaker}</p>
+            <p className="mt-0.5 truncate text-xs text-[var(--text-tertiary)]">
+              {s.speaker}
+            </p>
           </div>
         ),
       },
       {
         key: "date",
         header: "Date",
-        cell: (s) => <span className="text-sm text-[var(--text-secondary)]">{formatDateTime(s.date)}</span>,
+        cell: (s) => (
+          <span className="text-sm text-[var(--text-secondary)]">
+            {formatDateTime(s.date)}
+          </span>
+        ),
         className: "w-[170px]",
       },
       {
         key: "published",
         header: "Status",
         cell: (s) => (
-          <Badge variant={s.published ? "success-subtle" : "subtle"} size="sm" rounded="full">
+          <Badge
+            variant={s.published ? "success-subtle" : "subtle"}
+            size="sm"
+            rounded="full"
+          >
             {s.published ? "Published" : "Draft"}
           </Badge>
         ),
@@ -46,7 +60,11 @@ export function SermonsTable({ rows, onEdit, onDelete }: SermonsTableProps) {
       {
         key: "viewCount",
         header: "Views",
-        cell: (s) => <span className="text-sm text-[var(--text-secondary)]">{s.viewCount}</span>,
+        cell: (s) => (
+          <span className="text-sm text-[var(--text-secondary)]">
+            {s.viewCount}
+          </span>
+        ),
         className: "w-[90px]",
       },
       {
@@ -60,7 +78,13 @@ export function SermonsTable({ rows, onEdit, onDelete }: SermonsTableProps) {
                   ? [{ label: "Edit", onSelect: () => onEdit(s) }]
                   : []),
                 ...(onDelete
-                  ? [{ label: "Delete", destructive: true, onSelect: () => onDelete(s) }]
+                  ? [
+                      {
+                        label: "Delete",
+                        destructive: true,
+                        onSelect: () => onDelete(s),
+                      },
+                    ]
                   : []),
               ]}
             />
@@ -72,5 +96,7 @@ export function SermonsTable({ rows, onEdit, onDelete }: SermonsTableProps) {
     [onDelete, onEdit]
   );
 
-  return <DataTable columns={columns} rows={rows} emptyMessage="No sermons yet." />;
+  return (
+    <DataTable columns={columns} rows={rows} emptyMessage="No sermons yet." />
+  );
 }

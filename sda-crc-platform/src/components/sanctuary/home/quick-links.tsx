@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   Calendar,
@@ -62,7 +64,9 @@ export function QuickLinks({ className }: QuickLinksProps) {
                 <p className="truncate text-sm font-semibold text-[var(--text-primary)]">
                   {link.label}
                 </p>
-                <p className="text-xs text-[var(--text-secondary)]">Tap to open</p>
+                <p className="text-xs text-[var(--text-secondary)]">
+                  Tap to open
+                </p>
               </div>
             </Link>
           </Card>

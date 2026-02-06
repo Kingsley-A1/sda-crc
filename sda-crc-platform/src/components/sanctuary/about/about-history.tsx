@@ -6,11 +6,34 @@
 
 export function AboutHistory() {
   const milestones = [
-    { year: "1914", title: "First Adventists in Cross River", description: "The first Seventh-day Adventist missionaries arrived in the region." },
-    { year: "1950", title: "Mission Established", description: "The Cross River Mission was officially established." },
-    { year: "1980", title: "Conference Status", description: "Elevated to Conference status with multiple districts." },
-    { year: "2000", title: "Digital Expansion", description: "Began embracing technology for evangelism and communication." },
-    { year: "Present", title: "Growing Strong", description: "Continuing to grow with multiple churches across the state." },
+    {
+      year: "1914",
+      title: "First Adventists in Cross River",
+      description:
+        "The first Seventh-day Adventist missionaries arrived in the region.",
+    },
+    {
+      year: "1950",
+      title: "Mission Established",
+      description: "The Cross River Mission was officially established.",
+    },
+    {
+      year: "1980",
+      title: "Conference Status",
+      description: "Elevated to Conference status with multiple districts.",
+    },
+    {
+      year: "2000",
+      title: "Digital Expansion",
+      description:
+        "Began embracing technology for evangelism and communication.",
+    },
+    {
+      year: "Present",
+      title: "Growing Strong",
+      description:
+        "Continuing to grow with multiple churches across the state.",
+    },
   ];
 
   return (
@@ -36,7 +59,11 @@ export function AboutHistory() {
               <div className="absolute left-4 md:left-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-primary border-4 border-white dark:border-gray-900" />
 
               {/* Content */}
-              <div className={`ml-12 md:ml-0 md:w-[calc(50%-2rem)] ${index % 2 === 0 ? "md:text-right md:pr-8" : "md:pl-8"}`}>
+              <div
+                className={`ml-12 md:ml-0 md:w-[calc(50%-2rem)] ${
+                  index % 2 === 0 ? "md:text-right md:pr-8" : "md:pl-8"
+                }`}
+              >
                 <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-sm font-semibold rounded-full mb-2">
                   {milestone.year}
                 </span>

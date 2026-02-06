@@ -22,7 +22,11 @@ export function LiveBadge({ className }: LiveBadgeProps) {
         aria-hidden="true"
         className="h-2 w-2 rounded-full bg-white"
         animate={reduce ? undefined : { opacity: [1, 0.3, 1] }}
-        transition={reduce ? undefined : { duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+        transition={
+          reduce
+            ? undefined
+            : { duration: 1.2, repeat: Infinity, ease: "easeInOut" }
+        }
       />
       LIVE
     </span>

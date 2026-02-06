@@ -10,23 +10,24 @@ import { Card } from "@/components/ui/card";
 async function getStats() {
   const now = new Date();
   const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-  
-  const [totalMembers, workers, recentSignups, activeThisMonth] = await Promise.all([
-    db.member.count(),
-    db.member.count({
-      where: { isWorker: true },
-    }),
-    db.member.count({
-      where: {
-        createdAt: { gte: thirtyDaysAgo },
-      },
-    }),
-    db.member.count({
-      where: {
-        createdAt: { gte: new Date(now.getFullYear(), now.getMonth(), 1) },
-      },
-    }),
-  ]);
+
+  const [totalMembers, workers, recentSignups, activeThisMonth] =
+    await Promise.all([
+      db.member.count(),
+      db.member.count({
+        where: { isWorker: true },
+      }),
+      db.member.count({
+        where: {
+          createdAt: { gte: thirtyDaysAgo },
+        },
+      }),
+      db.member.count({
+        where: {
+          createdAt: { gte: new Date(now.getFullYear(), now.getMonth(), 1) },
+        },
+      }),
+    ]);
 
   return { totalMembers, workers, recentSignups, activeThisMonth };
 }

@@ -3,7 +3,7 @@
  * ======================
  * Type-safe validation for all API inputs.
  * These schemas ensure data integrity from the moment it enters our system.
- * 
+ *
  * "Test everything; hold fast what is good." — 1 Thessalonians 5:21
  */
 
@@ -82,7 +82,7 @@ export const SermonQuerySchema = z.object({
 // Event Schemas
 // ============================================================================
 
-export const CreateEventSchema = z.object({
+const EventBaseSchema = z.object({
   title: z.string().min(3, "Title must be at least 3 characters").max(200),
   description: z.string().optional(),
   startDate: z.coerce.date(),
@@ -91,20 +91,35 @@ export const CreateEventSchema = z.object({
   imageUrl: z.string().url("Must be a valid URL").optional(),
   isOnline: z.boolean().default(false),
   onlineUrl: z.string().url("Must be a valid URL").optional(),
-  category: z.enum(["WORSHIP", "FELLOWSHIP", "EVANGELISM", "TRAINING", "YOUTH", "CHILDREN", "SPECIAL"]).default("WORSHIP"),
+  category: z
+    .enum([
+      "WORSHIP",
+      "FELLOWSHIP",
+      "EVANGELISM",
+      "TRAINING",
+      "YOUTH",
+      "CHILDREN",
+      "SPECIAL",
+    ])
+    .default("WORSHIP"),
   featured: z.boolean().default(false),
   published: z.boolean().default(false),
-}).refine((data) => {
-  if (data.endDate && data.startDate > data.endDate) {
-    return false;
-  }
-  return true;
-}, {
-  message: "End date must be after start date",
-  path: ["endDate"],
 });
 
-export const UpdateEventSchema = CreateEventSchema.partial();
+export const CreateEventSchema = EventBaseSchema.refine(
+  (data) => {
+    if (data.endDate && data.startDate > data.endDate) {
+      return false;
+    }
+    return true;
+  },
+  {
+    message: "End date must be after start date",
+    path: ["endDate"],
+  }
+);
+
+export const UpdateEventSchema = EventBaseSchema.partial();
 
 export const EventQuerySchema = z.object({
   page: z.coerce.number().int().positive().default(1),
@@ -182,7 +197,9 @@ export const CreateMemberSchema = z.object({
   state: z.string().max(50).optional(),
   occupation: z.string().max(100).optional(),
   baptismDate: z.coerce.date().optional(),
-  membershipType: z.enum(["FULL", "TRANSFER", "PROFESSION_OF_FAITH", "BAPTISM"]).default("FULL"),
+  membershipType: z
+    .enum(["FULL", "TRANSFER", "PROFESSION_OF_FAITH", "BAPTISM"])
+    .default("FULL"),
   photoUrl: z.string().url().optional(),
   emergencyContactName: z.string().max(100).optional(),
   emergencyContactPhone: PhoneSchema.optional(),
@@ -202,35 +219,35 @@ export const WorkerRoleEnum = z.enum([
   "PRESIDENT",
   "EXECUTIVE_SECRETARY",
   "TREASURER",
-  
+
   // Pastoral Ministry
   "SENIOR_PASTOR",
   "ASSOCIATE_PASTOR",
   "DISTRICT_PASTOR",
   "INTERN_PASTOR",
-  
+
   // Church Elders
   "FIRST_ELDER",
   "SECOND_ELDER",
   "ELDER",
-  
+
   // Deacons & Deaconesses
   "HEAD_DEACON",
   "DEACON",
   "HEAD_DEACONESS",
   "DEACONESS",
-  
+
   // Music Ministry
   "MUSIC_DIRECTOR",
   "CHOIR_LEADER",
   "ORGANIST",
   "CHOIR_MEMBER",
-  
+
   // Sabbath School
   "SS_SUPERINTENDENT",
   "SS_SECRETARY",
   "SS_TEACHER",
-  
+
   // Youth Ministry
   "AY_DIRECTOR",
   "AY_ASSOCIATE",
@@ -238,34 +255,34 @@ export const WorkerRoleEnum = z.enum([
   "PATHFINDER_DEPUTY",
   "ADVENTURER_DIRECTOR",
   "MASTER_GUIDE",
-  
+
   // Women & Family Ministry
   "WM_LEADER",
   "WM_ASSOCIATE",
   "FM_LEADER",
-  
+
   // Children's Ministry
   "CHILDREN_DIRECTOR",
   "CHILDREN_TEACHER",
-  
+
   // Communication & Media
   "COMMUNICATION_DIRECTOR",
   "MEDIA_DIRECTOR",
   "SOUND_ENGINEER",
   "CAMERA_OPERATOR",
-  
+
   // Other Departments
   "HEALTH_DIRECTOR",
   "EDUCATION_DIRECTOR",
   "STEWARDSHIP_DIRECTOR",
   "PERSONAL_MINISTRIES_DIRECTOR",
   "PUBLISHING_DIRECTOR",
-  
+
   // Church Officers
   "CHURCH_CLERK",
   "CHURCH_TREASURER",
   "INTEREST_COORDINATOR",
-  
+
   // General Workers
   "USHER",
   "GREETER",
@@ -290,12 +307,14 @@ export const CreateWorkerSchema = z.object({
   isActive: z.boolean().default(true),
   displayOrder: z.number().int().min(0).optional(),
   showOnWebsite: z.boolean().default(true),
-  socialLinks: z.object({
-    facebook: z.string().url().optional(),
-    twitter: z.string().url().optional(),
-    instagram: z.string().url().optional(),
-    linkedin: z.string().url().optional(),
-  }).optional(),
+  socialLinks: z
+    .object({
+      facebook: z.string().url().optional(),
+      twitter: z.string().url().optional(),
+      instagram: z.string().url().optional(),
+      linkedin: z.string().url().optional(),
+    })
+    .optional(),
 });
 
 export const UpdateWorkerSchema = CreateWorkerSchema.partial();
@@ -320,7 +339,9 @@ export const CreateEvangelismSiteSchema = z.object({
   state: z.string().max(50).optional(),
   latitude: z.number().min(-90).max(90).optional(),
   longitude: z.number().min(-180).max(180).optional(),
-  status: z.enum(["PLANNING", "ACTIVE", "COMPLETED", "PAUSED"]).default("PLANNING"),
+  status: z
+    .enum(["PLANNING", "ACTIVE", "COMPLETED", "PAUSED"])
+    .default("PLANNING"),
   startDate: z.coerce.date().optional(),
   endDate: z.coerce.date().optional(),
   coordinatorId: z.string().cuid().optional(),
@@ -344,9 +365,20 @@ export const CreatePledgeSchema = z.object({
   phone: PhoneSchema.optional(),
   amount: z.number().positive("Amount must be positive"),
   currency: z.enum(["NGN", "USD"]).default("NGN"),
-  purpose: z.enum(["TITHE", "OFFERING", "EVANGELISM", "BUILDING", "SPECIAL_PROJECT", "OTHER"]).default("OFFERING"),
+  purpose: z
+    .enum([
+      "TITHE",
+      "OFFERING",
+      "EVANGELISM",
+      "BUILDING",
+      "SPECIAL_PROJECT",
+      "OTHER",
+    ])
+    .default("OFFERING"),
   projectName: z.string().max(200).optional(),
-  frequency: z.enum(["ONE_TIME", "WEEKLY", "MONTHLY", "QUARTERLY", "YEARLY"]).default("ONE_TIME"),
+  frequency: z
+    .enum(["ONE_TIME", "WEEKLY", "MONTHLY", "QUARTERLY", "YEARLY"])
+    .default("ONE_TIME"),
   startDate: z.coerce.date().optional(),
   notes: z.string().max(500).optional(),
   anonymous: z.boolean().default(false),
@@ -361,8 +393,20 @@ export const ContactFormSchema = z.object({
   email: EmailSchema,
   phone: PhoneSchema.optional(),
   subject: z.string().min(3, "Subject is required").max(200),
-  message: z.string().min(10, "Message must be at least 10 characters").max(2000),
-  category: z.enum(["GENERAL", "PRAYER_REQUEST", "MEMBERSHIP", "EVENTS", "FEEDBACK", "OTHER"]).default("GENERAL"),
+  message: z
+    .string()
+    .min(10, "Message must be at least 10 characters")
+    .max(2000),
+  category: z
+    .enum([
+      "GENERAL",
+      "PRAYER_REQUEST",
+      "MEMBERSHIP",
+      "EVENTS",
+      "FEEDBACK",
+      "OTHER",
+    ])
+    .default("GENERAL"),
 });
 
 // ============================================================================
@@ -371,9 +415,17 @@ export const ContactFormSchema = z.object({
 
 export const RequestUploadSchema = z.object({
   filename: z.string().min(1).max(255),
-  contentType: z.string().regex(/^[a-z]+\/[a-z0-9\-\+\.]+$/i, "Invalid content type"),
-  size: z.number().int().positive().max(50 * 1024 * 1024), // Max 50MB
-  category: z.enum(["sermons", "events", "members", "workers", "departments", "general"]).default("general"),
+  contentType: z
+    .string()
+    .regex(/^[a-z]+\/[a-z0-9\-\+\.]+$/i, "Invalid content type"),
+  size: z
+    .number()
+    .int()
+    .positive()
+    .max(50 * 1024 * 1024), // Max 50MB
+  category: z
+    .enum(["sermons", "events", "members", "workers", "departments", "general"])
+    .default("general"),
 });
 
 // ============================================================================
@@ -385,7 +437,11 @@ export const CreateResourceSchema = z.object({
   description: z.string().max(2000).optional(),
   fileUrl: z.string().url("Must be a valid URL"),
   fileType: z.string().min(1).max(100),
-  fileSize: z.number().int().positive().max(1024 * 1024 * 1024), // Max 1GB
+  fileSize: z
+    .number()
+    .int()
+    .positive()
+    .max(1024 * 1024 * 1024), // Max 1GB
   category: z.string().max(100).optional(),
   published: z.boolean().default(false),
 });

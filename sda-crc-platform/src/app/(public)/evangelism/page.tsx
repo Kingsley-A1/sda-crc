@@ -2,7 +2,7 @@
  * Evangelism Page
  * ===============
  * Public evangelism initiatives, campaigns, and outreach programs.
- * 
+ *
  * "Go into all the world and preach the gospel to all creation." — Mark 16:15
  */
 
@@ -27,6 +27,8 @@ export const metadata: Metadata = {
     "Join our evangelism initiatives. Support campaigns, pledge for souls, and be part of the great commission.",
 };
 
+export const dynamic = 'force-dynamic';
+
 // ============================================================================
 // Data Fetching
 // ============================================================================
@@ -47,8 +49,11 @@ async function getEvangelismData() {
 
   const stats = {
     totalSites: sites.length,
-    activeSites: sites.filter((s: { status: string }) => s.status === "ACTIVE").length,
-    completedSites: sites.filter((s: { status: string }) => s.status === "COMPLETED").length,
+    activeSites: sites.filter((s: { status: string }) => s.status === "ACTIVE")
+      .length,
+    completedSites: sites.filter(
+      (s: { status: string }) => s.status === "COMPLETED"
+    ).length,
     totalDecisions: pledges._sum.pledgedSouls || 0,
     totalBaptisms: pledges._sum.wonSouls || 0,
     totalAttendance: 0, // Will be calculated from actual event attendance

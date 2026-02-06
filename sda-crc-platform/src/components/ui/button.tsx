@@ -103,7 +103,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const childContent = React.useMemo(() => {
       if (asChild && React.isValidElement(children)) {
-        const childElement = children as React.ReactElement<{ children?: React.ReactNode }>;
+        const childElement = children as React.ReactElement<{
+          children?: React.ReactNode;
+        }>;
         return childElement.props.children;
       }
       return children;
@@ -128,12 +130,17 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     if (asChild) {
       if (!React.isValidElement(children)) {
         if (process.env.NODE_ENV !== "production") {
-          throw new Error("Button `asChild` expects a single React element child.");
+          throw new Error(
+            "Button `asChild` expects a single React element child."
+          );
         }
         return null;
       }
 
-      const child = children as React.ReactElement<{ className?: string; onClick?: (e: any) => void }>;
+      const child = children as React.ReactElement<{
+        className?: string;
+        onClick?: (e: any) => void;
+      }>;
       const mergedClassName = cn(
         buttonVariants({ variant, size, fullWidth, rounded }),
         className,
@@ -151,11 +158,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               e.stopPropagation();
               return;
             }
-            (childProps.onClick as ((e: React.MouseEvent) => void) | undefined)?.(e);
+            (
+              childProps.onClick as ((e: React.MouseEvent) => void) | undefined
+            )?.(e);
             onClick?.(e as unknown as React.MouseEvent<HTMLButtonElement>);
           },
           ...(isDisabled && { "aria-disabled": true }),
-          tabIndex: isDisabled ? -1 : (childProps.tabIndex as number | undefined),
+          tabIndex: isDisabled
+            ? -1
+            : (childProps.tabIndex as number | undefined),
         } as React.HTMLAttributes<HTMLElement>,
         content
       );

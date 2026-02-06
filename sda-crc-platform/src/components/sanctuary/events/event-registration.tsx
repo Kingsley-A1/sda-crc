@@ -50,7 +50,8 @@ export function EventRegistration({ event }: EventRegistrationProps) {
         <div className="text-4xl mb-4">✓</div>
         <h3 className="font-semibold text-lg mb-2">Registered!</h3>
         <p className="text-gray-600 dark:text-gray-400">
-          You&apos;re registered for {event.title}. Check your email for details.
+          You&apos;re registered for {event.title}. Check your email for
+          details.
         </p>
       </div>
     );
@@ -59,7 +60,7 @@ export function EventRegistration({ event }: EventRegistrationProps) {
   return (
     <div className="rounded-xl bg-gradient-to-br from-primary/5 to-secondary/5 p-6">
       <h3 className="font-semibold text-lg mb-4">Register for this Event</h3>
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="block text-sm font-medium mb-1">Name</label>
@@ -70,7 +71,7 @@ export function EventRegistration({ event }: EventRegistrationProps) {
             placeholder="Your full name"
           />
         </div>
-        
+
         <div>
           <label className="block text-sm font-medium mb-1">Email</label>
           <Input
@@ -81,7 +82,7 @@ export function EventRegistration({ event }: EventRegistrationProps) {
             placeholder="your@email.com"
           />
         </div>
-        
+
         <div>
           <label className="block text-sm font-medium mb-1">Phone</label>
           <Input

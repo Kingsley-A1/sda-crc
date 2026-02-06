@@ -8,7 +8,10 @@ export interface EvangelismStatsCardsProps {
   className?: string;
 }
 
-export function EvangelismStatsCards({ stats, className }: EvangelismStatsCardsProps) {
+export function EvangelismStatsCards({
+  stats,
+  className,
+}: EvangelismStatsCardsProps) {
   return (
     <StatsGrid
       className={cn(className)}

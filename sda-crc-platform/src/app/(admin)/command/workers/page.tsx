@@ -2,7 +2,7 @@
  * Workers Management Page
  * =======================
  * CRUD interface for managing church workers.
- * 
+ *
  * "Let the elders who rule well be counted worthy of double honor." — 1 Timothy 5:17
  */
 
@@ -14,37 +14,38 @@ import { WorkerStats } from "@/components/command/workers/worker-stats";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import type { WorkerRole } from "@/lib/validators";
 
 export const metadata: Metadata = {
   title: "Manage Workers | Command Center",
 };
 
+export const dynamic = 'force-dynamic';
+
 async function getWorkers() {
-  const workers = await db.member.findMany({
-    where: { isWorker: true },
-    orderBy: [{ workerOrder: "asc" }, { lastName: "asc" }],
+  const workers = await db.worker.findMany({
+    where: { isActive: true },
+    orderBy: [{ displayOrder: "asc" }, { lastName: "asc" }],
   });
 
-  return workers.map((w: {
-    id: string;
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string | null;
-    photoUrl: string | null;
-    workerRole: string | null;
-    workerOrder: number | null;
-  }) => ({
+  return workers.map((w) => ({
     id: w.id,
     firstName: w.firstName,
     lastName: w.lastName,
     email: w.email,
-    phone: w.phone || undefined,
-    photoUrl: w.photoUrl || undefined,
-    role: (w.workerRole || "OTHER") as WorkerRole,
-    isActive: true,
-    order: w.workerOrder || 999,
+    phone: w.phone,
+    role: w.role,
+    title: w.title,
+    department: w.department,
+    bio: w.bio,
+    photoUrl: w.photoUrl,
+    startDate: w.startDate?.toISOString() || null,
+    endDate: w.endDate?.toISOString() || null,
+    isActive: w.isActive,
+    displayOrder: w.displayOrder,
+    showOnWebsite: w.showOnWebsite,
+    socialLinks: w.socialLinks as Record<string, string> | null,
+    createdAt: w.createdAt.toISOString(),
+    updatedAt: w.updatedAt.toISOString(),
   }));
 }
 

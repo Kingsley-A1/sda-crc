@@ -8,9 +8,17 @@ export interface DepartmentGridProps {
   className?: string;
 }
 
-export function DepartmentGrid({ departments, className }: DepartmentGridProps) {
+export function DepartmentGrid({
+  departments,
+  className,
+}: DepartmentGridProps) {
   return (
-    <div className={cn("grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4", className)}>
+    <div
+      className={cn(
+        "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4",
+        className
+      )}
+    >
       {departments.map((department) => (
         <DepartmentCard key={department.id} department={department} />
       ))}

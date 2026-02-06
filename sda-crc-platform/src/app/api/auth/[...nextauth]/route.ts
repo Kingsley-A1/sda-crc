@@ -2,7 +2,7 @@
  * NextAuth Route Handlers
  * =======================
  * Handles all authentication-related routes.
- * 
+ *
  * "Come to me, all you who are weary and burdened, and I will give you rest." — Matthew 11:28
  */
 

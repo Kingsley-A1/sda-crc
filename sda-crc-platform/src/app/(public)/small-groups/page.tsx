@@ -3,7 +3,7 @@
  * =================
  * Find and join small groups (house churches, Bible study groups) near you.
  * Features location-based search with map integration.
- * 
+ *
  * "They broke bread in their homes and ate together with glad and sincere hearts." — Acts 2:46
  */
 
@@ -12,6 +12,7 @@ import { db } from "@/lib/db";
 import { PageHeader } from "@/components/layout/page-header";
 import { Container } from "@/components/layout/container";
 import { GroupFinder } from "@/components/sanctuary/groups/group-finder";
+import type { SmallGroupWithLeader } from "@/types";
 
 // ============================================================================
 // Metadata
@@ -23,11 +24,13 @@ export const metadata: Metadata = {
     "Find a small group or house church near you. Experience community, fellowship, and spiritual growth in an intimate setting.",
 };
 
+export const dynamic = 'force-dynamic';
+
 // ============================================================================
 // Data Fetching
 // ============================================================================
 
-async function getSmallGroups() {
+async function getSmallGroups(): Promise<SmallGroupWithLeader[]> {
   const groups = await db.smallGroup.findMany({
     where: { isActive: true },
     orderBy: { name: "asc" },
@@ -41,43 +44,31 @@ async function getSmallGroups() {
           photoUrl: true,
         },
       },
+      _count: {
+        select: { members: true },
+      },
     },
   });
 
-  return groups.map((group: {
-    id: string;
-    name: string;
-    description: string | null;
-    address: string | null;
-    city: string | null;
-    state: string | null;
-    latitude: number | null;
-    longitude: number | null;
-    meetingDay: string;
-    meetingTime: string | null;
-    type: string;
-    isActive: boolean;
-    leader: { id: string; firstName: string; lastName: string; phone: string | null; photoUrl: string | null } | null;
-  }) => ({
+  return groups.map((group) => ({
     id: group.id,
     name: group.name,
-    description: group.description || undefined,
-    address: group.address || undefined,
-    city: group.city || undefined,
-    state: group.state || undefined,
-    latitude: group.latitude || undefined,
-    longitude: group.longitude || undefined,
+    description: group.description,
+    type: group.type,
+    latitude: group.latitude,
+    longitude: group.longitude,
+    address: group.address,
+    city: group.city,
+    state: group.state,
     meetingDay: group.meetingDay,
-    meetingTime: group.meetingTime || undefined,
-    type: group.type as "house-church" | "bible-study" | "prayer-group" | "youth-group" | "other",
+    meetingTime: group.meetingTime,
+    maxMembers: group.maxMembers,
     isActive: group.isActive,
-    leader: group.leader ? {
-      id: group.leader.id,
-      firstName: group.leader.firstName,
-      lastName: group.leader.lastName,
-      phone: group.leader.phone || undefined,
-      photoUrl: group.leader.photoUrl || undefined,
-    } : undefined,
+    acceptingMembers: group.acceptingMembers,
+    createdAt: group.createdAt,
+    updatedAt: group.updatedAt,
+    leader: group.leader,
+    currentMembers: group._count.members,
   }));
 }
 
@@ -100,9 +91,9 @@ export default async function SmallGroupsPage() {
         {/* Introduction */}
         <div className="max-w-3xl mx-auto text-center mb-12">
           <p className="text-lg text-gray-600 dark:text-gray-400">
-            Small groups are the heart of our community life. Whether you&apos;re looking 
-            for a Bible study, prayer group, or house church, there&apos;s a place for you 
-            to connect and grow.
+            Small groups are the heart of our community life. Whether
+            you&apos;re looking for a Bible study, prayer group, or house
+            church, there&apos;s a place for you to connect and grow.
           </p>
         </div>
 
