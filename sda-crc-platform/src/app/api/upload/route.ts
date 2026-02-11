@@ -59,8 +59,7 @@ export async function POST(request: NextRequest) {
     const uploadResult = await getPresignedUploadUrl(
       filename,
       contentType,
-      category as UploadCategory,
-      size
+      category as UploadCategory
     );
 
     if (!uploadResult.success) {

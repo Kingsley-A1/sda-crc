@@ -156,8 +156,8 @@ function validateContentType(
 export async function getPresignedUploadUrl(
   filename: string,
   contentType: string,
-  category: UploadCategory = "general",
-  maxSize: number = 50 * 1024 * 1024 // 50MB default
+  category: UploadCategory = "general"
+  // maxSize parameter removed as validation should happen client-side
 ): Promise<PresignedUrlResult> {
   try {
     // Validate content type
@@ -337,7 +337,9 @@ export async function listFiles(
       LastModified?: Date;
     }
 
-    return (response.Contents || []).map((object: S3Object) => ({
+    const contents = (response as unknown as { Contents?: S3Object[] }).Contents || [];
+
+    return contents.map((object: S3Object) => ({
       key: object.Key || "",
       size: object.Size || 0,
       lastModified: object.LastModified || new Date(),

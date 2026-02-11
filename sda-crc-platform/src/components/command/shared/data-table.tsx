@@ -34,8 +34,8 @@ export function DataTable<T extends { id: string }>({
                 key={col.key}
                 scope="col"
                 className={cn(
-                  "sticky top-0 z-10 border-b border-[var(--border)] bg-[var(--surface)] px-3 py-3 text-left text-xs font-bold text-[var(--text-secondary)]",
-                  col.className
+                  "sticky top-0 z-10 border-b border-border bg-muted px-3 py-3 text-left text-xs font-bold text-muted-foreground",
+                  col.className,
                 )}
               >
                 {col.header}
@@ -49,18 +49,18 @@ export function DataTable<T extends { id: string }>({
             <tr>
               <td
                 colSpan={columns.length}
-                className="px-3 py-6 text-center text-sm text-[var(--text-tertiary)]"
+                className="px-3 py-6 text-center text-sm text-muted-foreground/60"
               >
                 {emptyMessage}
               </td>
             </tr>
           ) : (
             rows.map((row) => (
-              <tr key={row.id} className="border-b border-[var(--border)]">
+              <tr key={row.id} className="border-b border-border">
                 {columns.map((col) => (
                   <td
                     key={col.key}
-                    className="px-3 py-3 align-top text-sm text-[var(--text-primary)]"
+                    className="px-3 py-3 align-top text-sm text-foreground"
                   >
                     {col.cell
                       ? col.cell(row)

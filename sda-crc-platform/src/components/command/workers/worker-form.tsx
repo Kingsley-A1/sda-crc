@@ -37,7 +37,7 @@ export function WorkerForm({
         value: opt.value,
         label: opt.label,
         category: group.category,
-      }))
+      })),
     );
   }, []);
 
@@ -53,10 +53,10 @@ export function WorkerForm({
   const [photoUrl, setPhotoUrl] = React.useState(initial?.photoUrl ?? "");
 
   const [isActive, setIsActive] = React.useState<string>(
-    initial?.isActive === false ? "false" : "true"
+    initial?.isActive === false ? "false" : "true",
   );
   const [showOnWebsite, setShowOnWebsite] = React.useState<string>(
-    initial?.showOnWebsite ? "true" : "false"
+    initial?.showOnWebsite ? "true" : "false",
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -168,7 +168,7 @@ export function WorkerForm({
           rows={6}
         />
 
-        {error ? <p className="text-sm text-[var(--error)]">{error}</p> : null}
+        {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
         <div className="flex justify-end">
           <Button

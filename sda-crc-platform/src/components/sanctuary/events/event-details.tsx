@@ -1,104 +1,115 @@
 "use client";
 
-import Link from "next/link";
+import { motion } from "framer-motion";
 import Image from "next/image";
-import { Globe, MapPin } from "@phosphor-icons/react";
+import {
+  CalendarBlank,
+  MapPin,
+  Clock,
+  Users,
+  Tag,
+} from "@phosphor-icons/react";
+import { Badge, Button } from "@/components/ui";
+import Link from "next/link";
 
-import { Badge, Button, Card } from "@/components/ui";
-import { formatDateTime } from "@/lib/utils";
-import type { Event } from "@/types/event";
+interface EventData {
+  id: string;
+  title: string;
+  slug: string;
+  description: string | null;
+  startDate: Date | string;
+  endDate: Date | string | null;
+  location: string | null;
+  category: string;
+  imageUrl: string | null;
+  published: boolean;
+}
 
-export interface EventDetailsProps {
-  event: Event;
+interface EventDetailsProps {
+  event: EventData;
+}
+
+function formatDate(dateStr: Date | string): string {
+  return new Date(dateStr).toLocaleDateString("en-NG", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
+function formatTime(dateStr: Date | string): string {
+  return new Date(dateStr).toLocaleTimeString("en-NG", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
 }
 
 export function EventDetails({ event }: EventDetailsProps) {
-  return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-      <div className="lg:col-span-2">
-        <h1 className="text-balance text-2xl font-extrabold text-[var(--text-primary)] sm:text-3xl">
-          {event.title}
-        </h1>
+  const eventDate = event.startDate;
 
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <Badge
-            variant={event.featured ? "secondary" : "subtle"}
-            rounded="full"
-            size="sm"
-          >
+  return (
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      {/* Image */}
+      {event.imageUrl && (
+        <div className="relative aspect-video rounded-2xl overflow-hidden mb-6">
+          <Image
+            src={event.imageUrl}
+            alt={event.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 65vw"
+          />
+        </div>
+      )}
+
+      {/* Title */}
+      <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
+        {event.title}
+      </h1>
+
+      {/* Meta */}
+      <div className="space-y-3 text-sm text-muted-foreground mb-6">
+        <div className="flex items-center gap-2">
+          <CalendarBlank className="h-5 w-5 text-primary" />
+          <span>{formatDate(eventDate)}</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <Clock className="h-5 w-5 text-primary" />
+          <span>
+            {formatTime(eventDate)}
+            {event.endDate ? ` — ${formatTime(event.endDate)}` : ""}
+          </span>
+        </div>
+        {event.location && (
+          <div className="flex items-center gap-2">
+            <MapPin className="h-5 w-5 text-primary" />
+            <span>{event.location}</span>
+          </div>
+        )}
+        <div className="flex items-center gap-2">
+          <Tag className="h-5 w-5 text-primary" />
+          <Badge variant="success" size="sm">
             {event.category}
           </Badge>
-          <Badge variant="outline" rounded="full" size="sm">
-            {formatDateTime(event.startDate)}
-          </Badge>
-          {event.isOnline ? (
-            <Badge
-              variant="info-subtle"
-              rounded="full"
-              size="sm"
-              leftIcon={<Globe className="h-3.5 w-3.5" weight="bold" />}
-            >
-              Online
-            </Badge>
-          ) : null}
-          {!event.isOnline && event.location ? (
-            <Badge
-              variant="info-subtle"
-              rounded="full"
-              size="sm"
-              leftIcon={<MapPin className="h-3.5 w-3.5" weight="bold" />}
-            >
-              {event.location}
-            </Badge>
-          ) : null}
         </div>
-
-        {event.imageUrl ? (
-          <div className="relative mt-4 aspect-[16/9] overflow-hidden rounded-2xl border border-[var(--border)]">
-            <Image
-              src={event.imageUrl}
-              alt={event.title}
-              fill
-              className="object-cover"
-              sizes="100vw"
-            />
-          </div>
-        ) : null}
-
-        {event.description ? (
-          <Card className="mt-4 p-4">
-            <p className="whitespace-pre-wrap text-sm leading-relaxed text-[var(--text-secondary)]">
-              {event.description}
-            </p>
-          </Card>
-        ) : null}
       </div>
 
-      <div className="lg:col-span-1">
-        <Card className="p-4">
-          <p className="text-sm font-bold text-[var(--text-primary)]">
-            Event Info
+      {/* Description */}
+      {event.description && (
+        <div className="prose prose-green max-w-none mb-8">
+          <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+            {event.description}
           </p>
-          <p className="mt-2 text-sm text-[var(--text-secondary)]">
-            Starts: {formatDateTime(event.startDate)}
-          </p>
-          {event.endDate ? (
-            <p className="mt-1 text-sm text-[var(--text-secondary)]">
-              Ends: {formatDateTime(event.endDate)}
-            </p>
-          ) : null}
+        </div>
+      )}
 
-          {event.isOnline && event.onlineUrl ? (
-            <div className="mt-4">
-              <Button asChild className="min-h-11 w-full">
-                <Link href={event.onlineUrl} target="_blank" rel="noreferrer">
-                  Join online
-                </Link>
-              </Button>
-            </div>
-          ) : null}
-        </Card>
-      </div>
-    </div>
+      {/* Back */}
+      <Link href="/events">
+        <Button variant="outline" size="sm">
+          ← Back to Events
+        </Button>
+      </Link>
+    </motion.div>
   );
 }

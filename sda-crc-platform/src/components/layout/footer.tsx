@@ -1,14 +1,5 @@
-/**
- * Footer Component
- * ================
- * Site footer with navigation, contact info, and social links.
- *
- * "To the only wise God be glory forever through Jesus Christ." — Romans 16:27
- */
-
 import * as React from "react";
 import Link from "next/link";
-import Image from "next/image";
 import {
   MapPin,
   Phone,
@@ -18,193 +9,156 @@ import {
   InstagramLogo,
   Heart,
 } from "@phosphor-icons/react/dist/ssr";
-import { cn } from "@/lib/utils";
-import { Container } from "./container";
+import { Logo } from "@/components/ui/logo";
 
-interface FooterLink {
-  label: string;
-  href: string;
-}
-
-interface FooterSection {
-  title: string;
-  links: FooterLink[];
-}
-
-const footerSections: FooterSection[] = [
-  {
-    title: "Explore",
-    links: [
-      { label: "Home", href: "/" },
-      { label: "About Us", href: "/about" },
-      { label: "Sermons", href: "/sermons" },
-      { label: "Events", href: "/events" },
-      { label: "Departments", href: "/departments" },
-    ],
-  },
-  {
-    title: "Connect",
-    links: [
-      { label: "Small Groups", href: "/small-groups" },
-      { label: "Join Us", href: "/join" },
-      { label: "Workers", href: "/workers" },
-      { label: "Contact", href: "/contact" },
-      { label: "Live Stream", href: "/live" },
-    ],
-  },
-  {
-    title: "Evangelism",
-    links: [
-      { label: "Vision 2026", href: "/evangelism" },
-      { label: "I Will Go", href: "/evangelism#pledge" },
-      { label: "Bible Studies", href: "/contact" },
-      { label: "Resources", href: "/resources" },
-    ],
-  },
+const quickLinks = [
+  { href: "/about", label: "About Us" },
+  { href: "/sermons", label: "Sermons" },
+  { href: "/events", label: "Events" },
+  { href: "/departments", label: "Departments" },
+  { href: "/gallery", label: "Gallery" },
 ];
 
-interface FooterProps {
-  className?: string;
-}
+const connectLinks = [
+  { href: "/join", label: "Join Us" },
+  { href: "/contact", label: "Contact" },
+  { href: "/small-groups", label: "Small Groups" },
+  { href: "/evangelism", label: "Evangelism" },
+  { href: "/workers", label: "Workers" },
+  { href: "/live", label: "Watch Live" },
+];
 
-function Footer({ className }: FooterProps) {
-  const currentYear = new Date().getFullYear();
+const socialLinks = [
+  { href: "https://facebook.com", icon: FacebookLogo, label: "Facebook" },
+  { href: "https://youtube.com", icon: YoutubeLogo, label: "YouTube" },
+  { href: "https://instagram.com", icon: InstagramLogo, label: "Instagram" },
+];
 
+export function Footer() {
   return (
-    <footer className={cn("bg-[var(--primary)] text-white", className)}>
-      {/* Main Footer */}
-      <Container className="py-12 lg:py-16">
-        <div className="grid gap-10 lg:grid-cols-5">
-          {/* Brand Section */}
-          <div className="lg:col-span-2">
-            <Link href="/" className="inline-flex items-center gap-3">
-              <div className="relative h-12 w-12">
-                <Image
-                  src="/logo.svg"
-                  alt="SDA CRC Logo"
-                  fill
-                  className="object-contain brightness-0 invert"
-                />
-              </div>
-              <div>
-                <p className="font-bold text-lg">SDA Cross River</p>
-                <p className="text-sm text-white/70">Conference</p>
-              </div>
-            </Link>
+    <footer className="bg-gray-900 text-white">
+      {/* Top Accent Bar */}
+      <div className="h-1 bg-gradient-to-r from-primary-600 via-primary-500 to-primary-400" />
 
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-white/80">
-              Sharing the everlasting gospel and preparing a people for the soon
-              coming of Jesus Christ. We are a family of believers committed to
-              serving God and our community.
+      <div className="container">
+        {/* Main Footer */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 py-14 lg:py-20">
+          {/* Brand */}
+          <div className="sm:col-span-2 lg:col-span-1">
+            <div className="mb-5">
+              <Logo variant="full" size="md" inverted linked={false} />
+            </div>
+            <p className="text-sm text-gray-400 leading-relaxed mb-6 max-w-xs">
+              Seventh-day Adventist Church, Cross River Conference — Integrated
+              for Mission. Serving communities with faith, hope, and love.
             </p>
+            <div className="flex gap-2">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/5 hover:bg-primary-600 border border-white/10 hover:border-primary-600 transition-all duration-200"
+                  aria-label={social.label}
+                >
+                  <social.icon size={20} weight="fill" />
+                </a>
+              ))}
+            </div>
+          </div>
 
-            {/* Contact Info */}
-            <div className="mt-6 space-y-3">
-              <a
-                href="https://maps.google.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-start gap-3 text-sm text-white/80 hover:text-white transition-colors"
-              >
-                <MapPin className="h-5 w-5 shrink-0 mt-0.5" />
-                <span>
-                  Conference Headquarters, 42 Marian Road,
-                  <br />
-                  Calabar, Cross River State, Nigeria
+          {/* Quick Links */}
+          <div>
+            <h3 className="text-sm font-semibold mb-5 text-white tracking-wide uppercase">
+              Quick Links
+            </h3>
+            <ul className="space-y-3">
+              {quickLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-gray-400 hover:text-white hover:translate-x-1 inline-flex transition-all duration-200"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Connect */}
+          <div>
+            <h3 className="text-sm font-semibold mb-5 text-white tracking-wide uppercase">
+              Connect
+            </h3>
+            <ul className="space-y-3">
+              {connectLinks.map((link) => (
+                <li key={link.href}>
+                  <Link
+                    href={link.href}
+                    className="text-sm text-gray-400 hover:text-white hover:translate-x-1 inline-flex transition-all duration-200"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Info */}
+          <div>
+            <h3 className="text-sm font-semibold mb-5 text-white tracking-wide uppercase">
+              Contact Us
+            </h3>
+            <div className="space-y-4">
+              <div className="flex items-start gap-3 text-sm text-gray-400 group">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 group-hover:bg-primary-600/20 transition-colors">
+                  <MapPin size={16} className="text-primary-400" />
+                </div>
+                <span className="pt-1">
+                  SDA Conference Office, Calabar, Cross River State, Nigeria
                 </span>
-              </a>
-              <a
-                href="tel:+2348012345678"
-                className="flex items-center gap-3 text-sm text-white/80 hover:text-white transition-colors"
-              >
-                <Phone className="h-5 w-5 shrink-0" />
-                <span>+234 801 234 5678</span>
-              </a>
-              <a
-                href="mailto:info@sdacrc.org"
-                className="flex items-center gap-3 text-sm text-white/80 hover:text-white transition-colors"
-              >
-                <EnvelopeSimple className="h-5 w-5 shrink-0" />
-                <span>info@sdacrc.org</span>
-              </a>
-            </div>
-
-            {/* Social Links */}
-            <div className="mt-6 flex items-center gap-3">
-              <a
-                href="https://facebook.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-white/10 p-2.5 transition-colors hover:bg-white/20"
-                aria-label="Facebook"
-              >
-                <FacebookLogo className="h-5 w-5" weight="fill" />
-              </a>
-              <a
-                href="https://youtube.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-white/10 p-2.5 transition-colors hover:bg-white/20"
-                aria-label="YouTube"
-              >
-                <YoutubeLogo className="h-5 w-5" weight="fill" />
-              </a>
-              <a
-                href="https://instagram.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full bg-white/10 p-2.5 transition-colors hover:bg-white/20"
-                aria-label="Instagram"
-              >
-                <InstagramLogo className="h-5 w-5" weight="fill" />
-              </a>
+              </div>
+              <div className="flex items-center gap-3 text-sm text-gray-400 group">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 group-hover:bg-primary-600/20 transition-colors">
+                  <Phone size={16} className="text-primary-400" />
+                </div>
+                <a
+                  href="tel:+2348000000000"
+                  className="hover:text-white transition-colors"
+                >
+                  +234 800 000 0000
+                </a>
+              </div>
+              <div className="flex items-center gap-3 text-sm text-gray-400 group">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-white/5 group-hover:bg-primary-600/20 transition-colors">
+                  <EnvelopeSimple size={16} className="text-primary-400" />
+                </div>
+                <a
+                  href="mailto:info@sdacrc.org"
+                  className="hover:text-white transition-colors"
+                >
+                  info@sdacrc.org
+                </a>
+              </div>
             </div>
           </div>
-
-          {/* Navigation Sections */}
-          {footerSections.map((section) => (
-            <div key={section.title}>
-              <h3 className="font-bold text-[var(--secondary)] mb-4">
-                {section.title}
-              </h3>
-              <ul className="space-y-2.5">
-                {section.links.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-white/80 hover:text-white transition-colors"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
         </div>
-      </Container>
 
-      {/* Bottom Bar */}
-      <div className="border-t border-white/10">
-        <Container className="py-6">
-          <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
-            <p className="text-sm text-white/60">
-              © {currentYear} SDA Cross River Conference. All rights reserved.
-            </p>
-            <p className="flex items-center gap-1 text-sm text-white/60">
-              Built with{" "}
-              <Heart
-                className="h-4 w-4 text-[var(--secondary)]"
-                weight="fill"
-              />{" "}
-              for the glory of God
-            </p>
-          </div>
-        </Container>
+        {/* Bottom Bar */}
+        <div className="border-t border-white/10 py-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+          <p>
+            &copy; {new Date().getFullYear()} SDA Cross River Conference. All
+            rights reserved.
+          </p>
+          <p className="flex items-center gap-1.5">
+            Built with{" "}
+            <Heart size={14} weight="fill" className="text-red-500" /> for the
+            glory of God
+          </p>
+        </div>
       </div>
     </footer>
   );
 }
-
-export { Footer };
-export type { FooterProps };

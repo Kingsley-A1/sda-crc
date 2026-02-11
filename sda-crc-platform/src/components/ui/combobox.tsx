@@ -1,377 +1,182 @@
-/**
- * Combobox Component
- * ==================
- * Searchable dropdown for selecting from a large list (e.g., worker roles).
- *
- * "Seek and you shall find." — Matthew 7:7
- */
-
 "use client";
 
 import * as React from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { MagnifyingGlass, CaretDown, Check, X } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
+import { CaretDown, MagnifyingGlass, Check } from "@phosphor-icons/react";
 
 interface ComboboxOption {
   value: string;
   label: string;
   category?: string;
-  disabled?: boolean;
 }
 
 interface ComboboxProps {
-  options: ComboboxOption[];
-  value?: string;
-  onChange?: (value: string) => void;
-  placeholder?: string;
-  searchPlaceholder?: string;
-  disabled?: boolean;
-  error?: string;
-  helperText?: string;
   label?: string;
+  value: string;
+  onChange: (value: string) => void;
+  options: ComboboxOption[];
+  placeholder?: string;
   required?: boolean;
-  className?: string;
-  id?: string;
-  emptyMessage?: string;
   groupByCategory?: boolean;
+  error?: string;
+  className?: string;
 }
 
 function Combobox({
-  options,
+  label,
   value,
   onChange,
-  placeholder = "Select an option",
-  searchPlaceholder = "Search...",
-  disabled = false,
-  error,
-  helperText,
-  label,
+  options,
+  placeholder = "Select...",
   required,
+  groupByCategory,
+  error,
   className,
-  id,
-  emptyMessage = "No results found.",
-  groupByCategory = false,
 }: ComboboxProps) {
   const [isOpen, setIsOpen] = React.useState(false);
-  const [searchQuery, setSearchQuery] = React.useState("");
-  const [highlightedIndex, setHighlightedIndex] = React.useState(-1);
+  const [search, setSearch] = React.useState("");
   const containerRef = React.useRef<HTMLDivElement>(null);
-  const searchInputRef = React.useRef<HTMLInputElement>(null);
-  const inputId = id || React.useId();
-  const hasError = !!error;
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const selectedOption = options.find((opt) => opt.value === value);
+  const selectedOption = options.find((o) => o.value === value);
 
-  // Filter options based on search query
-  const filteredOptions = React.useMemo(() => {
-    if (!searchQuery.trim()) return options;
+  const filtered = options.filter(
+    (o) =>
+      o.label.toLowerCase().includes(search.toLowerCase()) ||
+      o.category?.toLowerCase().includes(search.toLowerCase()),
+  );
 
-    const query = searchQuery.toLowerCase();
-    return options.filter(
-      (opt) =>
-        opt.label.toLowerCase().includes(query) ||
-        opt.category?.toLowerCase().includes(query)
-    );
-  }, [options, searchQuery]);
+  // Group by category if enabled
+  const grouped = React.useMemo(() => {
+    if (!groupByCategory) return null;
+    const groups: Record<string, ComboboxOption[]> = {};
+    filtered.forEach((opt) => {
+      const cat = opt.category || "Other";
+      if (!groups[cat]) groups[cat] = [];
+      groups[cat].push(opt);
+    });
+    return groups;
+  }, [filtered, groupByCategory]);
 
-  // Group options by category
-  const groupedOptions = React.useMemo(() => {
-    if (!groupByCategory) return { "": filteredOptions };
-
-    return filteredOptions.reduce((groups, option) => {
-      const category = option.category || "Other";
-      if (!groups[category]) {
-        groups[category] = [];
-      }
-      groups[category].push(option);
-      return groups;
-    }, {} as Record<string, ComboboxOption[]>);
-  }, [filteredOptions, groupByCategory]);
-
-  // Flatten for keyboard navigation
-  const flatOptions = React.useMemo(() => {
-    return Object.values(groupedOptions).flat();
-  }, [groupedOptions]);
-
-  // Close on click outside
+  // Close on outside click
   React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    function handleClickOutside(e: MouseEvent) {
       if (
         containerRef.current &&
-        !containerRef.current.contains(event.target as Node)
+        !containerRef.current.contains(e.target as Node)
       ) {
         setIsOpen(false);
+        setSearch("");
       }
-    };
-
+    }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Focus search input when opened
-  React.useEffect(() => {
-    if (isOpen && searchInputRef.current) {
-      searchInputRef.current.focus();
-    }
-  }, [isOpen]);
-
-  // Reset search and highlighted index when closed
-  React.useEffect(() => {
-    if (!isOpen) {
-      setSearchQuery("");
-      setHighlightedIndex(-1);
-    }
-  }, [isOpen]);
-
-  // Keyboard navigation
-  const handleKeyDown = (event: React.KeyboardEvent) => {
-    if (disabled) return;
-
-    switch (event.key) {
-      case "Enter":
-        event.preventDefault();
-        if (
-          isOpen &&
-          highlightedIndex >= 0 &&
-          highlightedIndex < flatOptions.length
-        ) {
-          const option = flatOptions[highlightedIndex];
-          if (!option.disabled) {
-            onChange?.(option.value);
-            setIsOpen(false);
-          }
-        } else if (!isOpen) {
-          setIsOpen(true);
-        }
-        break;
-      case "ArrowDown":
-        event.preventDefault();
-        if (!isOpen) {
-          setIsOpen(true);
-        } else {
-          setHighlightedIndex((prev) => {
-            const next = prev + 1;
-            return next >= flatOptions.length ? 0 : next;
-          });
-        }
-        break;
-      case "ArrowUp":
-        event.preventDefault();
-        if (!isOpen) {
-          setIsOpen(true);
-        } else {
-          setHighlightedIndex((prev) => {
-            const next = prev - 1;
-            return next < 0 ? flatOptions.length - 1 : next;
-          });
-        }
-        break;
-      case "Escape":
-        setIsOpen(false);
-        break;
-    }
-  };
-
-  const handleClear = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onChange?.("");
+  const handleSelect = (val: string) => {
+    onChange(val);
+    setIsOpen(false);
+    setSearch("");
   };
 
   return (
-    <div className={cn("w-full", className)} ref={containerRef}>
-      {/* Label */}
+    <div className={cn("space-y-1.5 relative", className)} ref={containerRef}>
       {label && (
-        <label
-          htmlFor={inputId}
-          className="mb-2 block text-sm font-medium text-[var(--text-primary)]"
-        >
+        <label className="block text-sm font-medium text-foreground">
           {label}
-          {required && (
-            <span className="ml-1 text-[var(--error)]" aria-hidden="true">
-              *
-            </span>
-          )}
+          {required && <span className="text-destructive ml-0.5">*</span>}
         </label>
       )}
 
-      {/* Select Container */}
-      <div className="relative">
-        {/* Trigger */}
-        <button
-          type="button"
-          id={inputId}
-          role="combobox"
-          aria-expanded={isOpen}
-          aria-haspopup="listbox"
-          aria-controls={`${inputId}-options`}
-          aria-invalid={hasError}
-          disabled={disabled}
-          onClick={() => !disabled && setIsOpen(!isOpen)}
-          onKeyDown={handleKeyDown}
+      <button
+        type="button"
+        onClick={() => {
+          setIsOpen(!isOpen);
+          setTimeout(() => inputRef.current?.focus(), 0);
+        }}
+        className={cn(
+          "flex w-full items-center justify-between rounded-lg border border-border bg-white px-4 py-2.5 text-sm text-left transition-colors",
+          "focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20",
+          error && "border-destructive",
+          !selectedOption && "text-gray-400",
+        )}
+      >
+        <span className="truncate">{selectedOption?.label || placeholder}</span>
+        <CaretDown
+          size={16}
           className={cn(
-            "flex w-full items-center justify-between bg-[var(--surface)] text-[var(--text-primary)] transition-all duration-200 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer",
-            "h-11 px-4 text-base rounded-xl",
-            "border border-[var(--border)] focus-visible:border-[var(--primary)] focus-visible:ring-2 focus-visible:ring-[var(--primary)]/20",
-            hasError &&
-              "border-[var(--error)] focus-visible:border-[var(--error)] focus-visible:ring-[var(--error)]/20",
-            isOpen && "ring-2 ring-[var(--primary)]/20 border-[var(--primary)]"
+            "ml-2 shrink-0 transition-transform",
+            isOpen && "rotate-180",
           )}
-        >
-          <span
-            className={cn(
-              "flex-1 text-left truncate",
-              !selectedOption && "text-[var(--text-muted)]"
-            )}
-          >
-            {selectedOption?.label || placeholder}
-          </span>
-          <div className="flex items-center gap-2">
-            {value && (
-              <button
-                type="button"
-                onClick={handleClear}
-                className="rounded-full p-0.5 hover:bg-[var(--background-alt)] transition-colors"
-                aria-label="Clear selection"
-              >
-                <X className="h-3.5 w-3.5 text-[var(--text-muted)]" />
-              </button>
-            )}
-            <CaretDown
-              className={cn(
-                "h-4 w-4 text-[var(--text-muted)] transition-transform duration-200",
-                isOpen && "rotate-180"
-              )}
+        />
+      </button>
+
+      {isOpen && (
+        <div className="absolute left-0 right-0 top-full z-50 mt-1 rounded-lg border border-border bg-white shadow-lg">
+          <div className="flex items-center gap-2 border-b border-border px-3 py-2">
+            <MagnifyingGlass size={16} className="text-gray-400" />
+            <input
+              ref={inputRef}
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search..."
+              className="w-full border-none bg-transparent text-sm outline-none placeholder:text-gray-400"
             />
           </div>
-        </button>
 
-        {/* Dropdown */}
-        <AnimatePresence>
-          {isOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.15 }}
-              className="absolute z-[var(--z-dropdown)] mt-2 w-full overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-lg"
-            >
-              {/* Search Input */}
-              <div className="border-b border-[var(--border)] p-2">
-                <div className="relative">
-                  <MagnifyingGlass className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-muted)]" />
-                  <input
-                    ref={searchInputRef}
-                    type="text"
-                    value={searchQuery}
-                    onChange={(e) => {
-                      setSearchQuery(e.target.value);
-                      setHighlightedIndex(-1);
-                    }}
-                    onKeyDown={handleKeyDown}
-                    placeholder={searchPlaceholder}
-                    className="w-full rounded-lg bg-[var(--background-alt)] py-2 pl-9 pr-3 text-sm text-[var(--text-primary)] placeholder:text-[var(--text-muted)] focus:outline-none"
-                  />
-                </div>
-              </div>
+          <div className="max-h-60 overflow-y-auto py-1">
+            {filtered.length === 0 && (
+              <p className="px-4 py-3 text-sm text-gray-400">
+                No options found
+              </p>
+            )}
 
-              {/* Options List */}
-              <ul
-                id={`${inputId}-options`}
-                role="listbox"
-                aria-labelledby={inputId}
-                className="max-h-60 overflow-auto py-1"
-              >
-                {flatOptions.length === 0 ? (
-                  <li className="px-4 py-3 text-center text-sm text-[var(--text-muted)]">
-                    {emptyMessage}
-                  </li>
-                ) : (
-                  Object.entries(groupedOptions).map(
-                    ([category, categoryOptions]) => (
-                      <React.Fragment key={category}>
-                        {/* Category Header */}
-                        {groupByCategory && category && (
-                          <li className="sticky top-0 bg-[var(--background-alt)] px-4 py-2 text-xs font-semibold uppercase tracking-wider text-[var(--text-secondary)]">
-                            {category}
-                          </li>
+            {grouped
+              ? Object.entries(grouped).map(([category, opts]) => (
+                  <div key={category}>
+                    <p className="px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-gray-400">
+                      {category}
+                    </p>
+                    {opts.map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => handleSelect(opt.value)}
+                        className={cn(
+                          "flex w-full items-center justify-between px-4 py-2 text-sm transition-colors hover:bg-gray-50",
+                          value === opt.value && "bg-primary/5 text-primary",
                         )}
-
-                        {/* Options */}
-                        {categoryOptions.map((option) => {
-                          const globalIndex = flatOptions.findIndex(
-                            (o) => o.value === option.value
-                          );
-                          return (
-                            <li
-                              key={option.value}
-                              role="option"
-                              aria-selected={value === option.value}
-                              aria-disabled={option.disabled}
-                              onClick={() => {
-                                if (!option.disabled) {
-                                  onChange?.(option.value);
-                                  setIsOpen(false);
-                                }
-                              }}
-                              onMouseEnter={() =>
-                                setHighlightedIndex(globalIndex)
-                              }
-                              className={cn(
-                                "flex cursor-pointer items-center justify-between px-4 py-2.5 text-sm transition-colors",
-                                value === option.value
-                                  ? "bg-[var(--primary)]/10 text-[var(--primary)] font-medium"
-                                  : "text-[var(--text-primary)]",
-                                highlightedIndex === globalIndex &&
-                                  value !== option.value &&
-                                  "bg-[var(--background-alt)]",
-                                option.disabled &&
-                                  "cursor-not-allowed opacity-50"
-                              )}
-                            >
-                              <span>{option.label}</span>
-                              {value === option.value && (
-                                <Check
-                                  className="h-4 w-4 text-[var(--primary)]"
-                                  weight="bold"
-                                />
-                              )}
-                            </li>
-                          );
-                        })}
-                      </React.Fragment>
-                    )
-                  )
-                )}
-              </ul>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      {/* Error Message */}
-      {error && (
-        <p
-          id={`${inputId}-error`}
-          className="mt-2 text-sm text-[var(--error)]"
-          role="alert"
-        >
-          {error}
-        </p>
+                      >
+                        <span>{opt.label}</span>
+                        {value === opt.value && (
+                          <Check size={16} weight="bold" />
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                ))
+              : filtered.map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => handleSelect(opt.value)}
+                    className={cn(
+                      "flex w-full items-center justify-between px-4 py-2 text-sm transition-colors hover:bg-gray-50",
+                      value === opt.value && "bg-primary/5 text-primary",
+                    )}
+                  >
+                    <span>{opt.label}</span>
+                    {value === opt.value && <Check size={16} weight="bold" />}
+                  </button>
+                ))}
+          </div>
+        </div>
       )}
 
-      {/* Helper Text */}
-      {!error && helperText && (
-        <p
-          id={`${inputId}-helper`}
-          className="mt-2 text-sm text-[var(--text-secondary)]"
-        >
-          {helperText}
-        </p>
-      )}
+      {error && <p className="text-xs text-destructive">{error}</p>}
     </div>
   );
 }
 
 export { Combobox };
-export type { ComboboxProps, ComboboxOption };

@@ -35,31 +35,31 @@ export function EventForm({
 
   const [title, setTitle] = React.useState(initial?.title ?? "");
   const [startDate, setStartDate] = React.useState<string>(
-    String(initial?.startDate ?? "")
+    String(initial?.startDate ?? ""),
   );
   const [endDate, setEndDate] = React.useState<string>(
-    String(initial?.endDate ?? "")
+    String(initial?.endDate ?? ""),
   );
   const [category, setCategory] = React.useState<string>(
-    String(initial?.category ?? "WORSHIP")
+    String(initial?.category ?? "WORSHIP"),
   );
 
   const [isOnline, setIsOnline] = React.useState<string>(
-    initial?.isOnline ? "true" : "false"
+    initial?.isOnline ? "true" : "false",
   );
   const [onlineUrl, setOnlineUrl] = React.useState(initial?.onlineUrl ?? "");
   const [location, setLocation] = React.useState(initial?.location ?? "");
 
   const [featured, setFeatured] = React.useState<string>(
-    initial?.featured ? "true" : "false"
+    initial?.featured ? "true" : "false",
   );
   const [published, setPublished] = React.useState<string>(
-    initial?.published ? "true" : "false"
+    initial?.published ? "true" : "false",
   );
 
   const [imageUrl, setImageUrl] = React.useState(initial?.imageUrl ?? "");
   const [description, setDescription] = React.useState(
-    initial?.description ?? ""
+    initial?.description ?? "",
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -182,7 +182,7 @@ export function EventForm({
           rows={6}
         />
 
-        {error ? <p className="text-sm text-[var(--error)]">{error}</p> : null}
+        {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
         <div className="flex justify-end">
           <Button

@@ -40,12 +40,10 @@ export function ConfirmDialog({
       size="sm"
     >
       <ModalHeader>
-        <p className="text-base font-bold text-[var(--text-primary)]">
-          {title}
-        </p>
+        <p className="text-base font-bold text-foreground">{title}</p>
       </ModalHeader>
       <ModalBody>
-        <p className="text-sm text-[var(--text-secondary)]">{description}</p>
+        <p className="text-sm text-muted-foreground">{description}</p>
       </ModalBody>
       <ModalFooter>
         <div className="flex w-full gap-2">
@@ -60,7 +58,7 @@ export function ConfirmDialog({
           </Button>
           <Button
             type="button"
-            variant="danger"
+            variant="destructive"
             className="min-h-11 flex-1"
             onClick={onConfirm}
             isLoading={isLoading}

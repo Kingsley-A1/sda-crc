@@ -1,118 +1,80 @@
 /**
  * Sermons Page
  * ============
- * Browse and watch/listen to sermons from the SDA Cross River Conference.
- * Features filtering, search, and featured sermon highlighting.
- *
  * "Faith comes from hearing the message." — Romans 10:17
  */
 
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import { db } from "@/lib/db";
 import { PageHeader } from "@/components/layout/page-header";
 import { Container } from "@/components/layout/container";
 import { SermonGrid } from "@/components/sanctuary/sermons/sermon-grid";
-import { FeaturedSermon } from "@/components/sanctuary/sermons/featured-sermon";
-import { Skeleton } from "@/components/ui/skeleton";
-
-// ============================================================================
-// Metadata
-// ============================================================================
 
 export const metadata: Metadata = {
   title: "Sermons",
   description:
-    "Watch and listen to inspiring sermons from the SDA Cross River Conference. Search by preacher, topic, or series.",
+    "Watch and download powerful sermons from SDA Cross River Conference preachers.",
 };
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
-// ============================================================================
-// Data Fetching
-// ============================================================================
-
-async function getSermonsPageData() {
-  const [featuredSermon, sermons] = await Promise.all([
-    db.sermon.findFirst({
+async function getSermons() {
+  try {
+    const sermons = await db.sermon.findMany({
       where: { published: true },
       orderBy: { date: "desc" },
-    }),
-    db.sermon.findMany({
-      where: { published: true },
-      orderBy: { date: "desc" },
-      take: 12,
-    }),
-  ]);
-
-  return {
-    featuredSermon: featuredSermon || sermons[0] || null,
-    sermons,
-  };
+      take: 24,
+    });
+    return sermons;
+  } catch {
+    return [];
+  }
 }
-
-// ============================================================================
-// Loading Skeletons
-// ============================================================================
-
-function FeaturedSermonSkeleton() {
-  return (
-    <div className="aspect-video w-full rounded-2xl bg-gray-200 dark:bg-gray-800 animate-pulse" />
-  );
-}
-
-function SermonGridSkeleton() {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <div key={i} className="space-y-3">
-          <Skeleton className="aspect-video rounded-xl" />
-          <Skeleton className="h-5 w-3/4" />
-          <Skeleton className="h-4 w-1/2" />
-        </div>
-      ))}
-    </div>
-  );
-}
-
-// ============================================================================
-// Page Component
-// ============================================================================
 
 export default async function SermonsPage() {
-  const { featuredSermon, sermons } = await getSermonsPageData();
+  const sermons = await getSermons();
 
   return (
     <>
       <PageHeader
         title="Sermons"
-        subtitle="Feed your soul with the Word of God"
-        backgroundImage="/images/sermons-header.jpg"
+        subtitle="The Word of God"
+        description="Watch, listen, and download powerful messages to strengthen your faith."
+        size="sm"
       />
 
-      <Container className="py-8 md:py-12">
-        {/* Featured Sermon */}
-        {featuredSermon && (
-          <section className="mb-12">
-            <h2 className="text-2xl font-serif font-bold text-primary mb-6">
-              Featured Message
-            </h2>
-            <Suspense fallback={<FeaturedSermonSkeleton />}>
-              <FeaturedSermon sermon={featuredSermon} />
-            </Suspense>
-          </section>
-        )}
-
-        {/* Sermon Grid */}
-        <section>
-          <h2 className="text-2xl font-serif font-bold text-primary mb-6">
-            All Sermons
-          </h2>
-          <Suspense fallback={<SermonGridSkeleton />}>
+      <section className="section-padding">
+        <Container>
+          {sermons.length > 0 ? (
             <SermonGrid sermons={sermons} />
-          </Suspense>
-        </section>
-      </Container>
+          ) : (
+            <div className="text-center py-16">
+              <div className="flex h-20 w-20 mx-auto items-center justify-center rounded-full bg-primary-50 mb-4">
+                <svg
+                  className="h-10 w-10 text-primary"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-lg font-semibold text-foreground mb-2">
+                No Sermons Yet
+              </h3>
+              <p className="text-muted-foreground max-w-sm mx-auto">
+                Sermons will be uploaded here soon. Check back for powerful
+                messages from our conference preachers.
+              </p>
+            </div>
+          )}
+        </Container>
+      </section>
     </>
   );
 }

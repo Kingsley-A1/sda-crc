@@ -27,7 +27,7 @@ export function SermonsTable({ rows, onEdit, onDelete }: SermonsTableProps) {
         cell: (s) => (
           <div className="min-w-0">
             <p className="truncate font-semibold">{s.title}</p>
-            <p className="mt-0.5 truncate text-xs text-[var(--text-tertiary)]">
+            <p className="mt-0.5 truncate text-xs text-muted-foreground/60">
               {s.speaker}
             </p>
           </div>
@@ -37,7 +37,7 @@ export function SermonsTable({ rows, onEdit, onDelete }: SermonsTableProps) {
         key: "date",
         header: "Date",
         cell: (s) => (
-          <span className="text-sm text-[var(--text-secondary)]">
+          <span className="text-sm text-muted-foreground">
             {formatDateTime(s.date)}
           </span>
         ),
@@ -61,9 +61,7 @@ export function SermonsTable({ rows, onEdit, onDelete }: SermonsTableProps) {
         key: "viewCount",
         header: "Views",
         cell: (s) => (
-          <span className="text-sm text-[var(--text-secondary)]">
-            {s.viewCount}
-          </span>
+          <span className="text-sm text-muted-foreground">{s.viewCount}</span>
         ),
         className: "w-[90px]",
       },
@@ -93,7 +91,7 @@ export function SermonsTable({ rows, onEdit, onDelete }: SermonsTableProps) {
         className: "w-[150px]",
       },
     ],
-    [onDelete, onEdit]
+    [onDelete, onEdit],
   );
 
   return (

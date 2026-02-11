@@ -27,7 +27,9 @@ async function getEvents() {
     take: 50,
   });
 
-  return events.map((e) => ({
+  type EventQueryResult = typeof events[number];
+
+  return events.map((e: EventQueryResult) => ({
     id: e.id,
     title: e.title,
     slug: e.slug,

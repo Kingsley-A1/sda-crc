@@ -27,7 +27,9 @@ async function getWorkers() {
     orderBy: [{ displayOrder: "asc" }, { lastName: "asc" }],
   });
 
-  return workers.map((w) => ({
+  type WorkerQueryResult = typeof workers[number];
+
+  return workers.map((w: WorkerQueryResult) => ({
     id: w.id,
     firstName: w.firstName,
     lastName: w.lastName,

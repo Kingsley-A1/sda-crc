@@ -49,7 +49,7 @@ export function EventsTable({ rows, onEdit, onDelete }: EventsTableProps) {
         key: "startDate",
         header: "Starts",
         cell: (e) => (
-          <span className="text-sm text-[var(--text-secondary)]">
+          <span className="text-sm text-muted-foreground">
             {formatDateTime(e.startDate)}
           </span>
         ),
@@ -95,7 +95,7 @@ export function EventsTable({ rows, onEdit, onDelete }: EventsTableProps) {
         className: "w-[150px]",
       },
     ],
-    [onDelete, onEdit]
+    [onDelete, onEdit],
   );
 
   return (

@@ -22,24 +22,17 @@ export function useLocalStorage<T>(
   key: string,
   initialValue: T
 ): [T, (value: SetValue<T>) => void, () => void] {
-  // State to store our value
-  const [storedValue, setStoredValue] = useState<T>(initialValue);
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  // Initialize from localStorage after hydration
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
+  // State to store our value with lazy initialization
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    if (typeof window === "undefined") return initialValue;
     try {
       const item = window.localStorage.getItem(key);
-      if (item) {
-        setStoredValue(JSON.parse(item));
-      }
+      return item ? JSON.parse(item) : initialValue;
     } catch (error) {
       console.warn(`Error reading localStorage key "${key}":`, error);
+      return initialValue;
     }
-    setIsHydrated(true);
-  }, [key]);
+  });
 
   // Return a wrapped version of useState's setter function that
   // persists the new value to localStorage
@@ -117,20 +110,16 @@ export function useSessionStorage<T>(
   key: string,
   initialValue: T
 ): [T, (value: SetValue<T>) => void, () => void] {
-  const [storedValue, setStoredValue] = useState<T>(initialValue);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
+  const [storedValue, setStoredValue] = useState<T>(() => {
+    if (typeof window === "undefined") return initialValue;
     try {
       const item = window.sessionStorage.getItem(key);
-      if (item) {
-        setStoredValue(JSON.parse(item));
-      }
+      return item ? JSON.parse(item) : initialValue;
     } catch (error) {
       console.warn(`Error reading sessionStorage key "${key}":`, error);
+      return initialValue;
     }
-  }, [key]);
+  });
 
   const setValue = useCallback(
     (value: SetValue<T>) => {

@@ -1,83 +1,74 @@
-/**
- * Department Leader Component
- * ===========================
- * Display department leader information.
- */
+"use client";
 
 import Image from "next/image";
+import { Envelope, Phone } from "@phosphor-icons/react";
+import { Card } from "@/components/ui";
 
-interface Leader {
+interface LeaderInfo {
   id: string;
   firstName: string;
   lastName: string;
-  email?: string | null;
-  phone?: string | null;
-  photoUrl?: string | null;
-  role?: string;
-  bio?: string | null;
+  email: string | null;
+  phone: string | null;
+  photoUrl: string | null;
 }
 
 interface DepartmentLeaderProps {
-  leader: Leader;
+  leader: LeaderInfo;
 }
 
 export function DepartmentLeader({ leader }: DepartmentLeaderProps) {
   return (
-    <div className="rounded-xl bg-gradient-to-br from-primary/10 to-secondary/10 p-6">
-      <h3 className="font-semibold text-lg mb-4">Department Leader</h3>
+    <Card variant="bordered" className="p-6">
+      <h3 className="font-bold text-lg text-foreground mb-4">
+        Department Leader
+      </h3>
 
-      <div className="text-center">
-        {/* Photo */}
-        <div className="w-24 h-24 mx-auto mb-4 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700">
+      <div className="flex items-center gap-4 mb-4">
+        <div className="relative h-16 w-16 shrink-0 rounded-full overflow-hidden bg-primary-50">
           {leader.photoUrl ? (
             <Image
               src={leader.photoUrl}
               alt={`${leader.firstName} ${leader.lastName}`}
-              width={96}
-              height={96}
-              className="w-full h-full object-cover"
+              fill
+              className="object-cover"
+              sizes="64px"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-2xl font-bold text-gray-400">
-              {leader.firstName.charAt(0)}
-              {leader.lastName.charAt(0)}
+            <div className="w-full h-full flex items-center justify-center text-lg font-bold text-primary">
+              {leader.firstName[0]}
+              {leader.lastName[0]}
             </div>
           )}
         </div>
-
-        {/* Name & Role */}
-        <h4 className="font-semibold text-lg">
-          {leader.firstName} {leader.lastName}
-        </h4>
-        <p className="text-primary text-sm font-medium mb-3">Director</p>
-
-        {/* Bio */}
-        {leader.bio && (
-          <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-            {leader.bio}
+        <div>
+          <p className="font-semibold text-foreground">
+            {leader.firstName} {leader.lastName}
           </p>
-        )}
-
-        {/* Contact */}
-        <div className="space-y-2 text-sm">
-          {leader.email && (
-            <a
-              href={`mailto:${leader.email}`}
-              className="block text-primary hover:underline"
-            >
-              {leader.email}
-            </a>
-          )}
-          {leader.phone && (
-            <a
-              href={`tel:${leader.phone}`}
-              className="block text-primary hover:underline"
-            >
-              {leader.phone}
-            </a>
-          )}
+          <p className="text-sm text-muted-foreground">Director</p>
         </div>
       </div>
-    </div>
+
+      <div className="space-y-2 text-sm">
+        {leader.email && (
+          <a
+            href={`mailto:${leader.email}`}
+            className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Envelope className="h-4 w-4" />
+            <span>{leader.email}</span>
+          </a>
+        )}
+        {leader.phone && (
+          <a
+            href={`tel:${leader.phone}`}
+            className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors"
+          >
+            <Phone className="h-4 w-4" />
+            <span>{leader.phone}</span>
+          </a>
+        )}
+      </div>
+    </Card>
   );
 }

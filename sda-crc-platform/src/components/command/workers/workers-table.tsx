@@ -33,7 +33,7 @@ export function WorkersTable({
             <p className="truncate font-semibold">
               {w.firstName} {w.lastName}
             </p>
-            <p className="mt-0.5 truncate text-xs text-[var(--text-tertiary)]">
+            <p className="mt-0.5 truncate text-xs text-muted-foreground/60">
               {getRoleLabel(w.role)}
             </p>
           </div>
@@ -43,7 +43,7 @@ export function WorkersTable({
         key: "department",
         header: "Department",
         cell: (w) => (
-          <span className="text-sm text-[var(--text-secondary)]">
+          <span className="text-sm text-muted-foreground">
             {w.department ?? "—"}
           </span>
         ),
@@ -97,7 +97,7 @@ export function WorkersTable({
         className: "w-[160px]",
       },
     ],
-    [onDeactivate, onEdit]
+    [onDeactivate, onEdit],
   );
 
   return (

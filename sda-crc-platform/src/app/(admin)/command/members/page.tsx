@@ -25,7 +25,9 @@ async function getMembers() {
     take: 100,
   });
 
-  return members.map((m) => ({
+  type MemberQueryResult = typeof members[number];
+
+  return members.map((m: MemberQueryResult) => ({
     id: m.id,
     firstName: m.firstName,
     lastName: m.lastName,

@@ -34,22 +34,22 @@ export function SermonForm({
   const [speaker, setSpeaker] = React.useState(initial?.speaker ?? "");
   const [date, setDate] = React.useState<string>(String(initial?.date ?? ""));
   const [published, setPublished] = React.useState<string>(
-    initial?.published ? "true" : "false"
+    initial?.published ? "true" : "false",
   );
 
   const [description, setDescription] = React.useState(
-    initial?.description ?? ""
+    initial?.description ?? "",
   );
   const [audioUrl, setAudioUrl] = React.useState(initial?.audioUrl ?? "");
   const [videoUrl, setVideoUrl] = React.useState(initial?.videoUrl ?? "");
   const [thumbnailUrl, setThumbnailUrl] = React.useState(
-    initial?.thumbnailUrl ?? ""
+    initial?.thumbnailUrl ?? "",
   );
   const [duration, setDuration] = React.useState<string>(
-    typeof initial?.duration === "number" ? String(initial.duration) : ""
+    typeof initial?.duration === "number" ? String(initial.duration) : "",
   );
   const [scriptureReference, setScriptureReference] = React.useState(
-    initial?.scriptureReference ?? ""
+    initial?.scriptureReference ?? "",
   );
   const [series, setSeries] = React.useState(initial?.series ?? "");
   const [tags, setTags] = React.useState((initial?.tags ?? []).join(", "));
@@ -163,7 +163,7 @@ export function SermonForm({
           rows={6}
         />
 
-        {error ? <p className="text-sm text-[var(--error)]">{error}</p> : null}
+        {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
         <div className="flex justify-end">
           <Button

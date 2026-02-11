@@ -36,7 +36,9 @@ async function getSermons() {
     take: 50,
   });
 
-  return sermons.map((s) => ({
+  type SermonQueryResult = typeof sermons[number];
+
+  return sermons.map((s: SermonQueryResult) => ({
     id: s.id,
     title: s.title,
     slug: s.slug,

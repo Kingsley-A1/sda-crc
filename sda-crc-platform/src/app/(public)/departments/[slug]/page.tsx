@@ -93,9 +93,6 @@ export default async function DepartmentPage({ params }: PageProps) {
       <PageHeader
         title={department.name}
         subtitle={department.mission || undefined}
-        backgroundImage={
-          department.imageUrl || "/images/departments-header.jpg"
-        }
       />
 
       <Container className="py-8 md:py-12">

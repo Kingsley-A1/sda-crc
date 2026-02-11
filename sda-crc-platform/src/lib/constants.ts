@@ -99,25 +99,31 @@ export const SPRING_CONFIG = {
 
 export const BRAND_COLORS = {
   primary: {
-    DEFAULT: "#1a365d", // Navy blue
-    light: "#2a4a7f",
-    dark: "#0f2340",
+    DEFAULT: "#15803d", // SDA Green
+    light: "#16a34a",
+    dark: "#166534",
+    darker: "#14532d",
   },
   accent: {
-    DEFAULT: "#c9a227", // Gold
-    light: "#dbb84c",
-    dark: "#a8850f",
+    DEFAULT: "#22c55e", // Bright Green (for MISSION)
+    light: "#4ade80",
+    dark: "#16a34a",
+  },
+  gold: {
+    DEFAULT: "#f59e0b", // Gold (workers/honors)
+    light: "#fbbf24",
+    dark: "#d97706",
   },
   neutral: {
-    50: "#f8fafc",
-    100: "#f1f5f9",
-    200: "#e2e8f0",
-    300: "#cbd5e1",
-    400: "#94a3b8",
-    500: "#64748b",
-    600: "#475569",
-    700: "#334155",
-    800: "#1e293b",
+    50: "#f9fafb",
+    100: "#f3f4f6",
+    200: "#e5e7eb",
+    300: "#d1d5db",
+    400: "#9ca3af",
+    500: "#6b7280",
+    600: "#4b5563",
+    700: "#374151",
+    800: "#1f2937",
     900: "#0f172a",
   },
 } as const;

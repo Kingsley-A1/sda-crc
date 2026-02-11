@@ -45,7 +45,7 @@ export function EvangelismSitesTable({
         cell: (s) => (
           <div className="min-w-0">
             <p className="truncate font-semibold">{s.name}</p>
-            <p className="mt-0.5 truncate text-xs text-[var(--text-tertiary)]">
+            <p className="mt-0.5 truncate text-xs text-muted-foreground/60">
               {s.city ?? "—"}
             </p>
           </div>
@@ -65,7 +65,7 @@ export function EvangelismSitesTable({
         key: "startDate",
         header: "Start",
         cell: (s) => (
-          <span className="text-sm text-[var(--text-secondary)]">
+          <span className="text-sm text-muted-foreground">
             {s.startDate ? formatDate(s.startDate) : "—"}
           </span>
         ),
@@ -75,9 +75,7 @@ export function EvangelismSitesTable({
         key: "baptisms",
         header: "Baptisms",
         cell: (s) => (
-          <span className="text-sm text-[var(--text-secondary)]">
-            {s.baptisms}
-          </span>
+          <span className="text-sm text-muted-foreground">{s.baptisms}</span>
         ),
         className: "w-[110px]",
       },
@@ -85,9 +83,7 @@ export function EvangelismSitesTable({
         key: "decisions",
         header: "Decisions",
         cell: (s) => (
-          <span className="text-sm text-[var(--text-secondary)]">
-            {s.decisions}
-          </span>
+          <span className="text-sm text-muted-foreground">{s.decisions}</span>
         ),
         className: "w-[110px]",
       },
@@ -117,7 +113,7 @@ export function EvangelismSitesTable({
         className: "w-[150px]",
       },
     ],
-    [onDelete, onEdit]
+    [onDelete, onEdit],
   );
 
   return (

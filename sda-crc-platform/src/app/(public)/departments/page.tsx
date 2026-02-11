@@ -84,7 +84,6 @@ export default async function DepartmentsPage() {
       <PageHeader
         title="Departments"
         subtitle="Every member a minister"
-        backgroundImage="/images/departments-header.jpg"
       />
 
       <Container className="py-8 md:py-12">

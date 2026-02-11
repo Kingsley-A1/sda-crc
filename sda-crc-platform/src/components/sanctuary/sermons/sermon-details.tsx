@@ -1,67 +1,106 @@
-import { Badge, Card } from "@/components/ui";
-import { formatDate } from "@/lib/utils";
-import type { Sermon } from "@/types/sermon";
+"use client";
 
-import { SermonPlayer } from "./sermon-player";
+import { motion } from "framer-motion";
+import {
+  CalendarBlank,
+  User,
+  BookOpen,
+  Eye,
+  Clock,
+} from "@phosphor-icons/react";
+import { Badge, Button } from "@/components/ui";
+import { fadeInUp } from "@/animations";
+import Link from "next/link";
 
-export interface SermonDetailsProps {
-  sermon: Sermon;
+interface SermonData {
+  id: string;
+  title: string;
+  speaker: string;
+  date: string;
+  description: string | null;
+  scriptureReference: string | null;
+  series: string | null;
+  videoUrl: string | null;
+  audioUrl: string | null;
+  thumbnailUrl: string | null;
+  duration: string | number | null;
+  tags: string[];
+  slug: string;
+  published: boolean;
+  viewCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface SermonDetailsProps {
+  sermon: SermonData;
+}
+
+function formatDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString("en-NG", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 }
 
 export function SermonDetails({ sermon }: SermonDetailsProps) {
   return (
-    <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-      <div className="lg:col-span-2">
-        <h1 className="text-balance text-2xl font-extrabold text-[var(--text-primary)] sm:text-3xl">
-          {sermon.title}
-        </h1>
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      {/* Title */}
+      <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-4">
+        {sermon.title}
+      </h1>
 
-        <div className="mt-3 flex flex-wrap items-center gap-2">
-          <Badge variant="secondary" rounded="full" size="sm">
-            {sermon.speaker}
-          </Badge>
-          <Badge variant="subtle" rounded="full" size="sm">
-            {formatDate(sermon.date)}
-          </Badge>
-          {sermon.scriptureReference ? (
-            <Badge variant="info-subtle" rounded="full" size="sm">
-              {sermon.scriptureReference}
-            </Badge>
-          ) : null}
-          {sermon.series ? (
-            <Badge variant="success-subtle" rounded="full" size="sm">
-              {sermon.series}
-            </Badge>
-          ) : null}
+      {/* Meta info */}
+      <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mb-6">
+        <div className="flex items-center gap-1.5">
+          <User className="h-4 w-4" />
+          <span>{sermon.speaker}</span>
         </div>
-
-        {sermon.description ? (
-          <Card className="mt-4 p-4">
-            <p className="whitespace-pre-wrap text-sm leading-relaxed text-[var(--text-secondary)]">
-              {sermon.description}
-            </p>
-          </Card>
-        ) : null}
-
-        {sermon.tags?.length ? (
-          <div className="mt-4 flex flex-wrap gap-2" aria-label="Sermon tags">
-            {sermon.tags.map((tag) => (
-              <Badge key={tag} variant="outline" rounded="full" size="sm">
-                {tag}
-              </Badge>
-            ))}
+        <div className="flex items-center gap-1.5">
+          <CalendarBlank className="h-4 w-4" />
+          <span>{formatDate(sermon.date)}</span>
+        </div>
+        {sermon.duration && (
+          <div className="flex items-center gap-1.5">
+            <Clock className="h-4 w-4" />
+            <span>{sermon.duration}</span>
           </div>
-        ) : null}
+        )}
+        <div className="flex items-center gap-1.5">
+          <Eye className="h-4 w-4" />
+          <span>{sermon.viewCount} views</span>
+        </div>
       </div>
 
-      <div className="lg:col-span-1">
-        <SermonPlayer
-          title={sermon.title}
-          videoUrl={sermon.videoUrl}
-          audioUrl={sermon.audioUrl}
-          storageKey={`sermon:${sermon.id}`}
-        />
+      {/* Badges */}
+      <div className="flex flex-wrap gap-2 mb-6">
+        {sermon.series && <Badge variant="success">{sermon.series}</Badge>}
+        {sermon.scriptureReference && (
+          <Badge variant="outline">
+            <BookOpen className="h-3.5 w-3.5 mr-1" />
+            {sermon.scriptureReference}
+          </Badge>
+        )}
       </div>
-    </div>
+
+      {/* Description */}
+      {sermon.description && (
+        <div className="prose prose-green max-w-none mb-8">
+          <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+            {sermon.description}
+          </p>
+        </div>
+      )}
+
+      {/* Back link */}
+      <Link href="/sermons">
+        <Button variant="outline" size="sm">
+          ← Back to Sermons
+        </Button>
+      </Link>
+    </motion.div>
   );
 }

@@ -8,6 +8,7 @@
 
 "use client";
 
+import * as React from "react";
 import { useState, useEffect, useCallback } from "react";
 
 interface ScrollPosition {
@@ -41,7 +42,7 @@ export function useScrollPosition(
     progress: 0,
   });
 
-  const [lastY, setLastY] = useState(0);
+  const lastYRef = React.useRef(0);
 
   const handleScroll = useCallback(() => {
     const target = element || document.documentElement;
@@ -51,7 +52,7 @@ export function useScrollPosition(
     const scrollHeight = target.scrollHeight - target.clientHeight;
     const progress = scrollHeight > 0 ? scrollY / scrollHeight : 0;
     
-    const direction = scrollY > lastY ? "down" : scrollY < lastY ? "up" : null;
+    const direction = scrollY > lastYRef.current ? "down" : scrollY < lastYRef.current ? "up" : null;
     
     setPosition({
       x: scrollX,
@@ -62,8 +63,8 @@ export function useScrollPosition(
       progress: Math.min(1, Math.max(0, progress)),
     });
     
-    setLastY(scrollY);
-  }, [element, lastY]);
+    lastYRef.current = scrollY;
+  }, [element]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -88,8 +89,8 @@ export function useScrollPosition(
     const target = element || window;
     target.addEventListener("scroll", throttledHandler, { passive: true });
     
-    // Initial call
-    handleScroll();
+    // Initial call in next tick to avoid setState during render
+    requestAnimationFrame(handleScroll);
 
     return () => {
       target.removeEventListener("scroll", throttledHandler);

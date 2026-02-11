@@ -54,7 +54,7 @@ export function ActionMenu({ items, className }: ActionMenuProps) {
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.15 }}
             role="menu"
-            className="absolute right-0 z-[var(--z-dropdown)] mt-2 w-44 overflow-hidden rounded-xl border border-[var(--border)] bg-[var(--surface)] shadow-lg"
+            className="absolute right-0 z-20 mt-2 w-44 overflow-hidden rounded-xl border border-border bg-card shadow-lg"
           >
             {items.map((item) => (
               <button
@@ -64,8 +64,8 @@ export function ActionMenu({ items, className }: ActionMenuProps) {
                 className={cn(
                   "w-full px-4 py-3 text-left text-sm transition-colors",
                   item.destructive
-                    ? "text-[var(--error)] hover:bg-[var(--error)]/10"
-                    : "text-[var(--text-primary)] hover:bg-[var(--background-alt)]"
+                    ? "text-destructive hover:bg-destructive/10"
+                    : "text-foreground hover:bg-muted",
                 )}
                 onClick={() => {
                   setOpen(false);

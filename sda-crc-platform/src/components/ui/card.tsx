@@ -1,11 +1,3 @@
-/**
- * Card Component
- * ==============
- * Versatile card container with composable sub-components.
- *
- * "A word fitly spoken is like apples of gold in settings of silver." — Proverbs 25:11
- */
-
 "use client";
 
 import * as React from "react";
@@ -13,275 +5,268 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { motion, type HTMLMotionProps } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-// ============================================================================
-// Card Container
-// ============================================================================
-
-const cardVariants = cva(
-  "rounded-xl bg-[var(--surface)] transition-all duration-300",
-  {
-    variants: {
-      variant: {
-        default:
-          "border border-[var(--border-light)] shadow-sm hover:shadow-md",
-        elevated: "shadow-md hover:shadow-xl border-0",
-        bordered:
-          "border-2 border-[var(--border)] shadow-none hover:border-[var(--primary)]",
-        ghost: "bg-transparent border-0 shadow-none",
-        glass: "bg-white/80 backdrop-blur-md border border-white/30 shadow-lg",
-        admin: "bg-[var(--admin-surface)] border border-[var(--admin-border)]",
-      },
-      padding: {
-        none: "p-0",
-        sm: "p-4",
-        md: "p-6",
-        lg: "p-8",
-      },
-      hover: {
-        none: "",
-        lift: "hover:-translate-y-2 hover:shadow-xl",
-        glow: "hover:shadow-[var(--shadow-glow)]",
-        border: "hover:border-[var(--primary)]",
-        scale: "hover:scale-[1.02]",
-      },
-      interactive: {
-        true: "cursor-pointer",
-        false: "",
-      },
+const cardVariants = cva("rounded-xl transition-all duration-200", {
+  variants: {
+    variant: {
+      default: "bg-card text-card-foreground border border-border shadow-card",
+      elevated: "bg-card text-card-foreground shadow-md",
+      bordered: "bg-card text-card-foreground border-2 border-border",
+      ghost: "bg-transparent",
+      glass:
+        "bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border border-white/20 dark:border-gray-700/30",
+      filled: "bg-muted text-foreground",
+      accent: "bg-accent text-accent-foreground border border-primary-200",
+      gradient:
+        "bg-gradient-to-br from-primary-50 to-accent border border-primary-100",
+      admin: "bg-gray-900 border border-gray-800 text-gray-100",
     },
-    defaultVariants: {
-      variant: "default",
-      padding: "md",
-      hover: "none",
-      interactive: false,
+    padding: {
+      none: "",
+      sm: "p-4",
+      md: "p-6",
+      lg: "p-8",
+      xl: "p-10",
     },
-  }
-);
+    hover: {
+      none: "",
+      lift: "hover:shadow-card-hover hover:-translate-y-1",
+      glow: "hover:shadow-lg hover:border-primary-300 hover:shadow-primary-100/50",
+      border: "hover:border-primary",
+      scale: "hover:scale-[1.02]",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+    padding: "none",
+    hover: "none",
+  },
+});
 
 interface CardProps
-  extends Omit<HTMLMotionProps<"div">, "children">,
+  extends
+    Omit<HTMLMotionProps<"div">, "children">,
     VariantProps<typeof cardVariants> {
   children?: React.ReactNode;
-  asChild?: boolean;
+  interactive?: boolean;
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   (
-    {
-      className,
-      variant,
-      padding,
-      hover,
-      interactive,
-      children,
-      asChild = false,
-      ...props
-    },
-    ref
+    { className, variant, padding, hover, interactive, children, ...props },
+    ref,
   ) => {
-    if (asChild) {
-      if (!React.isValidElement(children)) {
-        if (process.env.NODE_ENV !== "production") {
-          throw new Error(
-            "Card `asChild` expects a single React element child."
-          );
-        }
-        return null;
-      }
-
-      const child = children as React.ReactElement<{ className?: string }>;
-      return React.cloneElement(child, {
-        className: cn(
-          cardVariants({ variant, padding, hover, interactive }),
-          className,
-          child.props.className
-        ),
-      });
-    }
-
     return (
       <motion.div
         ref={ref}
         className={cn(
-          cardVariants({ variant, padding, hover, interactive }),
-          className
+          cardVariants({ variant, padding, hover }),
+          interactive && "cursor-pointer",
+          className,
         )}
-        whileHover={interactive ? { y: -4 } : undefined}
-        transition={{ duration: 0.3 }}
+        {...(interactive
+          ? {
+              whileHover: { y: -4 },
+              whileTap: { scale: 0.99 },
+              transition: { duration: 0.2 },
+            }
+          : {})}
         {...props}
       >
         {children}
       </motion.div>
     );
-  }
+  },
 );
-
 Card.displayName = "Card";
 
-// ============================================================================
-// Card Header
-// ============================================================================
-
 interface CardHeaderProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode;
+  noBorder?: boolean;
 }
 
-const CardHeader = React.forwardRef<HTMLDivElement, CardHeaderProps>(
-  ({ className, children, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={cn("flex flex-col space-y-1.5", className)}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  }
-);
-
-CardHeader.displayName = "CardHeader";
-
-// ============================================================================
-// Card Title
-// ============================================================================
+function CardHeader({ className, noBorder, ...props }: CardHeaderProps) {
+  return (
+    <div
+      className={cn(
+        "p-6 pb-4",
+        !noBorder && "border-b border-border",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
 
 interface CardTitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
-  children?: React.ReactNode;
   as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
 }
 
-const CardTitle = React.forwardRef<HTMLHeadingElement, CardTitleProps>(
-  ({ className, as: Component = "h3", children, ...props }, ref) => {
-    return (
-      <Component
-        ref={ref}
-        className={cn(
-          "text-lg font-semibold leading-tight tracking-tight text-[var(--text-primary)]",
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </Component>
-    );
-  }
-);
-
-CardTitle.displayName = "CardTitle";
-
-// ============================================================================
-// Card Description
-// ============================================================================
-
-interface CardDescriptionProps
-  extends React.HTMLAttributes<HTMLParagraphElement> {
-  children?: React.ReactNode;
+function CardTitle({ className, as: Tag = "h3", ...props }: CardTitleProps) {
+  return (
+    <Tag
+      className={cn(
+        "text-lg font-semibold leading-tight text-foreground tracking-tight",
+        className,
+      )}
+      {...props}
+    />
+  );
 }
 
-const CardDescription = React.forwardRef<
-  HTMLParagraphElement,
-  CardDescriptionProps
->(({ className, children, ...props }, ref) => {
+function CardDescription({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLParagraphElement>) {
   return (
     <p
-      ref={ref}
-      className={cn("text-sm text-[var(--text-secondary)]", className)}
+      className={cn(
+        "text-sm text-muted-foreground mt-1.5 leading-relaxed",
+        className,
+      )}
       {...props}
-    >
-      {children}
-    </p>
+    />
   );
-});
-
-CardDescription.displayName = "CardDescription";
-
-// ============================================================================
-// Card Content
-// ============================================================================
-
-interface CardContentProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode;
 }
 
-const CardContent = React.forwardRef<HTMLDivElement, CardContentProps>(
-  ({ className, children, ...props }, ref) => {
-    return (
-      <div ref={ref} className={cn("", className)} {...props}>
-        {children}
-      </div>
-    );
-  }
-);
-
-CardContent.displayName = "CardContent";
-
-// ============================================================================
-// Card Footer
-// ============================================================================
+function CardContent({
+  className,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) {
+  return <div className={cn("p-6", className)} {...props} />;
+}
 
 interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode;
+  noBorder?: boolean;
 }
 
-const CardFooter = React.forwardRef<HTMLDivElement, CardFooterProps>(
-  ({ className, children, ...props }, ref) => {
-    return (
-      <div
-        ref={ref}
-        className={cn("flex items-center pt-4", className)}
-        {...props}
-      >
-        {children}
-      </div>
-    );
-  }
-);
-
-CardFooter.displayName = "CardFooter";
-
-// ============================================================================
-// Card Image
-// ============================================================================
+function CardFooter({ className, noBorder, ...props }: CardFooterProps) {
+  return (
+    <div
+      className={cn(
+        "flex items-center p-6 pt-4",
+        !noBorder && "border-t border-border",
+        className,
+      )}
+      {...props}
+    />
+  );
+}
 
 interface CardImageProps extends React.HTMLAttributes<HTMLDivElement> {
-  children?: React.ReactNode;
-  aspectRatio?: "video" | "square" | "portrait" | "auto";
+  aspectRatio?: "video" | "square" | "wide" | "portrait";
   overlay?: boolean;
 }
 
-const CardImage = React.forwardRef<HTMLDivElement, CardImageProps>(
-  (
-    { className, aspectRatio = "video", overlay = false, children, ...props },
-    ref
-  ) => {
-    const aspectClasses = {
-      video: "aspect-video",
-      square: "aspect-square",
-      portrait: "aspect-[3/4]",
-      auto: "",
-    };
+function CardImage({
+  className,
+  aspectRatio = "video",
+  overlay,
+  children,
+  ...props
+}: CardImageProps) {
+  const ratioClasses = {
+    video: "aspect-video",
+    square: "aspect-square",
+    wide: "aspect-[2/1]",
+    portrait: "aspect-[3/4]",
+  };
 
-    return (
-      <div
-        ref={ref}
-        className={cn(
-          "relative overflow-hidden rounded-t-xl",
-          aspectClasses[aspectRatio],
-          className
-        )}
-        {...props}
-      >
-        {children}
-        {overlay && (
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+  return (
+    <div
+      className={cn(
+        "relative overflow-hidden rounded-t-xl",
+        ratioClasses[aspectRatio],
+        className,
+      )}
+      {...props}
+    >
+      {children}
+      {overlay && (
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+      )}
+    </div>
+  );
+}
+
+/* Specialized card variants for common use cases */
+interface FeatureCardProps extends Omit<CardProps, "variant"> {
+  icon?: React.ReactNode;
+  title: string;
+  description: string;
+}
+
+function FeatureCard({
+  icon,
+  title,
+  description,
+  className,
+  ...props
+}: FeatureCardProps) {
+  return (
+    <Card
+      variant="default"
+      hover="lift"
+      padding="lg"
+      className={cn("text-center", className)}
+      {...props}
+    >
+      {icon && (
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-primary-100 text-primary-600">
+          {icon}
+        </div>
+      )}
+      <CardTitle className="mb-2">{title}</CardTitle>
+      <CardDescription className="mt-0">{description}</CardDescription>
+    </Card>
+  );
+}
+
+interface StatCardProps extends Omit<CardProps, "variant"> {
+  value: string | number;
+  label: string;
+  icon?: React.ReactNode;
+  trend?: { value: number; positive: boolean };
+}
+
+function StatCard({
+  value,
+  label,
+  icon,
+  trend,
+  className,
+  ...props
+}: StatCardProps) {
+  return (
+    <Card
+      variant="default"
+      padding="md"
+      className={cn("", className)}
+      {...props}
+    >
+      <div className="flex items-start justify-between">
+        <div>
+          <p className="text-sm font-medium text-muted-foreground">{label}</p>
+          <p className="mt-1 text-3xl font-bold text-foreground">{value}</p>
+          {trend && (
+            <p
+              className={cn(
+                "mt-1.5 text-sm font-medium flex items-center gap-1",
+                trend.positive ? "text-success" : "text-destructive",
+              )}
+            >
+              <span>{trend.positive ? "↑" : "↓"}</span>
+              {Math.abs(trend.value)}%
+            </p>
+          )}
+        </div>
+        {icon && (
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-100 text-primary-600">
+            {icon}
+          </div>
         )}
       </div>
-    );
-  }
-);
-
-CardImage.displayName = "CardImage";
+    </Card>
+  );
+}
 
 export {
   Card,
@@ -291,14 +276,7 @@ export {
   CardContent,
   CardFooter,
   CardImage,
-  cardVariants,
+  FeatureCard,
+  StatCard,
 };
-export type {
-  CardProps,
-  CardHeaderProps,
-  CardTitleProps,
-  CardDescriptionProps,
-  CardContentProps,
-  CardFooterProps,
-  CardImageProps,
-};
+export type { CardProps };

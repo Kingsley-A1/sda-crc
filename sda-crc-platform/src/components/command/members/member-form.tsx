@@ -41,14 +41,14 @@ export function MemberForm({
   const [phone, setPhone] = React.useState(initial?.phone ?? "");
 
   const [gender, setGender] = React.useState<string>(
-    String(initial?.gender ?? "")
+    String(initial?.gender ?? ""),
   );
   const [membershipType, setMembershipType] = React.useState<string>(
-    String(initial?.membershipType ?? "FULL")
+    String(initial?.membershipType ?? "FULL"),
   );
 
   const [dateOfBirth, setDateOfBirth] = React.useState<string>(
-    String(initial?.dateOfBirth ?? "")
+    String(initial?.dateOfBirth ?? ""),
   );
   const [address, setAddress] = React.useState(initial?.address ?? "");
   const [city, setCity] = React.useState(initial?.city ?? "");
@@ -170,7 +170,7 @@ export function MemberForm({
           rows={5}
         />
 
-        {error ? <p className="text-sm text-[var(--error)]">{error}</p> : null}
+        {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
         <div className="flex justify-end">
           <Button

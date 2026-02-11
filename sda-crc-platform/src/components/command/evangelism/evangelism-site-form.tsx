@@ -35,39 +35,39 @@ export function EvangelismSiteForm({
 
   const [name, setName] = React.useState(initial?.name ?? "");
   const [status, setStatus] = React.useState<string>(
-    String(initial?.status ?? "PLANNING")
+    String(initial?.status ?? "PLANNING"),
   );
   const [city, setCity] = React.useState(initial?.city ?? "");
   const [state, setState] = React.useState(initial?.state ?? "");
   const [address, setAddress] = React.useState(initial?.address ?? "");
 
   const [startDate, setStartDate] = React.useState<string>(
-    String(initial?.startDate ?? "")
+    String(initial?.startDate ?? ""),
   );
   const [endDate, setEndDate] = React.useState<string>(
-    String(initial?.endDate ?? "")
+    String(initial?.endDate ?? ""),
   );
 
   const [targetAttendance, setTargetAttendance] = React.useState<string>(
     typeof initial?.targetAttendance === "number"
       ? String(initial.targetAttendance)
-      : ""
+      : "",
   );
   const [actualAttendance, setActualAttendance] = React.useState<string>(
     typeof initial?.actualAttendance === "number"
       ? String(initial.actualAttendance)
-      : ""
+      : "",
   );
   const [baptisms, setBaptisms] = React.useState<string>(
-    typeof initial?.baptisms === "number" ? String(initial.baptisms) : ""
+    typeof initial?.baptisms === "number" ? String(initial.baptisms) : "",
   );
   const [decisions, setDecisions] = React.useState<string>(
-    typeof initial?.decisions === "number" ? String(initial.decisions) : ""
+    typeof initial?.decisions === "number" ? String(initial.decisions) : "",
   );
 
   const [imageUrl, setImageUrl] = React.useState(initial?.imageUrl ?? "");
   const [description, setDescription] = React.useState(
-    initial?.description ?? ""
+    initial?.description ?? "",
   );
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -194,7 +194,7 @@ export function EvangelismSiteForm({
           rows={6}
         />
 
-        {error ? <p className="text-sm text-[var(--error)]">{error}</p> : null}
+        {error ? <p className="text-sm text-destructive">{error}</p> : null}
 
         <div className="flex justify-end">
           <Button

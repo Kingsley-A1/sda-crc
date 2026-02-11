@@ -1,286 +1,135 @@
-/**
- * Tabs Component
- * ==============
- * Accessible tab navigation with animations.
- *
- * "There is a time for every purpose under heaven." — Ecclesiastes 3:1
- */
-
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-// ============================================================================
-// Context
-// ============================================================================
-
-interface TabsContextValue {
-  activeTab: string;
-  setActiveTab: (value: string) => void;
-  orientation: "horizontal" | "vertical";
-}
-
-const TabsContext = React.createContext<TabsContextValue | null>(null);
-
-function useTabsContext() {
-  const context = React.useContext(TabsContext);
-  if (!context) {
-    throw new Error("Tabs components must be used within a Tabs provider");
-  }
-  return context;
-}
-
-// ============================================================================
-// Tabs Root
-// ============================================================================
-
 interface TabsProps {
-  value?: string;
+  tabs?: { label: string; value: string }[];
+  activeTab?: string;
+  onChange?: (value: string) => void;
   defaultValue?: string;
-  onValueChange?: (value: string) => void;
-  orientation?: "horizontal" | "vertical";
-  children: React.ReactNode;
   className?: string;
+  children?: React.ReactNode;
 }
 
 function Tabs({
-  value,
+  tabs,
+  activeTab,
+  onChange,
   defaultValue,
-  onValueChange,
-  orientation = "horizontal",
-  children,
   className,
+  children,
 }: TabsProps) {
-  const [activeTab, setActiveTabState] = React.useState(defaultValue || "");
+  const [internalValue, setInternalValue] = React.useState(defaultValue || "");
+  const currentValue = activeTab ?? internalValue;
+  const handleChange = onChange ?? setInternalValue;
 
-  const setActiveTab = React.useCallback(
-    (newValue: string) => {
-      if (value === undefined) {
-        setActiveTabState(newValue);
-      }
-      onValueChange?.(newValue);
-    },
-    [value, onValueChange]
-  );
-
-  const currentValue = value !== undefined ? value : activeTab;
-
-  return (
-    <TabsContext.Provider
-      value={{ activeTab: currentValue, setActiveTab, orientation }}
-    >
-      <div
-        className={cn(orientation === "vertical" && "flex gap-6", className)}
-        data-orientation={orientation}
+  // Children-based API (for admin)
+  if (children) {
+    return (
+      <TabsContext.Provider
+        value={{ activeTab: currentValue, onChange: handleChange }}
       >
-        {children}
-      </div>
-    </TabsContext.Provider>
-  );
-}
+        <div className={className}>{children}</div>
+      </TabsContext.Provider>
+    );
+  }
 
-// ============================================================================
-// Tab List
-// ============================================================================
-
-interface TabListProps {
-  children: React.ReactNode;
-  className?: string;
-}
-
-function TabList({ children, className }: TabListProps) {
-  const { orientation } = useTabsContext();
+  // Simple API (for public)
+  if (!tabs) return null;
 
   return (
     <div
+      className={cn("flex gap-1 rounded-xl bg-gray-100 p-1", className)}
       role="tablist"
-      aria-orientation={orientation}
-      className={cn(
-        "relative",
-        orientation === "horizontal" &&
-          "flex items-center gap-1 border-b border-[var(--border)] p-1",
-        orientation === "vertical" &&
-          "flex flex-col gap-1 border-r border-[var(--border)] p-1",
-        className
-      )}
+    >
+      {tabs.map((tab) => (
+        <button
+          key={tab.value}
+          role="tab"
+          aria-selected={currentValue === tab.value}
+          onClick={() => handleChange(tab.value)}
+          className={cn(
+            "flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all",
+            currentValue === tab.value
+              ? "bg-white text-primary shadow-sm"
+              : "text-muted-foreground hover:text-foreground",
+          )}
+        >
+          {tab.label}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// Context for children-based tabs
+const TabsContext = React.createContext<{
+  activeTab: string;
+  onChange: (value: string) => void;
+}>({ activeTab: "", onChange: () => {} });
+
+function useTabsContext() {
+  return React.useContext(TabsContext);
+}
+
+function TabsList({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn("flex gap-1 rounded-xl bg-gray-100 p-1 mb-4", className)}
+      role="tablist"
     >
       {children}
     </div>
   );
 }
 
-// ============================================================================
-// Tab Trigger
-// ============================================================================
-
-interface TabTriggerProps {
-  value: string;
-  children: React.ReactNode;
-  disabled?: boolean;
-  className?: string;
-}
-
-function TabTrigger({
+function TabsTrigger({
   value,
   children,
-  disabled = false,
   className,
-}: TabTriggerProps) {
-  const { activeTab, setActiveTab, orientation } = useTabsContext();
-  const isActive = activeTab === value;
-  const id = React.useId();
-
+}: {
+  value: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const { activeTab, onChange } = useTabsContext();
   return (
     <button
-      id={`tab-${id}`}
       role="tab"
-      type="button"
-      aria-selected={isActive}
-      aria-controls={`tabpanel-${id}`}
-      disabled={disabled}
-      onClick={() => setActiveTab(value)}
+      aria-selected={activeTab === value}
+      onClick={() => onChange(value)}
       className={cn(
-        "relative px-4 py-2.5 text-sm font-medium transition-colors",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)] focus-visible:ring-offset-2",
-        "disabled:pointer-events-none disabled:opacity-50",
-        orientation === "horizontal" && "rounded-lg",
-        orientation === "vertical" && "w-full text-left rounded-lg",
-        isActive
-          ? "text-[var(--primary)]"
-          : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--background-alt)]",
-        className
+        "flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-all",
+        activeTab === value
+          ? "bg-white text-primary shadow-sm"
+          : "text-muted-foreground hover:text-foreground",
+        className,
       )}
-      data-state={isActive ? "active" : "inactive"}
     >
       {children}
-
-      {/* Active indicator */}
-      {isActive && (
-        <motion.div
-          layoutId="tab-indicator"
-          className={cn(
-            "absolute bg-[var(--primary)]",
-            orientation === "horizontal" &&
-              "bottom-0 left-0 right-0 h-0.5 -mb-1 rounded-full",
-            orientation === "vertical" &&
-              "left-0 top-0 bottom-0 w-0.5 -ml-1 rounded-full"
-          )}
-          transition={{ type: "spring", stiffness: 500, damping: 30 }}
-        />
-      )}
     </button>
   );
 }
 
-// ============================================================================
-// Tab Content
-// ============================================================================
-
-interface TabContentProps {
-  value: string;
-  children: React.ReactNode;
-  className?: string;
-  forceMount?: boolean;
-}
-
-function TabContent({
+function TabsContent({
   value,
   children,
   className,
-  forceMount = false,
-}: TabContentProps) {
-  const { activeTab } = useTabsContext();
-  const isActive = activeTab === value;
-  const id = React.useId();
-
-  if (!forceMount && !isActive) return null;
-
-  return (
-    <motion.div
-      id={`tabpanel-${id}`}
-      role="tabpanel"
-      aria-labelledby={`tab-${id}`}
-      tabIndex={0}
-      hidden={!isActive}
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: isActive ? 1 : 0, y: isActive ? 0 : 10 }}
-      transition={{ duration: 0.2 }}
-      className={cn(
-        "focus-visible:outline-none",
-        !isActive && "hidden",
-        className
-      )}
-      data-state={isActive ? "active" : "inactive"}
-    >
-      {children}
-    </motion.div>
-  );
-}
-
-// ============================================================================
-// Pill Tabs Variant
-// ============================================================================
-
-interface PillTabsProps {
-  tabs: { value: string; label: string; icon?: React.ReactNode }[];
+}: {
   value: string;
-  onChange: (value: string) => void;
+  children: React.ReactNode;
   className?: string;
+}) {
+  const { activeTab } = useTabsContext();
+  if (activeTab !== value) return null;
+  return <div className={className}>{children}</div>;
 }
 
-function PillTabs({ tabs, value, onChange, className }: PillTabsProps) {
-  return (
-    <div
-      className={cn(
-        "inline-flex items-center gap-1 rounded-xl bg-[var(--background-alt)] p-1",
-        className
-      )}
-    >
-      {tabs.map((tab) => {
-        const isActive = value === tab.value;
-        return (
-          <button
-            key={tab.value}
-            onClick={() => onChange(tab.value)}
-            className={cn(
-              "relative flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors",
-              "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--primary)]",
-              isActive
-                ? "text-[var(--primary)]"
-                : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-            )}
-          >
-            {isActive && (
-              <motion.div
-                layoutId="pill-tab-bg"
-                className="absolute inset-0 rounded-lg bg-[var(--surface)] shadow-sm"
-                transition={{ type: "spring", stiffness: 500, damping: 30 }}
-              />
-            )}
-            <span className="relative z-10 flex items-center gap-2">
-              {tab.icon}
-              {tab.label}
-            </span>
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
-export { Tabs, TabList, TabTrigger, TabContent, PillTabs };
-// Aliases for compatibility
-export {
-  TabList as TabsList,
-  TabTrigger as TabsTrigger,
-  TabContent as TabsContent,
-};
-export type {
-  TabsProps,
-  TabListProps,
-  TabTriggerProps,
-  TabContentProps,
-  PillTabsProps,
-};
+export { Tabs, TabsList, TabsTrigger, TabsContent };

@@ -1,53 +1,50 @@
-/**
- * Department Details Component
- * ============================
- * Full department information display.
- */
+"use client";
 
-interface Department {
-  id: string;
-  name: string;
-  description: string | null;
-  mission: string | null;
-  vision?: string | null;
-}
+import { motion } from "framer-motion";
+import Image from "next/image";
 
 interface DepartmentDetailsProps {
-  department: Department;
+  department: {
+    id: string;
+    name: string;
+    description: string | null;
+    mission: string | null;
+    imageUrl: string | null;
+  };
 }
 
 export function DepartmentDetails({ department }: DepartmentDetailsProps) {
   return (
-    <div className="space-y-8">
-      {/* Description */}
-      {department.description && (
-        <div>
-          <h2 className="text-xl font-semibold mb-4">About</h2>
-          <div className="prose dark:prose-invert max-w-none">
-            <p>{department.description}</p>
-          </div>
+    <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+      {department.imageUrl && (
+        <div className="relative aspect-video rounded-2xl overflow-hidden mb-6">
+          <Image
+            src={department.imageUrl}
+            alt={department.name}
+            fill
+            className="object-cover"
+            sizes="(max-width: 1024px) 100vw, 65vw"
+          />
         </div>
       )}
 
-      {/* Mission */}
       {department.mission && (
-        <div className="rounded-xl bg-primary/5 p-6">
-          <h3 className="font-semibold text-lg mb-2">Our Mission</h3>
-          <p className="text-gray-600 dark:text-gray-400">
-            {department.mission}
-          </p>
+        <div className="bg-primary-50 border border-primary/20 rounded-xl p-5 mb-6">
+          <h2 className="text-sm font-semibold text-primary mb-1">
+            Our Mission
+          </h2>
+          <p className="text-muted-foreground">{department.mission}</p>
         </div>
       )}
 
-      {/* Vision */}
-      {department.vision && (
-        <div className="rounded-xl bg-secondary/5 p-6">
-          <h3 className="font-semibold text-lg mb-2">Our Vision</h3>
-          <p className="text-gray-600 dark:text-gray-400">
-            {department.vision}
+      {department.description && (
+        <div className="prose prose-green max-w-none">
+          <h2 className="text-xl font-bold text-foreground mb-3">About</h2>
+          <p className="text-muted-foreground leading-relaxed whitespace-pre-line">
+            {department.description}
           </p>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

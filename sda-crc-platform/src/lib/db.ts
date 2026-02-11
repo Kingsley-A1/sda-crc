@@ -20,10 +20,22 @@ export const db =
       process.env.NODE_ENV === "development"
         ? ["query", "error", "warn"]
         : ["error"],
+    datasources: {
+      db: {
+        url: process.env.DATABASE_URL,
+      },
+    },
   });
 
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = db;
+}
+
+// Test connection on startup (don't block app if it fails)
+if (process.env.NODE_ENV === "development") {
+  db.$connect()
+    .then(() => console.log("✅ Database connected"))
+    .catch((err) => console.warn("⚠️ Database connection failed (app will use fallback data):", err.message));
 }
 
 export default db;

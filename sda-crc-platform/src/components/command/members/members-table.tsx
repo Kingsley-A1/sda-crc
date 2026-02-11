@@ -32,7 +32,7 @@ export function MembersTable({
             <p className="truncate font-semibold">
               {m.firstName} {m.lastName}
             </p>
-            <p className="mt-0.5 truncate text-xs text-[var(--text-tertiary)]">
+            <p className="mt-0.5 truncate text-xs text-muted-foreground/60">
               {m.email}
             </p>
           </div>
@@ -42,9 +42,7 @@ export function MembersTable({
         key: "phone",
         header: "Phone",
         cell: (m) => (
-          <span className="text-sm text-[var(--text-secondary)]">
-            {m.phone}
-          </span>
+          <span className="text-sm text-muted-foreground">{m.phone}</span>
         ),
         className: "w-[160px]",
       },
@@ -97,7 +95,7 @@ export function MembersTable({
         className: "w-[160px]",
       },
     ],
-    [onDeactivate, onEdit]
+    [onDeactivate, onEdit],
   );
 
   return (

@@ -85,7 +85,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Fetch small groups
-    let smallGroups = await db.smallGroup.findMany({
+    const smallGroups = await db.smallGroup.findMany({
       where,
       include: {
         leader: {
