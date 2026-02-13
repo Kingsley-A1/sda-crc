@@ -1,0 +1,7 @@
+# sda-crc-frontend
+node_modules/
+.next/
+.env
+.env.local
+*.tsbuildinfo
+.agents
